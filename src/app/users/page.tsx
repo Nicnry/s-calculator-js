@@ -1,9 +1,7 @@
-// src/app/users/page.tsx
 import { Suspense } from 'react';
 import UserList from "@/app/components/UserList";
 import { getUsers } from "@/app/services/userService";
 
-// Composant statique de mise en page
 function UsersPageLayout() {
   return (
     <div className="container mx-auto px-4 py-8">
@@ -15,7 +13,6 @@ function UsersPageLayout() {
   );
 }
 
-// Composant de chargement pendant le fetch
 function UserListSkeleton() {
   return (
     <div className="animate-pulse">
@@ -30,13 +27,11 @@ function UserListSkeleton() {
   );
 }
 
-// Wrapper pour le chargement des utilisateurs
 async function UserListWrapper() {
   const users = await getUsers();
   return <UserList users={users} />;
 }
 
-// Utilisation du revalidate pour mise à jour périodique
-export const revalidate = 60; // Revalide toutes les 60 secondes
+export const revalidate = 60;
 
 export default UsersPageLayout;
