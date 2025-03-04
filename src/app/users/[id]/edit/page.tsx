@@ -1,4 +1,4 @@
-import UserForm from "@/app/components/UserForm";
+/* import UserForm from "@/app/components/UserForm";
 import { getUserById } from "@/app/services/userService";
 
 export default async function EditUserPage({ params }: { params: { id: number } }) {
@@ -7,7 +7,7 @@ export default async function EditUserPage({ params }: { params: { id: number } 
   if (!user) {
     return <p>Utilisateur non trouvé</p>;
   }
-  
+
   return (
     <div className="p-6">
       <h1 className="text-2xl font-bold mb-4">Modifier l'utilisateur</h1>
@@ -15,3 +15,5 @@ export default async function EditUserPage({ params }: { params: { id: number } 
     </div>
   );
 }
+ */
+export default function EditUserPage() {}

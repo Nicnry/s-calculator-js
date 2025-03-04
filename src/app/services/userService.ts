@@ -9,9 +9,14 @@ export async function getUsers(): Promise<User[]>  {
       throw new Error("Erreur lors de la récupération des utilisateurs");
     }
     return await res.json();
-  } catch (error) {
-    console.error("Error during fetch:", error);
-    throw new Error("Erreur lors du chargement des utilisateurs: " + error.message);
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      console.error("Error during fetch:", error.message);
+      throw new Error("Erreur lors du chargement des utilisateurs: " + error.message);
+    } else {
+      console.error("Erreur inconnue lors de la récupération des utilisateurs");
+      throw new Error("Erreur inconnue lors de la récupération des utilisateurs");
+    }
   }
 }
 

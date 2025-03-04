@@ -1,4 +1,4 @@
-import SalaryList from "@/app/components/SalaryList";
+/* import SalaryList from "@/app/components/SalaryList";
 import SalaryForm from "@/app/components/SalaryForm";
 import { getUserById } from "@/app/services/userService";
 
@@ -19,3 +19,6 @@ export default async function UserSalariesPage({ params }: { params: { id: strin
     </div>
   );
 }
+ */
+
+export default function UserSalariesPage() {}

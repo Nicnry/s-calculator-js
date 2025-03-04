@@ -1,4 +1,4 @@
-import Link from "next/link";
+/* import Link from "next/link";
 
 import { getUserById } from "@/app/services/userService";
 
@@ -15,4 +15,5 @@ export default async function UserDetail({ params }: { params: { id: string } })
       <Link href={`/users/${user.id}/salaries`}>Voir les salaires</Link>
     </div>
   );
-}
+} */
+export default function UserDetail() {}

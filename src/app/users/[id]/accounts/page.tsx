@@ -1,6 +1,6 @@
+/* import { getUserById } from "@/app/services/userService";
 import AccountList from "@/app/components/AccountList";
 import AccountForm from "@/app/components/AccountForm";
-import { getUserById } from "@/app/services/userService";
 
 export default async function UserAccountsPage({ params }: { params: { id: string } }) {
   const userId = parseInt(params.id);
@@ -19,3 +19,6 @@ export default async function UserAccountsPage({ params }: { params: { id: strin
     </div>
   );
 }
+ */
+
+export default function UserAccountsPage() {}
