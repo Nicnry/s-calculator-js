@@ -8,4 +8,6 @@ export interface User {
   password?: string;
   salaries?: Salary[];
   accounts?: Account[];
+  createdAt?: string;
+  updatedAt?: string;
 }
