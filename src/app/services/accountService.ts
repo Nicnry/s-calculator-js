@@ -1,11 +1,26 @@
 import { Account } from "@/app/types/account";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL as string + "/users/1/accounts";
+const API_URL = process.env.NEXT_PUBLIC_API_URL as string;
 
 export async function getAccounts(userId: number): Promise<Account[]> {
-  const res = await fetch(`${API_URL}/${userId}/accounts`);
-  if (!res.ok) throw new Error("Erreur lors de la récupération des salaires");
-  return res.json();
+  try {
+    const res = await fetch(`${API_URL}/users/${userId}/accounts`);
+    
+    if (!res.ok) {
+      const errorText = await res.text();
+      throw new Error(`Erreur lors de la récupération des comptes pour l'utilisateur ${userId}: ${errorText}`);
+    }
+    
+    return await res.json();
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      console.error("Error during fetch:", error.message);
+      throw new Error("Erreur lors du chargement des comptes: " + error.message);
+    } else {
+      console.error("Erreur inconnue lors de la récupération des comptes");
+      throw new Error("Erreur inconnue lors de la récupération des comptes");
+    }
+  }
 }
 
 export async function addAccount(userId: number, account: { amount: number; date: string }): Promise<Account> {
