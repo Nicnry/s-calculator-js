@@ -4,7 +4,7 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL as string + "/users";
 
 export async function getUsers(): Promise<User[]>  {
   try {
-    const res = await fetch(`${API_URL}`);
+    const res = await fetch(`${API_URL}`, { cache: 'no-store' });
     if (!res.ok) {
       throw new Error("Erreur lors de la récupération des utilisateurs");
     }

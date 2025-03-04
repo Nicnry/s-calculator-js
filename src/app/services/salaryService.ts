@@ -4,7 +4,7 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL as string;
 
 export async function getSalaries(userId: number): Promise<Salary[]> {
   try {
-    const res = await fetch(`${API_URL}/users/${userId}/salaries`);
+    const res = await fetch(`${API_URL}/users/${userId}/salaries`, { cache: 'no-store' });
     
     if (!res.ok) {
       const errorText = await res.text();

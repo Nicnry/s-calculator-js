@@ -4,7 +4,7 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL as string;
 
 export async function getAccounts(userId: number): Promise<Account[]> {
   try {
-    const res = await fetch(`${API_URL}/users/${userId}/accounts`);
+    const res = await fetch(`${API_URL}/users/${userId}/accounts`, { cache: 'no-store' });
     
     if (!res.ok) {
       const errorText = await res.text();
