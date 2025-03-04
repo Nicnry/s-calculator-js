@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 import { getUserById } from "@/app/services/userService";
 
 export default async function UserDetail({ params }: { params: { id: string } }) {
@@ -9,7 +11,8 @@ export default async function UserDetail({ params }: { params: { id: string } })
     <div>
       <h1>{user.name}</h1>
       <p>Email: {user.email}</p>
-      <a href={`/users/${user.id}/salaries`}>Voir les salaires</a>
+
+      <Link href={`/users/${user.id}/salaries`}>Voir les salaires</Link>
     </div>
   );
 }
