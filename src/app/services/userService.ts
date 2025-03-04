@@ -8,7 +8,8 @@ export async function getUsers(): Promise<User[]>  {
       next: { 
         revalidate: 60,
         tags: ['users']
-      }
+      },
+      cache: "no-store"
     });
     if (!res.ok) {
       throw new Error("Erreur lors de la récupération des utilisateurs");
