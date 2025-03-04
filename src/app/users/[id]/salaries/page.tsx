@@ -1,8 +1,15 @@
 import SalaryList from "@/app/components/SalaryList";
 import SalaryForm from "@/app/components/SalaryForm";
+import { getUserById } from "@/app/services/userService";
 
-export default function UserSalariesPage({ params }: { params: { id: string } }) {
+export default async function UserSalariesPage({ params }: { params: { id: string } }) {
   const userId = parseInt(params.id);
+
+  const user = await getUserById(userId);
+
+  if (!user) {
+    return <p>Utilisateur non trouvé</p>;
+  }
 
   return (
     <div>
