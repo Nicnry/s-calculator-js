@@ -6,6 +6,7 @@ import { Salary } from "../types/salary";
 
 export default function SalaryList({ userId }: { userId: number }) {
   const [salaries, setSalaries] = useState<Salary[]>([]);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     async function fetchData() {
@@ -14,6 +15,7 @@ export default function SalaryList({ userId }: { userId: number }) {
         setSalaries(data);
       } catch (error) {
         console.error(error);
+        setError("Impossible de charger les salaires. Veuillez réessayer plus tard.");
       }
     }
     fetchData();
@@ -32,6 +34,7 @@ export default function SalaryList({ userId }: { userId: number }) {
   return (
     <div>
       <h2>Salaires</h2>
+      {error && <p style={{ color: "red" }}>{error}</p>}
       <ul>
         {salaries.map((salary) => (
           <li key={salary.id}>

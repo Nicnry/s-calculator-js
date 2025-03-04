@@ -3,9 +3,16 @@ import { User } from "@/app/types/user";
 const API_URL = process.env.NEXT_PUBLIC_API_URL as string + "/users";
 
 export async function getUsers(): Promise<User[]>  {
-  const res = await fetch(`${API_URL}`);
-  if (!res.ok) throw new Error("Erreur lors de la récupération des utilisateurs");
-  return res.json();
+  try {
+    const res = await fetch(`${API_URL}`);
+    if (!res.ok) {
+      throw new Error("Erreur lors de la récupération des utilisateurs");
+    }
+    return await res.json();
+  } catch (error) {
+    console.error("Error during fetch:", error);
+    throw new Error("Erreur lors du chargement des utilisateurs: " + error.message);
+  }
 }
 
 export async function getUserById(userId: number) {
