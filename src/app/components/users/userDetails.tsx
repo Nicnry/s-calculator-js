@@ -12,7 +12,7 @@ import {
 import Link from "next/link";
 
 export default function UserDetails({ id }: { id: number; }) {
-  const [user, setUser] = useState<User>();
+  const [user, setUser] = useState<User>({ name: '', email: ''});
 
   useEffect(() => {
     (async () => setUser(await UserService.getUserById(id)))();
@@ -54,13 +54,13 @@ export default function UserDetails({ id }: { id: number; }) {
         <UserDetailItem 
           icon={<UserIcon size={20} />} 
           label="Nom complet" 
-          value={user!.name} 
+          value={user.name} 
         />
         
         <UserDetailItem 
           icon={<Mail size={20} />} 
           label="Adresse email" 
-          value={user!.email} 
+          value={user.email} 
         />
         
         {formattedCreatedAt && (

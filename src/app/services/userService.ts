@@ -12,14 +12,14 @@ export class UserService {
     }
   }
 
-  static async getUserById(id: number) {
+  static async getUserById(id: number): Promise<User> {
     try {
       await localDb.ensureOpen();
       const user = await localDb.users.get(id);
-      return user;
+      return user!;
     } catch (error) {
       console.error('Erreur lors de la récupération des utilisateurs', error);
-      return undefined;
+      throw new Error('Utilisateur non trouvé');
     }
   }
 
