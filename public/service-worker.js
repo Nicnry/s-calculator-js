@@ -1,11 +1,8 @@
-// public/sw.js
+// public/service-worker.js
 const CACHE_NAME = 'offline-cache-v1';
 const urlsToCache = [
   '/',
-  '/users',
-  '/_next/static/chunks/main.js',
-  '/_next/static/chunks/webpack.js',
-  '/_next/static/css/app.css'
+  '/users'
 ];
 
 self.addEventListener('install', (event) => {
@@ -13,9 +10,22 @@ self.addEventListener('install', (event) => {
     caches.open(CACHE_NAME)
       .then((cache) => {
         console.log('Cache ouvert');
-        return cache.addAll(urlsToCache);
+        return Promise.all(
+          urlsToCache.map(url => {
+            return cache.add(url).catch(error => {
+              console.warn(`Échec de mise en cache de ${url}:`, error);
+              return null;
+            });
+          })
+        );
       })
   );
+});
+
+urlsToCache.forEach(url => {
+  cache.add(url).catch(error => {
+    console.error(`Échec de mise en cache pour ${url}:`, error);
+  });
 });
 
 self.addEventListener('fetch', (event) => {
@@ -28,21 +38,25 @@ self.addEventListener('fetch', (event) => {
         
         return fetch(event.request)
           .then((response) => {
-            // Si la réponse n'est pas valide, on retourne quand même
             if (!response || response.status !== 200 || response.type !== 'basic') {
               return response;
             }
             
             const responseToCache = response.clone();
             const url = new URL(event.request.url);
+            const pathname = url.pathname;
+            
             if (
-              urlsToCache.includes(url.pathname) || 
-              url.pathname.match(/^\/users\/\d+$/) ||
-              url.pathname === '/users/new'
+              urlsToCache.includes(pathname) || 
+              pathname.match(/^\/users\/\d+$/) ||
+              pathname === '/users/new' ||
+              pathname.startsWith('/_next/static/')
             ) {
               caches.open(CACHE_NAME)
                 .then((cache) => {
-                  cache.put(event.request, responseToCache);
+                  cache.put(event.request, responseToCache).catch(err => {
+                    console.warn('Erreur lors de la mise en cache:', err);
+                  });
                 });
             }
               
@@ -50,8 +64,10 @@ self.addEventListener('fetch', (event) => {
           })
           .catch(() => {
             if (event.request.mode === 'navigate') {
-              return caches.match('/offline');
+              return caches.match('/')
+                .catch(() => new Response('Vous êtes hors ligne et la page demandée n\'est pas en cache.'));
             }
+            return new Response('', {status: 408, statusText: 'Offline'});
           });
       })
   );
@@ -66,6 +82,7 @@ self.addEventListener('activate', (event) => {
           if (cacheWhitelist.indexOf(cacheName) === -1) {
             return caches.delete(cacheName);
           }
+          return null;
         })
       );
     })
