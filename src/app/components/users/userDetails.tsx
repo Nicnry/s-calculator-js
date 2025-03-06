@@ -1,6 +1,8 @@
 'use client';
 
-import { User } from "@/app/types/user";
+import { User } from "@/app/db/schema";
+import { UserService } from "@/app/services/userService";
+import { useState, useEffect } from "react";
 import { 
   Mail, 
   User as UserIcon, 
@@ -8,38 +10,39 @@ import {
   Edit 
 } from "lucide-react";
 import Link from "next/link";
-import { useEffect, useState } from "react";
 
-type UserDetailsProps = {
-  user: User;
-};
+export default function UserDetails({ id }: { id: number; }) {
+  const [user, setUser] = useState<User>();
 
-export default function UserDetails({ user }: UserDetailsProps) {
+  useEffect(() => {
+    (async () => setUser(await UserService.getUserById(id)))();
+  }, [id]);
+
   const [formattedCreatedAt, setFormattedCreatedAt] = useState('');
 
   useEffect(() => {
-    if (user.createdAt) {
+    if (user?.createdAt) {
       setFormattedCreatedAt(
-        new Date(user.createdAt).toLocaleDateString('fr-FR', {
+        new Date(user?.createdAt).toLocaleDateString('fr-FR', {
           day: '2-digit',
           month: '2-digit',
           year: 'numeric'
         })
       );
     }
-  }, [user.createdAt]);
+  }, [user?.createdAt]);
 
   return (
     <div className="max-w-2xl mx-auto bg-white shadow-lg rounded-xl overflow-hidden">
       <div className="bg-blue-50 px-6 py-8 flex flex-col items-center">
         <div className="w-24 h-24 bg-blue-200 rounded-full flex items-center justify-center text-blue-700 text-4xl font-bold mb-4">
-          {user.name.charAt(0).toUpperCase()}
+          {user?.name.charAt(0).toUpperCase()}
         </div>
-        <h1 className="text-2xl font-bold text-gray-800">{user.name}</h1>
-        <p className="text-gray-500 mb-4">{user.email}</p>
+        <h1 className="text-2xl font-bold text-gray-800">{user?.name}</h1>
+        <p className="text-gray-500 mb-4">{user?.email}</p>
         
         <Link 
-          href={`/users/${user.id}/edit`} 
+          href={`/users/${user?.id}/edit`} 
           className="flex items-center space-x-2 text-blue-600 hover:text-blue-800 transition-colors"
         >
           <Edit size={20} />
@@ -51,13 +54,13 @@ export default function UserDetails({ user }: UserDetailsProps) {
         <UserDetailItem 
           icon={<UserIcon size={20} />} 
           label="Nom complet" 
-          value={user.name} 
+          value={user!.name} 
         />
         
         <UserDetailItem 
           icon={<Mail size={20} />} 
           label="Adresse email" 
-          value={user.email} 
+          value={user!.email} 
         />
         
         {formattedCreatedAt && (
@@ -79,7 +82,7 @@ export default function UserDetails({ user }: UserDetailsProps) {
         
         <div className="flex space-x-3">
           <Link 
-            href={`/users/${user.id}/edit`} 
+            href={`/users/${user?.id}/edit`} 
             className="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600 transition-colors"
           >
             Modifier

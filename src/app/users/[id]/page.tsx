@@ -1,14 +1,10 @@
-import { getUserById } from "@/app/services/userService";
-import { notFound } from "next/navigation";
-import UserDetails from "./userDetails";
+import UserDetails from "@/app/components/users/userDetails";
 
 export default async function UserShowPage({ params, }: { params: Promise<{ id: string }> }) {
-  const { id } = await params
+  const { id } = await params;
+  const userId = Number(id);
+
+  if (isNaN(userId)) return <p>ID invalide</p>;
   
-  try {
-    const user = await getUserById(Number(id));
-    return <UserDetails user={user} />;
-  } catch {
-    notFound();
-  }
+  return <UserDetails id={userId} />;
 }

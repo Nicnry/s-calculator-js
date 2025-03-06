@@ -1,4 +1,71 @@
-import { User } from "@/app/types/user";
+import { localDb } from '@/app/db/database';
+import { User } from '@/app/db/schema';
+
+export class UserService {
+  static async getAllUsers(): Promise<User[]> {
+    try {
+      await localDb.ensureOpen();
+      return await localDb.users.toArray();
+    } catch (error) {
+      console.error('Erreur lors de la récupération des utilisateurs', error);
+      return [];
+    }
+  }
+
+  static async getUserById(id: number) {
+    try {
+      await localDb.ensureOpen();
+      const user = await localDb.users.get(id);
+      return user;
+    } catch (error) {
+      console.error('Erreur lors de la récupération des utilisateurs', error);
+      return undefined;
+    }
+  }
+
+  static async addUser(user: User) {
+    try {
+      await localDb.ensureOpen();
+      const id = await localDb.users.add({ ...user, createdAt: new Date() });
+      return id;
+    } catch (error) {
+      console.error("Erreur lors de l'ajout de l'utilisateur", error);
+      return null;
+    }
+  }
+
+  static async updateUser(id: number, updatedUser: Partial<User>): Promise<boolean> {
+    try {
+      await localDb.ensureOpen();
+      const user = await localDb.users.get(id);
+      if (!user) {
+        console.error('Utilisateur introuvable');
+        return false;
+      }
+      await localDb.users.update(id, { ...updatedUser, updatedAt: new Date() });
+      return true;
+    } catch (error) {
+      console.error("Erreur lors de la mise à jour de l'utilisateur", error);
+      return false;
+    }
+  }
+
+  static async deleteUser(id: number): Promise<boolean> {
+    try {
+      await localDb.ensureOpen();
+      const user = await localDb.users.get(id);
+      if (!user) {
+        console.error('Utilisateur introuvable');
+        return false;
+      }
+      await localDb.users.delete(id);
+      return true;
+    } catch (error) {
+      console.error("Erreur lors de la suppression de l'utilisateur", error);
+      return false;
+    }
+  }
+}
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL as string + "/users";
 
