@@ -5,14 +5,14 @@ import {
   Trash2 
 } from "lucide-react";
 import { useState } from "react";
-import { UserService } from "@/app/services/userService";
+import { AccountService } from "@/app/services/accountService";
 
-export default function UsersItem({ id, name, email, onDelete }: { id: number; name: string; email: string; onDelete: (id: number) => void }) {
+export default function UsersItem({ id, userId, bankName, accountNumber, accountType, balance, currency, onDelete }: { id: number, userId: number, bankName: string, accountNumber: string, accountType: string, balance: number, currency: string, onDelete: (id: number) => void; }) {
   const [isDeleting, setIsDeleting] = useState(false);
 
   const handleDelete = async () => {
     setIsDeleting(true);
-    const success = await UserService.deleteUser(id);
+    const success = await AccountService.deleteAccount(id);
     if (success) {
       alert("Utilisateur supprimé avec succès.");
       onDelete(id);
@@ -29,17 +29,21 @@ export default function UsersItem({ id, name, email, onDelete }: { id: number; n
     >
       <div className="flex items-center space-x-4">
         <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-bold">
-          {name.charAt(0).toUpperCase()}
+          {bankName.charAt(0).toUpperCase()}
         </div>
         <div>
-          <p className="font-semibold text-gray-800">{name}</p>
-          <p className="text-sm text-gray-500">{email}</p>
+          <p className="font-semibold text-gray-800">{userId}</p>
+          <p className="font-semibold text-gray-800">{bankName}</p>
+          <p className="text-sm text-gray-500">{accountNumber}</p>
+          <p className="text-sm text-gray-500">{accountType}</p>
+          <p className="text-sm text-gray-500">{balance}</p>
+          <p className="text-sm text-gray-500">{currency}</p>
         </div>
       </div>
   
       <div className="flex items-center space-x-3">
         <Link 
-          href={`/users/${id}`} 
+          href={`accounts/${id}`} 
           className="text-gray-500 hover:text-blue-600 transition-colors"
           title="Voir détails"
         >
@@ -47,18 +51,9 @@ export default function UsersItem({ id, name, email, onDelete }: { id: number; n
         </Link>
         
         <Link 
-          href={`/users/${id}/edit`} 
+          href={`accounts/${id}/edit`} 
           className="text-gray-500 hover:text-yellow-600 transition-colors"
           title="Modifier"
-        >
-          <Edit size={20} />
-        </Link>
-
-
-        <Link 
-          href={`/users/${id}/accounts`} 
-          className="text-gray-500 hover:text-yellow-600 transition-colors"
-          title="Comptes"
         >
           <Edit size={20} />
         </Link>

@@ -16,7 +16,7 @@ export interface BankAccount {
   accountType: string;
   balance: number;
   currency: string;
-  createdAt: Date;
+  createdAt?: Date;
 }
 
 export interface Transaction {
