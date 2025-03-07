@@ -1,24 +1,13 @@
-/* import SalaryList from "@/app/components/SalaryList";
-import SalaryForm from "@/app/components/SalaryForm";
-import { getUserById } from "@/app/services/userService";
+import SalariesListWrapper from "@/app/components/salaries/salariesListWrapper";
 
-export default async function UserSalariesPage({ params }: { params: { id: string } }) {
-  const userId = parseInt(params.id);
+export default async function SalaryPage({ params, }: { params: Promise<{ userId: string }> }) {
+  const { userId } = await params;
+  const id = Number(userId);
 
-  const user = await getUserById(userId);
-
-  if (!user) {
-    return <p>Utilisateur non trouvé</p>;
-  }
-
-  return (
-    <div>
-      <h1>Salaires de l'utilisateur {userId}</h1>
-      <SalaryForm userId={userId} />
-      <SalaryList userId={userId} />
-    </div>
-  );
+  if (isNaN(id)) return <p>ID invalide</p>;
+    return (
+      <>
+        <SalariesListWrapper />
+      </>
+    );
 }
- */
-
-export default function UserSalariesPage() {}

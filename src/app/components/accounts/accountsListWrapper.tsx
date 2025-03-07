@@ -49,6 +49,9 @@ export default function AccountsListWrapper() {
         </Suspense>
       </div>
     </div>
+    <div>
+      <Link href="/users/">Retour aux utilisateurs</Link>
+    </div>
     </>
     );
 };

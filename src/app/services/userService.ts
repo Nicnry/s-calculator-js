@@ -36,8 +36,7 @@ export class UserService {
 
   static async updateUser(id: number, updatedUser: Partial<User>): Promise<boolean> {
     try {
-      await localDb.ensureOpen();
-      const user = await localDb.users.get(id);
+      const user = await this.getUserById(id);
       if (!user) {
         console.error('Utilisateur introuvable');
         return false;
@@ -52,8 +51,7 @@ export class UserService {
 
   static async deleteUser(id: number): Promise<boolean> {
     try {
-      await localDb.ensureOpen();
-      const user = await localDb.users.get(id);
+      const user = await this.getUserById(id);
       if (!user) {
         console.error('Utilisateur introuvable');
         return false;

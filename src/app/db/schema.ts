@@ -40,5 +40,5 @@ export interface Salary {
   aanpDeduction: number;
   ijmA1Deduction: number;
   lppDeduction: number;
-  createdAt: Date;
+  createdAt?: Date;
 }

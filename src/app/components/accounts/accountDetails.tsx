@@ -10,6 +10,7 @@ import {
   Edit 
 } from "lucide-react";
 import Link from "next/link";
+import DetailItem from "@/app/components/global/DetailItem";
 
 export default function AccountDetails({ userId, accountId }: { userId: number; accountId: number; }) {
   const [account, setAccount] = useState<BankAccount>({ userId: userId, bankName : '', accountNumber: '', accountType: '', balance: 0, currency: ''});
@@ -52,44 +53,44 @@ export default function AccountDetails({ userId, accountId }: { userId: number; 
 
       <div className="p-6 space-y-4">
 
-        <AccountDetailItem 
+        <DetailItem 
           icon={<UserIcon size={20} />} 
           label="Nom complet" 
           value={String(account.userId)} 
         />
 
-        <AccountDetailItem 
+        <DetailItem 
           icon={<UserIcon size={20} />} 
           label="Nom complet" 
           value={account.bankName} 
         />
 
-        <AccountDetailItem 
+        <DetailItem 
           icon={<UserIcon size={20} />} 
           label="Nom complet" 
           value={account.accountNumber} 
         />
 
-        <AccountDetailItem 
+        <DetailItem 
           icon={<UserIcon size={20} />} 
           label="Nom complet" 
           value={account.accountType} 
         />
 
-        <AccountDetailItem 
+        <DetailItem 
           icon={<UserIcon size={20} />} 
           label="Nom complet" 
           value={String(account.balance)} 
         />
         
-        <AccountDetailItem 
+        <DetailItem 
           icon={<Mail size={20} />} 
           label="Adresse email" 
           value={account.currency} 
         />
         
         {formattedCreatedAt && (
-          <AccountDetailItem 
+          <DetailItem 
             icon={<Calendar size={20} />} 
             label="Date de création" 
             value={formattedCreatedAt} 
@@ -124,26 +125,6 @@ export default function AccountDetails({ userId, accountId }: { userId: number; 
             Supprimer
           </button>
         </div>
-      </div>
-    </div>
-  );
-}
-
-function AccountDetailItem({ 
-  icon, 
-  label, 
-  value 
-}: { 
-  icon: React.ReactNode, 
-  label: string, 
-  value: string 
-}) {
-  return (
-    <div className="flex items-center space-x-4 bg-gray-100 p-4 rounded-lg">
-      <div className="text-blue-600">{icon}</div>
-      <div>
-        <p className="text-sm text-gray-500">{label}</p>
-        <p className="font-semibold text-gray-800">{value}</p>
       </div>
     </div>
   );

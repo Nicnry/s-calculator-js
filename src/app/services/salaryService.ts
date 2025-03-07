@@ -1,40 +1,68 @@
-import { Salary } from "@/app/types/salary";
+import { Salary } from "@/app/db/schema";
+import { localDb } from "@/app/db/database";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL as string;
-
-export async function getSalaries(userId: number): Promise<Salary[]> {
-  try {
-    const res = await fetch(`${API_URL}/users/${userId}/salaries`, { cache: 'no-store' });
-    
-    if (!res.ok) {
-      const errorText = await res.text();
-      throw new Error(`Erreur lors de la récupération des salaires pour l'utilisateur ${userId}: ${errorText}`);
-    }
-    
-    return await res.json();
-  } catch (error: unknown) {
-    if (error instanceof Error) {
-      console.error("Error during fetch:", error.message);
-      throw new Error("Erreur lors du chargement des salaires: " + error.message);
-    } else {
-      console.error("Erreur inconnue lors de la récupération des salaires");
-      throw new Error("Erreur inconnue lors de la récupération des salaires");
+export class SalaryService {
+  static async getAllSalaries(): Promise<Salary[]> {
+    try {
+      await localDb.ensureOpen();
+      return await localDb.salaries.toArray();
+    } catch (error) {
+      console.error('Erreur lors de la récupération des salaires', error);
+      return [];
     }
   }
-}
 
+  static async getSalaryById(id: number): Promise<Salary> {
+    try {
+      await localDb.ensureOpen();
+      const salary = await localDb.salaries.get(id);
+      return salary!;
+    } catch (error) {
+      console.error('Erreur lors de la récupération du salaire', error);
+      throw new Error('Compte non trouvé');
+    }
+  }
 
-export async function addSalary(userId: number, salary: { amount: number; date: string }): Promise<Salary> {
-  const res = await fetch(`${API_URL}/users/${userId}/salaries`, {
-    method: "POST",
-    body: JSON.stringify(salary),
-    headers: { "Content-Type": "application/json" },
-  });
-  if (!res.ok) throw new Error("Erreur lors de l'ajout du salaire");
-  return res.json();
-}
+  static async addSalary(salary: Salary) {
+    try {
+      await localDb.ensureOpen();
+      const id = await localDb.salaries.add({ ...salary, createdAt: new Date() });
+      return id;
+    } catch (error) {
+      console.error("Erreur lors de l'ajout du compte", error);
+      return null;
+    }
+  }
 
-export async function deleteSalary(userId: number, salaryId: number) {
-  const res = await fetch(`${API_URL}/users/${userId}/salaries/${salaryId}`, { method: "DELETE" });
-  if (!res.ok) throw new Error("Erreur lors de la suppression");
+  static async updateSalary(id: number, updatedSalary: Partial<Salary>): Promise<boolean> {
+    try {
+      await localDb.ensureOpen();
+      const account = await localDb.salaries.get(id);
+      if (!account) {
+        console.error('Salaire introuvable');
+        return false;
+      }
+      await localDb.bankAccounts.update(id, { ...updatedSalary });
+      return true;
+    } catch (error) {
+      console.error("Erreur lors de la mise à jour du salaire", error);
+      return false;
+    }
+  }
+
+  static async deleteSalary(id: number): Promise<boolean> {
+    try {
+      await localDb.ensureOpen();
+      const account = await localDb.salaries.get(id);
+      if (!account) {
+        console.error('Salaire introuvable');
+        return false;
+      }
+      await localDb.salaries.delete(id);
+      return true;
+    } catch (error) {
+      console.error("Erreur lors de la suppression du salaire", error);
+      return false;
+    }
+  }
 }

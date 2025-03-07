@@ -1,6 +1,6 @@
 import AccountDetails from "@/app/components/accounts/accountDetails";
 
-export default async function AccountShowPage({ params, }: { params: Promise<{ userId: string, accountId: string }> }) {
+export default async function SalaryShowPage({ params, }: { params: Promise<{ userId: string, accountId: string }> }) {
   const { userId, accountId } = await params;
   const uId = Number(userId);
   const aId = Number(accountId);
