@@ -1,6 +1,6 @@
 // public/service-worker.js
 const CACHE_NAME = 'offline-cache-v1';
-const urlsToCache = [
+/* const urlsToCache = [
   '/',
   '/users'
 ];
@@ -87,4 +87,4 @@ self.addEventListener('activate', (event) => {
       );
     })
   );
-});
+}); */

@@ -2,7 +2,8 @@ import Link from "next/link";
 import { 
   Eye, 
   Edit, 
-  Trash2 
+  Trash2,
+  Landmark
 } from "lucide-react";
 import { useState } from "react";
 import { UserService } from "@/app/services/userService";
@@ -60,7 +61,7 @@ export default function UsersItem({ id, name, email, onDelete }: { id: number; n
           className="text-gray-500 hover:text-yellow-600 transition-colors"
           title="Comptes"
         >
-          <Edit size={20} />
+          <Landmark size={20} />
         </Link>
         
         <button 

@@ -2,12 +2,12 @@ import Link from "next/link";
 import { 
   Eye, 
   Edit, 
-  Trash2 
+  Trash2
 } from "lucide-react";
 import { useState } from "react";
 import { AccountService } from "@/app/services/accountService";
 
-export default function UsersItem({ id, userId, bankName, accountNumber, accountType, balance, currency, onDelete }: { id: number, userId: number, bankName: string, accountNumber: string, accountType: string, balance: number, currency: string, onDelete: (id: number) => void; }) {
+export default function AccountsItem({ id, userId, bankName, accountNumber, accountType, balance, currency, onDelete }: { id: number, userId: number, bankName: string, accountNumber: string, accountType: string, balance: number, currency: string, onDelete: (id: number) => void; }) {
   const [isDeleting, setIsDeleting] = useState(false);
 
   const handleDelete = async () => {
