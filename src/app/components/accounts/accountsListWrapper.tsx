@@ -7,12 +7,12 @@ import { AccountService } from '@/app/services/accountService';
 import Link from 'next/link';
 import AccountsList from '@/app/components/accounts/accountsList';
 
-export default function AccountsListWrapper() {
+export default function AccountsListWrapper({ userId }: {userId: number}) {
   const [accounts, setAccounts] = useState<BankAccount[]>([]);
 
   useEffect(() => {
     (async () => {
-      setAccounts(await AccountService.getAllAccounts())
+      setAccounts(await AccountService.getAllUserAccounts(userId))
     })();
   }, []);
 
@@ -38,7 +38,7 @@ export default function AccountsListWrapper() {
             <AccountsList 
               key={account.id} 
               id={account.id!} 
-              userId={1}
+              userId={userId}
               bankName={account.bankName} 
               accountNumber={account.accountNumber}
               accountType={account.accountType}

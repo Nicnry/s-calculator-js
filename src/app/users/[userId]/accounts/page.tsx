@@ -5,7 +5,7 @@ export default async function AccountPage({ params, }: { params: Promise<{ userI
   const id = Number(userId);
 
   if (isNaN(id)) return <p>ID invalide</p>;
-    return <AccountsListWrapper />;
+    return <AccountsListWrapper userId={id} />;
 }
 
 /* import { getUserById } from "@/app/services/userService";

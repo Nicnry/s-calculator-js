@@ -16,7 +16,7 @@ export default function AccountDetails({ userId, accountId }: { userId: number; 
   const [account, setAccount] = useState<BankAccount>({ userId: userId, bankName : '', accountNumber: '', accountType: '', balance: 0, currency: ''});
 
   useEffect(() => {
-    (async () => setAccount(await AccountService.getAccountById(accountId)))();
+    (async () => setAccount(await AccountService.getUserAccountById(userId, accountId)))();
   }, [accountId]);
 
   const [formattedCreatedAt, setFormattedCreatedAt] = useState('');
