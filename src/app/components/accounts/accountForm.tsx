@@ -1,6 +1,6 @@
 'use client'
 
-import { AccountService } from "@/app/services/accountService";
+import { UserAccountService } from "@/app/services/userAccountService";
 import { BankAccount, defaultAccount } from "@/app/db/schema";
 import FormComponent from "@/app/components/global/FormComponent";
 import FormField from "@/app/types/formField";
@@ -18,7 +18,7 @@ export default function AccountForm({ userId, account }: { userId: number, accou
   ];
 
   const onSubmit = async (data: BankAccount) => {
-    await AccountService.addAccount({ ...data, createdAt: new Date() });
+    await UserAccountService.addAccount({ ...data, createdAt: new Date() });
   };
 
   return <FormComponent initialData={initialData} fields={fields} onSubmit={onSubmit} title="Créer un compte" />;

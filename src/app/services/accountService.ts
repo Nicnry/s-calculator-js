@@ -15,32 +15,10 @@ export class AccountService {
     }
   }
 
-  static async getAllUserAccounts(userId: number): Promise<BankAccount[]> {
-    try {
-      await localDb.ensureOpen();
-      return await localDb.bankAccounts.where('userId').equals(userId).toArray();
-    } catch (error) {
-      console.error('Erreur lors de la récupération des comptes', error);
-      return [];
-    }
-  }
-
   static async getAccountById(id: number): Promise<BankAccount> {
     try {
       await localDb.ensureOpen();
       const account = await localDb.bankAccounts.get(id);
-      return account!;
-    } catch (error) {
-      console.error('Erreur lors de la récupération du compte', error);
-      throw new Error('Compte non trouvé');
-    }
-  }
-
-
-  static async getUserAccountById(userId: number, id: number): Promise<BankAccount> {
-    try {
-      await localDb.ensureOpen();
-      const account = await localDb.bankAccounts.where('userId').equals(userId).and(account => account.id === id).first();
       return account!;
     } catch (error) {
       console.error('Erreur lors de la récupération du compte', error);

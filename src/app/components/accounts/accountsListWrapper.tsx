@@ -3,7 +3,7 @@
 import { Suspense, useEffect, useState } from 'react';
 import React from 'react';
 import { BankAccount } from '@/app/db/schema';
-import { AccountService } from '@/app/services/accountService';
+import { UserAccountService } from '@/app/services/userAccountService';
 import Link from 'next/link';
 import AccountsList from '@/app/components/accounts/accountsList';
 
@@ -12,9 +12,9 @@ export default function AccountsListWrapper({ userId }: {userId: number}) {
 
   useEffect(() => {
     (async () => {
-      setAccounts(await AccountService.getAllUserAccounts(userId))
+      setAccounts(await UserAccountService.getAllUserAccounts(userId))
     })();
-  }, []);
+  }, [userId]);
 
   const handleDeleteAccount = (deletedId: number) => {
     setAccounts((prevAccounts) => prevAccounts.filter((account) => account.id !== deletedId));

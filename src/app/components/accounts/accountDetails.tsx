@@ -1,7 +1,7 @@
 'use client';
 
 import { BankAccount } from "@/app/db/schema";
-import { AccountService } from "@/app/services/accountService";
+import { UserAccountService } from "@/app/services/userAccountService";
 import { useState, useEffect } from "react";
 import { 
   Mail, 
@@ -16,8 +16,8 @@ export default function AccountDetails({ userId, accountId }: { userId: number; 
   const [account, setAccount] = useState<BankAccount>({ userId: userId, bankName : '', accountNumber: '', accountType: '', balance: 0, currency: ''});
 
   useEffect(() => {
-    (async () => setAccount(await AccountService.getUserAccountById(userId, accountId)))();
-  }, [accountId]);
+    (async () => setAccount(await UserAccountService.getUserAccountById(userId, accountId)))();
+  }, [accountId, userId]);
 
   const [formattedCreatedAt, setFormattedCreatedAt] = useState('');
 

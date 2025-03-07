@@ -5,14 +5,14 @@ import {
   Trash2
 } from "lucide-react";
 import { useState } from "react";
-import { AccountService } from "@/app/services/accountService";
+import { UserAccountService } from "@/app/services/userAccountService";
 
 export default function AccountsItem({ id, userId, bankName, accountNumber, accountType, balance, currency, onDelete }: { id: number, userId: number, bankName: string, accountNumber: string, accountType: string, balance: number, currency: string, onDelete: (id: number) => void; }) {
   const [isDeleting, setIsDeleting] = useState(false);
 
   const handleDelete = async () => {
     setIsDeleting(true);
-    const success = await AccountService.deleteAccount(id);
+    const success = await UserAccountService.deleteAccount(id);
     if (success) {
       alert("Utilisateur supprimé avec succès.");
       onDelete(id);
