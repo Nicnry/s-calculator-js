@@ -9,7 +9,7 @@ export default async function NewAccountPage({ params, }: { params: Promise<{ us
   return (
     <div className="p-6">
       <h1 className="text-2xl font-bold mb-4">Créer un compte pour le user {id}</h1>
-      <AccountForm />
+      <AccountForm userId={id} />
     </div>
   );
 }

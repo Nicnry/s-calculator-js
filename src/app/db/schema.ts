@@ -2,6 +2,7 @@ export interface User {
   id?: number;
   name: string;
   email: string;
+  password: string;
   salaries?: Salary[];
   accounts?: BankAccount[];
   createdAt?: Date;
@@ -41,4 +42,36 @@ export interface Salary {
   ijmA1Deduction: number;
   lppDeduction: number;
   createdAt?: Date;
+}
+
+export function defaultSalary(): Omit<Salary, "userId"> {
+  return {
+    totalSalary: 5000,
+    taxableSalary: 5000,
+    avsAiApgContribution: 5.3,
+    vdLpcfamDeduction: 0.06,
+    acDeduction: 1.1,
+    aanpDeduction: 0.4528,
+    ijmA1Deduction: 0.5265,
+    lppDeduction: 261.95,
+    createdAt: new Date,
+  };
+}
+
+export function defaultAccount(): Omit<BankAccount, "userId"> {
+  return {
+    bankName: "",
+    accountNumber: "",
+    accountType: "",
+    balance: 0,
+    currency: "",
+  }
+}
+
+export function defaultUser(): User {
+  return {
+    name: "",
+    email: "",
+    password: "",
+  }
 }

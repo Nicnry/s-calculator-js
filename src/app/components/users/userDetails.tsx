@@ -13,7 +13,7 @@ import Link from "next/link";
 import DetailItem from "@/app/components/global/DetailItem";
 
 export default function UserDetails({ id }: { id: number; }) {
-  const [user, setUser] = useState<User>({ name: '', email: ''});
+  const [user, setUser] = useState<User>({ name: '', email: '', password: ''});
 
   useEffect(() => {
     (async () => setUser(await UserService.getUserById(id)))();
