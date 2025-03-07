@@ -3,7 +3,8 @@ import {
   Eye, 
   Edit, 
   Trash2,
-  Landmark
+  Landmark,
+  Calculator
 } from "lucide-react";
 import { useState } from "react";
 import { UserService } from "@/app/services/userService";
@@ -55,13 +56,20 @@ export default function UsersItem({ id, name, email, onDelete }: { id: number; n
           <Edit size={20} />
         </Link>
 
-
         <Link 
           href={`/users/${id}/accounts`} 
           className="text-gray-500 hover:text-yellow-600 transition-colors"
           title="Comptes"
         >
           <Landmark size={20} />
+        </Link>
+
+        <Link 
+          href={`/users/${id}/salaries`} 
+          className="text-gray-500 hover:text-yellow-600 transition-colors"
+          title="Salaires"
+        >
+          <Calculator size={20} />
         </Link>
         
         <button 

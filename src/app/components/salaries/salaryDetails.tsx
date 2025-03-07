@@ -7,7 +7,7 @@ import {
   Mail, 
   User as UserIcon, 
   Calendar, 
-  Edit 
+  Edit
 } from "lucide-react";
 import Link from "next/link";
 import DetailItem from "@/app/components/global/DetailItem";
@@ -117,7 +117,7 @@ export default function SalaryDetails({ userId, salaryId }: { userId: number; sa
 
       <div className="bg-gray-50 px-6 py-4 flex justify-between items-center">
         <Link 
-          href=".." 
+          href="../salaries" 
           className="text-blue-600 hover:underline"
         >
           Retour à la liste

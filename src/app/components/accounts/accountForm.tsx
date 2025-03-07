@@ -113,13 +113,22 @@ export default function AccountForm({ account }: { account?: BankAccount }) {
           />
         </div>
 
-        <button 
-          type="submit"
-          disabled={loading}
-          className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors w-full"
-        >
-          {loading ? "Création..." : "Créer"}
-        </button>
+        <div className="flex justify-between mt-4">
+          <button 
+            type="submit"
+            disabled={loading}
+            className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors w-1/2 mr-2"
+          >
+            {loading ? "Création..." : "Créer"}
+          </button>
+          <button 
+            type="button"
+            onClick={() => router.back()}
+            className="bg-gray-400 text-white px-4 py-2 rounded-lg hover:bg-gray-500 transition-colors w-1/2 ml-2"
+          >
+            Annuler
+          </button>
+        </div>
       </form>
     </div>
   );
