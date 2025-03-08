@@ -41,6 +41,7 @@ export interface Salary {
   aanpDeduction: number;
   ijmA1Deduction: number;
   lppDeduction: number;
+  monthlyPayments: number;
   createdAt?: Date;
 }
 
@@ -54,6 +55,7 @@ export function defaultSalary(): Omit<Salary, "userId"> {
     aanpDeduction: 0.4528,
     ijmA1Deduction: 0.5265,
     lppDeduction: 261.95,
+    monthlyPayments: 12,
     createdAt: new Date,
   };
 }

@@ -4,7 +4,6 @@ import { Suspense, useEffect, useState } from 'react';
 import React from 'react';
 import { Salary } from '@/app/db/schema';
 import { SalaryService } from '@/app/services/salaryService';
-import Link from 'next/link';
 import SalariesList from '@/app/components/salaries/salariesList';
 
 export default function SalariesListWrapper() {
@@ -21,41 +20,24 @@ export default function SalariesListWrapper() {
   };
   
   return (
-    <>
-      <div className="flex justify-between items-center mb-6">
-
-        <h1 className="text-3xl font-bold mb-6">Gestion des salaires</h1>
-        <Link 
-          href={`salaries/new`} 
-          className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition"
-          title="+ Créer un compte"
-        >+ Créer un salaire</Link>
-      </div>
-      <div className="bg-white shadow-lg rounded-xl overflow-hidden">
-        <div className="divide-y divide-gray-100">
-        <Suspense fallback={<SalaryListSkeleton />}>
+      <Suspense fallback={<SalaryListSkeleton />}>
         {salaries.map((salary) => (
-            <SalariesList 
-              key={salary.id} 
-              id={salary.id!} 
-              userId={1}
-              totalSalary={salary.totalSalary} 
-              avsAiApgContribution={salary.avsAiApgContribution}
-              vdLpcfamDeduction={salary.vdLpcfamDeduction}
-              acDeduction={salary.acDeduction}
-              aanpDeduction={salary.aanpDeduction}
-              ijmA1Deduction={salary.ijmA1Deduction}
-              lppDeduction={salary.lppDeduction}
-              onDelete={handleDeleteAccount} />
-          ))}
-        </Suspense>
-      </div>
-    </div>
-    <div>
-      <Link href="/users/">Retour aux utilisateurs</Link>
-    </div>
-    </>
-    );
+          <SalariesList 
+            key={salary.id} 
+            id={salary.id!} 
+            userId={1}
+            totalSalary={salary.totalSalary} 
+            avsAiApgContribution={salary.avsAiApgContribution}
+            vdLpcfamDeduction={salary.vdLpcfamDeduction}
+            acDeduction={salary.acDeduction}
+            aanpDeduction={salary.aanpDeduction}
+            ijmA1Deduction={salary.ijmA1Deduction}
+            lppDeduction={salary.lppDeduction}
+            onDelete={handleDeleteAccount} 
+          />
+        ))}
+      </Suspense>
+  );
 };
 
 function SalaryListSkeleton() {

@@ -17,6 +17,7 @@ export default function SalaryForm({ userId, salary }: { userId: number, salary?
     { name: "aanpDeduction", label: "Cotisation AANP", type: "number" },
     { name: "ijmA1Deduction", label: "Cotisation IJMA1", type: "number" },
     { name: "lppDeduction", label: "Cotisation LPP", type: "number" },
+    { name: "monthlyPayments", label: "Récurrence", type: "number" },
   ];
 
   const onSubmit = async (data: Salary) => {
