@@ -13,7 +13,8 @@ import {
   CreditCard,
   ArrowLeft,
   Trash2,
-  CalendarDays
+  CalendarDays,
+  CalendarRange
 } from "lucide-react";
 import Link from "next/link";
 import DetailItem from "@/app/components/global/DetailItem";
@@ -39,6 +40,7 @@ export default function SalaryDetails({ userId, salaryId }: SalaryDetailsProps) 
   
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [formattedCreatedAt, setFormattedCreatedAt] = useState<string>('');
+  const [isAnnualView, setIsAnnualView] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchSalary = async (): Promise<void> => {
@@ -89,6 +91,14 @@ export default function SalaryDetails({ userId, salaryId }: SalaryDetailsProps) 
 
   const netSalary = calculateNetSalary();
 
+  const getAnnualAmount = (monthlyAmount: number): number => {
+    return monthlyAmount * (salary.monthlyPayments || 12);
+  };
+
+  const getDisplayAmount = (monthlyAmount: number): number => {
+    return isAnnualView ? getAnnualAmount(monthlyAmount) : monthlyAmount;
+  };
+
   const formatCurrency = (amount: number): string => {
     return new Intl.NumberFormat('fr-CH', { 
       style: 'decimal',
@@ -114,6 +124,10 @@ export default function SalaryDetails({ userId, salaryId }: SalaryDetailsProps) 
     }
   };
 
+  const toggleView = (): void => {
+    setIsAnnualView(!isAnnualView);
+  };
+
   if (isLoading) {
     return (
       <div className="max-w-2xl mx-auto p-8 flex justify-center items-center">
@@ -126,18 +140,29 @@ export default function SalaryDetails({ userId, salaryId }: SalaryDetailsProps) 
     <div className="max-w-2xl mx-auto bg-white shadow-lg rounded-xl overflow-hidden">
       <div className="bg-gradient-to-r from-blue-500 to-blue-600 px-6 py-8 flex flex-col items-center text-white">
         <div className="w-24 h-24 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center text-white text-xl font-bold mb-4 border-2 border-white/30">
-          CHF {formatCurrency(netSalary)}
+          CHF {formatCurrency(getDisplayAmount(netSalary))}
         </div>
         <h1 className="text-2xl font-bold">Fiche de salaire</h1>
-        <p className="mb-4">Employé #{salary?.userId}</p>
+        <p className="mb-2">Employé #{salary?.userId}</p>
+        <p className="mb-4 text-sm">{isAnnualView ? 'Vue annuelle' : 'Vue mensuelle'}</p>
         
-        <Link 
-          href={`${salary?.id}/edit`} 
-          className="flex items-center space-x-2 bg-white/20 hover:bg-white/30 backdrop-blur-sm px-4 py-2 rounded-full transition-colors"
-        >
-          <Edit size={16} />
-          <span>Modifier</span>
-        </Link>
+        <div className="flex gap-4 mb-4">
+          <button
+            onClick={toggleView}
+            className="flex items-center space-x-2 bg-white/20 hover:bg-white/30 backdrop-blur-sm px-4 py-2 rounded-full transition-colors"
+          >
+            <CalendarRange size={16} />
+            <span>{isAnnualView ? 'Voir montant mensuel' : 'Voir montant annuel'}</span>
+          </button>
+          
+          <Link 
+            href={`${salary?.id}/edit`} 
+            className="flex items-center space-x-2 bg-white/20 hover:bg-white/30 backdrop-blur-sm px-4 py-2 rounded-full transition-colors"
+          >
+            <Edit size={16} />
+            <span>Modifier</span>
+          </Link>
+        </div>
       </div>
 
       <div className="p-6">
@@ -168,28 +193,27 @@ export default function SalaryDetails({ userId, salaryId }: SalaryDetailsProps) 
           </div>
           
           <div className="bg-green-50 p-4 rounded-lg">
-            <h2 className="font-semibold text-gray-700 mb-3">Montants principaux</h2>
+            <h2 className="font-semibold text-gray-700 mb-3">Montants principaux {isAnnualView && '(annuels)'}</h2>
             <DetailItem 
               icon={<DollarSign size={18} className="text-green-600" />} 
-              label="Salaire brut" 
-              value={`CHF ${formatCurrency(salary.totalSalary)}`} 
+              label={`Salaire brut ${isAnnualView ? 'annuel' : ''}`}
+              value={`CHF ${formatCurrency(getDisplayAmount(salary.totalSalary))}`} 
             />
             
             <DetailItem 
               icon={<CreditCard size={18} className="text-green-600" />} 
-              label="Salaire imposable" 
-              value={`CHF ${formatCurrency(salary.taxableSalary)}`} 
+              label={`Salaire imposable ${isAnnualView ? 'annuel' : ''}`}
+              value={`CHF ${formatCurrency(getDisplayAmount(salary.taxableSalary))}`} 
             />
             
-            {/* Implémentation personnalisée pour le salaire net avec mise en évidence */}
             <div className="flex items-start py-2">
               <div className="mt-0.5 mr-3">
                 <Calculator size={18} className="text-green-600" />
               </div>
               <div>
-                <span className="text-sm text-gray-600">Salaire net</span>
+                <span className="text-sm text-gray-600">Salaire net {isAnnualView ? 'annuel' : ''}</span>
                 <p className="font-semibold text-green-700 bg-green-100 px-2 py-1 rounded mt-1">
-                  CHF {formatCurrency(netSalary)}
+                  CHF {formatCurrency(getDisplayAmount(netSalary))}
                 </p>
               </div>
             </div>
@@ -197,42 +221,42 @@ export default function SalaryDetails({ userId, salaryId }: SalaryDetailsProps) 
         </div>
         
         <div className="bg-gray-50 p-4 rounded-lg mb-6">
-          <h2 className="font-semibold text-gray-700 mb-3">Déductions</h2>
+          <h2 className="font-semibold text-gray-700 mb-3">Déductions {isAnnualView && '(annuelles)'}</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <DetailItem 
               icon={<Percent size={18} className="text-red-500" />} 
               label="AVS/AI/APG" 
-              value={`${salary.avsAiApgContribution}% (CHF ${formatCurrency(salary.totalSalary * salary.avsAiApgContribution / 100)})`} 
+              value={`${salary.avsAiApgContribution}% (CHF ${formatCurrency(getDisplayAmount(salary.totalSalary * salary.avsAiApgContribution / 100))})`} 
             />
             
             <DetailItem 
               icon={<Percent size={18} className="text-red-500" />} 
               label="VD/LPCFam" 
-              value={`${salary.vdLpcfamDeduction}% (CHF ${formatCurrency(salary.totalSalary * salary.vdLpcfamDeduction / 100)})`} 
+              value={`${salary.vdLpcfamDeduction}% (CHF ${formatCurrency(getDisplayAmount(salary.totalSalary * salary.vdLpcfamDeduction / 100))})`} 
             />
             
             <DetailItem 
               icon={<Percent size={18} className="text-red-500" />} 
               label="AC" 
-              value={`${salary.acDeduction}% (CHF ${formatCurrency(salary.totalSalary * salary.acDeduction / 100)})`} 
+              value={`${salary.acDeduction}% (CHF ${formatCurrency(getDisplayAmount(salary.totalSalary * salary.acDeduction / 100))})`} 
             />
             
             <DetailItem 
               icon={<Percent size={18} className="text-red-500" />} 
               label="AANP" 
-              value={`${salary.aanpDeduction}% (CHF ${formatCurrency(salary.totalSalary * salary.aanpDeduction / 100)})`} 
+              value={`${salary.aanpDeduction}% (CHF ${formatCurrency(getDisplayAmount(salary.totalSalary * salary.aanpDeduction / 100))})`} 
             />
             
             <DetailItem 
               icon={<Percent size={18} className="text-red-500" />} 
               label="IJM A1" 
-              value={`${salary.ijmA1Deduction}% (CHF ${formatCurrency(salary.totalSalary * salary.ijmA1Deduction / 100)})`} 
+              value={`${salary.ijmA1Deduction}% (CHF ${formatCurrency(getDisplayAmount(salary.totalSalary * salary.ijmA1Deduction / 100))})`} 
             />
             
             <DetailItem 
               icon={<CreditCard size={18} className="text-red-500" />} 
               label="LPP (montant fixe)" 
-              value={`CHF ${formatCurrency(salary.lppDeduction)}`} 
+              value={`CHF ${formatCurrency(getDisplayAmount(salary.lppDeduction))}`} 
             />
           </div>
         </div>
