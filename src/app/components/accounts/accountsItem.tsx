@@ -1,7 +1,8 @@
 import Link from "next/link";
 import { 
   Eye, 
-  Edit, 
+  Edit,
+  ArrowLeftRight,
   Trash2
 } from "lucide-react";
 import { useState } from "react";
@@ -56,6 +57,14 @@ export default function AccountsItem({ id, userId, bankName, accountNumber, acco
           title="Modifier"
         >
           <Edit size={20} />
+        </Link>
+        
+        <Link 
+          href={`accounts/${id}/transactions`} 
+          className="text-gray-500 hover:text-yellow-600 transition-colors"
+          title="Modifier"
+        >
+          <ArrowLeftRight size={20} />
         </Link>
         
         <button 

@@ -1,64 +1,53 @@
 import Link from "next/link";
-import { 
-  Eye, 
-  Edit, 
-  Trash2
-} from "lucide-react";
+import { Eye, Edit, Trash2 } from "lucide-react";
 import { useState } from "react";
-import { SalaryService } from "@/app/services/salaryService";
+import { AccountTransaction } from "@/app/db/schema";
+import { AccountTransactionService } from "@/app/services/accountTransactionService";
 
-export default function TransactionsItem({ id, userId, totalSalary, avsAiApgContribution, vdLpcfamDeduction, acDeduction, aanpDeduction, ijmA1Deduction, lppDeduction, onDelete }:   { id: number, userId: number, totalSalary: number, avsAiApgContribution: number, vdLpcfamDeduction: number, acDeduction: number, aanpDeduction: number, ijmA1Deduction: number, lppDeduction: number, onDelete: (id: number) => void; }) {
+export default function TransactionsItem({ id, bankAccountId, amount, type, category, date, description, onDelete }: AccountTransaction & { onDelete: (id: number) => void }) {
   const [isDeleting, setIsDeleting] = useState<boolean>(false);
-  
-  const netSalary = getNetSalary(
-    totalSalary, 
-    [avsAiApgContribution, vdLpcfamDeduction, acDeduction, aanpDeduction, ijmA1Deduction], 
-    [lppDeduction]
-  );
 
   const handleDelete = async (): Promise<void> => {
     setIsDeleting(true);
-    const success = await SalaryService.deleteSalary(id);
+    const success = await AccountTransactionService.deleteAccountTransaction(id!);
     if (success) {
-      alert("Salaire supprimé avec succès.");
-      onDelete(id);
+      alert("Transaction supprimée avec succès.");
+      onDelete(id!);
     } else {
-      alert("Erreur lors de la suppression du salaire.");
+      alert("Erreur lors de la suppression de la transaction.");
     }
     setIsDeleting(false);
   };
-  
+
   const formatCurrency = (amount: number): string => {
     return new Intl.NumberFormat('fr-CH', { 
-      style: 'decimal',
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2
+      style: 'currency', 
+      currency: 'CHF', 
+      minimumFractionDigits: 2 
     }).format(amount);
   };
-  
+
   return (
     <div className="bg-white rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition-all duration-200 mb-4 overflow-hidden">
       <div className="p-5">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center">
-            <div className="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold">
-              {userId}
+            <div className={`w-12 h-12 rounded-full flex items-center justify-center font-bold text-white ${type === 'income' ? 'bg-green-600' : 'bg-red-600'}`}>
+              {type === 'income' ? "+" : "-"}
             </div>
             <div className="ml-4">
-              <h3 className="text-lg font-bold text-gray-800">
-                Employé #{userId}
-              </h3>
+              <h3 className="text-lg font-bold text-gray-800">{category}</h3>
               <div className="flex items-center mt-1">
-                <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
-                  Net: CHF {formatCurrency(netSalary)}
+                <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${type === 'income' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
+                  {formatCurrency(amount)}
                 </span>
               </div>
             </div>
           </div>
-          
+
           <div className="flex items-center space-x-2">
             <Link 
-              href={`salaries/${id}`} 
+              href={`transactions/${id}`} 
               className="p-2 text-gray-500 hover:text-blue-600 hover:bg-blue-50 rounded-full transition-colors"
               title="Voir détails"
             >
@@ -66,7 +55,7 @@ export default function TransactionsItem({ id, userId, totalSalary, avsAiApgCont
             </Link>
             
             <Link 
-              href={`salaries/${id}/edit`} 
+              href={`transactions/${id}/edit`} 
               className="p-2 text-gray-500 hover:text-yellow-600 hover:bg-yellow-50 rounded-full transition-colors"
               title="Modifier"
             >
@@ -87,56 +76,26 @@ export default function TransactionsItem({ id, userId, totalSalary, avsAiApgCont
             </button>
           </div>
         </div>
-        
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 border-t border-gray-100 pt-4">
+
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-4 border-t border-gray-100 pt-4">
           <div className="flex flex-col">
-            <span className="text-xs text-gray-500">Salaire brut</span>
-            <span className="font-semibold text-gray-800">CHF {formatCurrency(totalSalary)}</span>
+            <span className="text-xs text-gray-500">Date</span>
+            <span className="font-semibold text-gray-800">{new Date(date).toLocaleDateString()}</span>
           </div>
-          
+
           <div className="flex flex-col">
-            <span className="text-xs text-gray-500">AVS/AI/APG</span>
-            <span className="font-semibold text-gray-800">{avsAiApgContribution}%</span>
+            <span className="text-xs text-gray-500">Compte bancaire</span>
+            <span className="font-semibold text-gray-800">#{bankAccountId}</span>
           </div>
-          
-          <div className="flex flex-col">
-            <span className="text-xs text-gray-500">VD/LPCFam</span>
-            <span className="font-semibold text-gray-800">{vdLpcfamDeduction}%</span>
-          </div>
-          
-          <div className="flex flex-col">
-            <span className="text-xs text-gray-500">AC</span>
-            <span className="font-semibold text-gray-800">{acDeduction}%</span>
-          </div>
-          
-          <div className="flex flex-col">
-            <span className="text-xs text-gray-500">AANP</span>
-            <span className="font-semibold text-gray-800">{aanpDeduction}%</span>
-          </div>
-          
-          <div className="flex flex-col">
-            <span className="text-xs text-gray-500">IJM A1</span>
-            <span className="font-semibold text-gray-800">{ijmA1Deduction}%</span>
-          </div>
-          
-          <div className="flex flex-col">
-            <span className="text-xs text-gray-500">LPP</span>
-            <span className="font-semibold text-gray-800">CHF {formatCurrency(lppDeduction)}</span>
-          </div>
-          
-          <div className="flex flex-col">
-            <span className="text-xs text-gray-500">Salaire net</span>
-            <span className="font-semibold text-green-600">CHF {formatCurrency(netSalary)}</span>
-          </div>
+
+          {description && (
+            <div className="flex flex-col col-span-2 md:col-span-1">
+              <span className="text-xs text-gray-500">Description</span>
+              <span className="font-semibold text-gray-800">{description}</span>
+            </div>
+          )}
         </div>
       </div>
     </div>
   );
-}
-
-function getNetSalary(taxableSalary: number, percentDeductions: number[], fixedDeductions: number[]): number {
-  const totalPercentDeduction = percentDeductions.reduce((acc, percent) => acc + (taxableSalary * percent / 100), 0);
-  const totalFixedDeduction = fixedDeductions.reduce((acc, deduction) => acc + deduction, 0);
-
-  return taxableSalary - totalPercentDeduction - totalFixedDeduction;
 }

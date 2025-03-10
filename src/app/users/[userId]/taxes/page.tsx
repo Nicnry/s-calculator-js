@@ -8,7 +8,7 @@ export default async function SalaryPage({ params }: { params: Promise<{ userId:
 
   return (
     <>
-      <SalariesListWrapper />
+      <SalariesListWrapper userId={id} />
     </>
   );
 }

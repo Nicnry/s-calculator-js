@@ -1,10 +1,11 @@
 import Dexie from 'dexie';
-import { User, BankAccount, Salary } from './schema';
+import { User, BankAccount, Salary, AccountTransaction } from './schema';
 
 export class LocalDatabase extends Dexie {
   users: Dexie.Table<User, number>;
   bankAccounts: Dexie.Table<BankAccount, number>;
   salaries: Dexie.Table<Salary, number>;
+  accountTransactions: Dexie.Table<AccountTransaction, number>;
 
   constructor() {
     super('SCalculator');
@@ -12,12 +13,14 @@ export class LocalDatabase extends Dexie {
     this.version(1).stores({
       users: '++id, name, email, createdAt',
       bankAccounts: '++id, userId, bankName, accountNumber, accountType, balance, currency, createdAt',
-      salaries: '++id, userId, totalSalary, taxableSalary, avsAiApgContribution, vdLpcfamDeduction, acDeduction, aanpDeduction, ijmA1Deduction, lppDeduction, monthlyPayments, createdAt'
+      salaries: '++id, userId, totalSalary, taxableSalary, avsAiApgContribution, vdLpcfamDeduction, acDeduction, aanpDeduction, ijmA1Deduction, lppDeduction, monthlyPayments, createdAt',
+      accountTransactions: '++id, bankAccountId, amount, type, category, date, description, createdAt'
     });
 
     this.users = this.table('users');
     this.bankAccounts = this.table('bankAccounts');
     this.salaries = this.table('salaries');
+    this.accountTransactions = this.table('accountTransactions');
   }
 
   async ensureOpen(): Promise<void> {

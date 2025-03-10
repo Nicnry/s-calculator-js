@@ -6,7 +6,7 @@ import { Salary } from '@/app/db/schema';
 import { SalaryService } from '@/app/services/salaryService';
 import SalariesList from '@/app/components/salaries/salariesList';
 
-export default function SalariesListWrapper() {
+export default function SalariesListWrapper({ userId }: {userId: number}) {
   const [salaries, setSalaries] = useState<Salary[]>([]);
 
   useEffect(() => {
@@ -25,7 +25,7 @@ export default function SalariesListWrapper() {
           <SalariesList 
             key={salary.id} 
             id={salary.id!} 
-            userId={1}
+            userId={userId}
             totalSalary={salary.totalSalary} 
             avsAiApgContribution={salary.avsAiApgContribution}
             vdLpcfamDeduction={salary.vdLpcfamDeduction}

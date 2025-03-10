@@ -1,4 +1,5 @@
 import FormComponentProps from "@/app/types/props/formComponentProps";
+import FormField from "@/app/types/formField";
 import { useRouter } from "next/navigation";
 import { ChangeEvent, FormEvent, useState } from "react";
 
@@ -12,7 +13,7 @@ export default function FormComponent<T extends Record<string, string | number |
   const [formData, setFormData] = useState<T>(initialData);
   const [loading, setLoading] = useState(false);
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
 
     if (formData[name] instanceof Date) {
@@ -35,23 +36,50 @@ export default function FormComponent<T extends Record<string, string | number |
     }
   };
 
+  const renderField = (field: FormField) => {
+    const { name, label, type = "text", options = [] } = field;
+    
+    if (type === "select") {
+      return (
+        <div className="flex flex-col" key={name}>
+          <label className="text-sm font-semibold text-gray-600">{label}</label>
+          <select
+            name={name}
+            value={String(formData[name])}
+            onChange={handleChange}
+            required
+            className="p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+            {options.map((option) => (
+              <option key={option} value={option}>
+                {option}
+              </option>
+            ))}
+          </select>
+        </div>
+      );
+    }
+
+    return (
+      <div className="flex flex-col" key={name}>
+        <label className="text-sm font-semibold text-gray-600">{label}</label>
+        <input
+          type={type}
+          name={name}
+          value={formData[name] instanceof Date ? (formData[name] as Date).toISOString().split('T')[0] : formData[name]}
+          onChange={handleChange}
+          required
+          className="p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
+      </div>
+    );
+  };
+
   return (
     <div className="max-w-2xl mx-auto bg-white shadow-lg rounded-xl overflow-hidden p-6">
       <h2 className="text-2xl font-bold text-gray-800 mb-4">{title}</h2>
       <form onSubmit={handleSubmit} className="space-y-4">
-        {fields.map(({ name, label, type = "text" }) => (
-          <div className="flex flex-col" key={name}>
-            <label className="text-sm font-semibold text-gray-600">{label}</label>
-            <input
-              type={type}
-              name={name}
-              value={formData[name] instanceof Date ? formData[name].toISOString().split('T')[0] : formData[name]}
-              onChange={handleChange}
-              required
-              className="p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-          </div>
-        ))}
+        {fields.map(renderField)}
 
         <div className="flex justify-between mt-4">
           <button

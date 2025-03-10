@@ -20,7 +20,7 @@ export interface BankAccount {
   createdAt?: Date;
 }
 
-export interface Transaction {
+export interface AccountTransaction {
   id?: number;
   bankAccountId: number;
   amount: number;
@@ -28,6 +28,7 @@ export interface Transaction {
   category: string;
   date: Date;
   description?: string;
+  createdAt?: Date;
 }
 
 export interface Salary {
@@ -43,6 +44,17 @@ export interface Salary {
   lppDeduction: number;
   monthlyPayments: number;
   createdAt?: Date;
+}
+
+export function defaultAccountTransaction(): Omit<AccountTransaction, "id" | "bankAccountId"> {
+  return {
+    amount: 0,
+    type: 'income',
+    category: 'Autre',
+    date: new Date(),
+    description: '',
+    createdAt: new Date(),
+  };
 }
 
 export function defaultSalary(): Omit<Salary, "userId"> {

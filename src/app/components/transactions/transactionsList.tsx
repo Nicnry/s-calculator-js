@@ -1,7 +1,19 @@
 import React from 'react';
 import TransactionsItem from '@/app/components/transactions/transactionsItem';
+import { AccountTransaction } from '@/app/db/schema';
 
-export default function TransactionsList({ id, userId, totalSalary, avsAiApgContribution, vdLpcfamDeduction, acDeduction, aanpDeduction, ijmA1Deduction, lppDeduction, onDelete }:   { id: number, userId: number, totalSalary: number, avsAiApgContribution: number, vdLpcfamDeduction: number, acDeduction: number, aanpDeduction: number, ijmA1Deduction: number, lppDeduction: number, onDelete: (id: number) => void; }) {
+export default function TransactionsList({ id, bankAccountId, amount, type, category, date, description, onDelete }: AccountTransaction & { onDelete: (id: number) => void }) {
   
-  return (<TransactionsItem id={id} userId={userId} totalSalary={totalSalary} avsAiApgContribution={avsAiApgContribution} vdLpcfamDeduction={vdLpcfamDeduction} acDeduction={acDeduction} aanpDeduction={aanpDeduction} ijmA1Deduction={ijmA1Deduction} lppDeduction={lppDeduction} onDelete={onDelete} />);
+  return (<TransactionsItem 
+          key={id}
+          id={id!}
+          bankAccountId={bankAccountId}
+          amount={amount}
+          type={type}
+          category={category}
+          date={date}
+          description={description}
+          onDelete={onDelete}
+          />
+  );
 };

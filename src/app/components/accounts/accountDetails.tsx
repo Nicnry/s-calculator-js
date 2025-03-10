@@ -1,6 +1,6 @@
 'use client';
 
-import { BankAccount } from "@/app/db/schema";
+import { AccountTransaction, BankAccount } from "@/app/db/schema";
 import { UserAccountService } from "@/app/services/userAccountService";
 import { useState, useEffect } from "react";
 import {
@@ -18,9 +18,11 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import DetailItem from "@/app/components/global/DetailItem";
+import { AccountTransactionService } from "@/app/services/accountTransactionService";
 
 export default function AccountDetails({ userId, accountId }: { userId: number; accountId: number; }) {
   const [account, setAccount] = useState<BankAccount>({ userId: userId, bankName: '', accountNumber: '', accountType: '', balance: 0, currency: ''});
+  const [transactions, setTransactions] = useState<AccountTransaction[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [formattedCreatedAt, setFormattedCreatedAt] = useState('');
 
@@ -28,6 +30,7 @@ export default function AccountDetails({ userId, accountId }: { userId: number; 
     const fetchAccount = async () => {
       try {
         setIsLoading(true);
+        setTransactions(await AccountTransactionService.getAllAccountTransactions(accountId));
         const accountData = await UserAccountService.getUserAccountById(userId, accountId);
         setAccount(accountData);
       } catch (error) {
@@ -36,9 +39,9 @@ export default function AccountDetails({ userId, accountId }: { userId: number; 
         setIsLoading(false);
       }
     };
-    
     fetchAccount();
   }, [accountId, userId]);
+
 
   useEffect(() => {
     if (account?.createdAt) {
@@ -187,13 +190,48 @@ export default function AccountDetails({ userId, accountId }: { userId: number; 
         
         <div className="bg-gray-50 p-4 rounded-lg">
           <h2 className="font-semibold text-gray-700 mb-3">Transactions récentes</h2>
-          <div className="text-center p-6 text-gray-500">
-            <BarChart3 size={36} className="mx-auto mb-2 text-gray-400" />
-            <p>Aucune transaction récente à afficher</p>
-            <button className="mt-2 text-blue-500 hover:underline">
-              Voir l'historique complet
-            </button>
-          </div>
+          {transactions.length > 0 ? (
+            <div className="space-y-3">
+              {transactions.slice(0, 5).map((transaction) => (
+                <div 
+                  key={transaction.id} 
+                  className={`flex justify-between items-center p-3 rounded-lg border-l-4 ${
+                    transaction.type === 'income' ? 'border-green-500 bg-green-50' : 'border-red-500 bg-red-50'
+                  }`}
+                >
+                  <div className="flex flex-col">
+                    <span className="font-medium">{transaction.description}</span>
+                    <span className="text-sm text-gray-600">
+                      {new Date(transaction.date).toLocaleDateString('fr-FR', {
+                        day: '2-digit',
+                        month: '2-digit',
+                        year: 'numeric'
+                      })}
+                      {transaction.category && ` • ${transaction.category}`}
+                    </span>
+                  </div>
+                  <div className={`font-bold ${transaction.type === 'income' ? 'text-green-600' : 'text-red-600'}`}>
+                  {account.currency} {transaction.type === 'income' ? '+' : '-'}{formatCurrency(parseFloat(String(transaction.amount)))}
+                  </div>
+                </div>
+              ))}
+              {transactions.length > 5 && (
+                <div className="text-center mt-4">
+                  <Link href={`/transactions/${accountId}`} className="text-blue-500 hover:underline">
+                    Voir toutes les transactions ({transactions.length})
+                  </Link>
+                </div>
+              )}
+            </div>
+          ) : (
+            <div className="text-center p-6 text-gray-500">
+              <BarChart3 size={36} className="mx-auto mb-2 text-gray-400" />
+              <p>Aucune transaction récente à afficher</p>
+              <Link href={`${accountId}/transactions/new`} className="mt-2 text-blue-500 hover:underline block">
+                Ajouter une transaction
+              </Link>
+            </div>
+          )}
         </div>
       </div>
 
