@@ -7,6 +7,6 @@ export default async function SalaryPage({ params }: { params: Promise<{ userId:
   if (isNaN(id)) return <p>ID invalide</p>;
 
   return (
-    <SalariesListWrapper />
+    <SalariesListWrapper userId={id} />
   );
 }

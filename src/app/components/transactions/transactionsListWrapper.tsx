@@ -20,7 +20,7 @@ export default function TransactionsListWrapper({ userId, accountId }: { userId:
       setAccount(await AccountService.getAccountById(accountId))
       setUser(await UserService.getUserById(userId))
     })();
-  }, []);
+  }, [userId, accountId]);
 
   const handleDeleteAccount = (deletedId: number) => {
     setTransactions((prevTransactions) => prevTransactions.filter((transaction) => transaction.id !== deletedId));
