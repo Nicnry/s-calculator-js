@@ -4,6 +4,7 @@ import UsersList from '@/app/components/users/usersList';
 import { User } from '@/app/db/schema';
 import { UserService } from '@/app/services/userService';
 import CreateNew from '@/app/components/global/CreateNew';
+import BackLink from '@/app/components/global/BackLink';
 
 export default function UserListWrapper() {
   const [users, setUsers] = useState<User[]>([]);
@@ -20,6 +21,7 @@ export default function UserListWrapper() {
   return (
     <>
       <div className="flex justify-between items-center mb-6">
+        <BackLink />
         <h1 className="text-3xl font-bold mb-6">Gestion des Utilisateurs</h1>
         <CreateNew href="users/new" title="+ Créer un utilisateur" />
       </div>
