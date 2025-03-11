@@ -7,5 +7,9 @@ export default async function SalaryShowPage({ params, }: { params: Promise<{ us
 
   if (isNaN(uId)) return <p>ID invalide</p>;
   
-  return <AccountDetails userId={uId} accountId={aId} />;
+  return (
+    <div className="container mx-auto px-4 py-8">
+      <AccountDetails userId={uId} accountId={aId} />
+    </div>
+  );
 }

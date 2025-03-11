@@ -4,8 +4,9 @@ import { Suspense, useEffect, useState } from 'react';
 import React from 'react';
 import { BankAccount } from '@/app/db/schema';
 import { UserAccountService } from '@/app/services/userAccountService';
-import Link from 'next/link';
 import AccountsList from '@/app/components/accounts/accountsList';
+import BackLink from '@/app/components/global/BackLink';
+import CreateNew from '@/app/components/global/CreateNew';
 
 export default function AccountsListWrapper({ userId }: {userId: number}) {
   const [accounts, setAccounts] = useState<BankAccount[]>([]);
@@ -23,35 +24,28 @@ export default function AccountsListWrapper({ userId }: {userId: number}) {
   return (
     <>
       <div className="flex justify-between items-center mb-6">
-
+        <BackLink />
         <h1 className="text-3xl font-bold mb-6">Gestion des comptes</h1>
-        <Link 
-          href={`accounts/new`} 
-          className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition"
-          title="+ Créer un compte"
-        >+ Créer un compte</Link>
+        <CreateNew href="accounts/new" title="+ Créer un compte" />
       </div>
       <div className="bg-white shadow-lg rounded-xl overflow-hidden">
         <div className="divide-y divide-gray-100">
-        <Suspense fallback={<UserListSkeleton />}>
-        {accounts.map((account) => (
-            <AccountsList 
-              key={account.id} 
-              id={account.id!} 
-              userId={userId}
-              bankName={account.bankName} 
-              accountNumber={account.accountNumber}
-              accountType={account.accountType}
-              balance={account.balance}
-              currency={account.currency}
-              onDelete={handleDeleteAccount} />
-          ))}
-        </Suspense>
+          <Suspense fallback={<UserListSkeleton />}>
+          {accounts.map((account) => (
+              <AccountsList 
+                key={account.id} 
+                id={account.id!} 
+                userId={userId}
+                bankName={account.bankName} 
+                accountNumber={account.accountNumber}
+                accountType={account.accountType}
+                balance={account.balance}
+                currency={account.currency}
+                onDelete={handleDeleteAccount} />
+            ))}
+          </Suspense>
+        </div>
       </div>
-    </div>
-    <div>
-      <Link href="/users/">Retour aux utilisateurs</Link>
-    </div>
     </>
     );
 };
