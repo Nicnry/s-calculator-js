@@ -1,9 +1,9 @@
 import { Suspense, useEffect, useState } from 'react';
 import React from 'react';
 import UsersList from '@/app/components/users/usersList';
-import Link from "next/link";
 import { User } from '@/app/db/schema';
 import { UserService } from '@/app/services/userService';
+import CreateNew from '@/app/components/global/CreateNew';
 
 export default function UserListWrapper() {
   const [users, setUsers] = useState<User[]>([]);
@@ -20,28 +20,23 @@ export default function UserListWrapper() {
   return (
     <>
       <div className="flex justify-between items-center mb-6">
-
         <h1 className="text-3xl font-bold mb-6">Gestion des Utilisateurs</h1>
-        <Link 
-          href={`/users/new`} 
-          className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition"
-          title="+ Créer un utilisateur"
-        >+ Créer un utilisateur</Link>
+        <CreateNew href="users/new" title="+ Créer un utilisateur" />
       </div>
       <div className="bg-white shadow-lg rounded-xl overflow-hidden">
         <div className="divide-y divide-gray-100">
-        <Suspense fallback={<UserListSkeleton />}>
-          {users.map((user) => (
-            <UsersList 
-              key={user.id} 
-              id={user.id!} 
-              name={user.name} 
-              email={user.email} 
-              onDelete={handleDeleteUser} />
-          ))}
-        </Suspense>
+          <Suspense fallback={<UserListSkeleton />}>
+            {users.map((user) => (
+              <UsersList 
+                key={user.id} 
+                id={user.id!} 
+                name={user.name} 
+                email={user.email} 
+                onDelete={handleDeleteUser} />
+            ))}
+          </Suspense>
+        </div>
       </div>
-    </div>
     </>
     );
 };

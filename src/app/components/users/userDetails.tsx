@@ -12,7 +12,7 @@ import {
 import Link from "next/link";
 import DetailItem from "@/app/components/global/DetailItem";
 
-export default function UserDetails({ id }: { id: number; }) {
+export default function UserDetail({ id }: { id: number; }) {
   const [user, setUser] = useState<User>({ name: '', email: '', password: ''});
 
   useEffect(() => {
@@ -32,6 +32,18 @@ export default function UserDetails({ id }: { id: number; }) {
       );
     }
   }, [user?.createdAt]);
+
+  const handleDelete = async () => {
+    if(confirm("Voulez-vous vraiment supprimer cet utilisateur ?")) {
+      try {
+        await UserService.deleteUser(id);
+        window.location.href = '/users';
+      } catch (error) {
+        console.error("Erreur lors de la suppression:", error);
+        alert("La suppression a échoué");
+      }
+    }
+  };
 
   return (
     <div className="max-w-2xl mx-auto bg-white shadow-lg rounded-xl overflow-hidden">
@@ -91,11 +103,7 @@ export default function UserDetails({ id }: { id: number; }) {
           
           <button 
             className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition-colors"
-            onClick={() => {
-              if(confirm("Voulez-vous vraiment supprimer cet utilisateur ?")) {
-                // TODO
-              }
-            }}
+            onClick={handleDelete}
           >
             Supprimer
           </button>

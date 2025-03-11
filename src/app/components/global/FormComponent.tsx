@@ -37,18 +37,27 @@ export default function FormComponent<T extends Record<string, string | number |
   };
 
   const renderField = (field: FormField) => {
-    const { name, label, type = "text", options = [] } = field;
+    const { name, label, type = "text", options = [], icon } = field;
+    
+    const labelElement = (
+      <label 
+        className={`text-sm font-semibold text-gray-700 ${icon ? 'flex items-center' : ''}`}
+      >
+        {icon && <span className="mr-2">{icon}</span>}
+        <span>{label}</span>
+      </label>
+    );
     
     if (type === "select") {
       return (
-        <div className="flex flex-col" key={name}>
-          <label className="text-sm font-semibold text-gray-600">{label}</label>
+        <div className="space-y-2" key={name}>
+          {labelElement}
           <select
             name={name}
             value={String(formData[name])}
             onChange={handleChange}
             required
-            className="p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
             {options.map((option) => (
               <option key={option} value={option}>
@@ -61,41 +70,64 @@ export default function FormComponent<T extends Record<string, string | number |
     }
 
     return (
-      <div className="flex flex-col" key={name}>
-        <label className="text-sm font-semibold text-gray-600">{label}</label>
+      <div className="space-y-2" key={name}>
+        {labelElement}
         <input
           type={type}
           name={name}
           value={formData[name] instanceof Date ? (formData[name] as Date).toISOString().split('T')[0] : formData[name]}
           onChange={handleChange}
           required
-          className="p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
       </div>
     );
   };
 
-  return (
-    <div className="max-w-2xl mx-auto bg-white shadow-lg rounded-xl overflow-hidden p-6">
-      <h2 className="text-2xl font-bold text-gray-800 mb-4">{title}</h2>
-      <form onSubmit={handleSubmit} className="space-y-4">
-        {fields.map(renderField)}
+  const mainTitle = title.split(':')[0];
+  const subTitle = title.includes(':') ? title.split(':')[1].trim() : '';
 
-        <div className="flex justify-between mt-4">
+  return (
+    <div className="max-w-2xl mx-auto bg-white shadow-lg rounded-xl overflow-hidden">
+      <div className="bg-blue-50 px-6 py-8 flex flex-col items-center">
+        <div className="w-24 h-24 bg-blue-200 rounded-full flex items-center justify-center text-blue-700 text-4xl font-bold mb-4">
+          {mainTitle.charAt(0).toUpperCase()}
+        </div>
+        <h1 className="text-2xl font-bold text-gray-800">{mainTitle}</h1>
+        {subTitle && <p className="text-gray-500 mb-4">{subTitle}</p>}
+      </div>
+
+      <form onSubmit={handleSubmit}>
+        <div className="p-6 space-y-4">
+          {fields.map(renderField)}
+        </div>
+
+        <div className="bg-gray-50 px-6 py-4 flex justify-between items-center">
           <button
             type="button"
             onClick={() => router.back()}
-            className="bg-gray-400 text-white px-4 py-2 rounded-lg hover:bg-gray-500 transition-colors w-1/2 mr-2"
+            className="text-blue-600 hover:underline"
           >
-            Annuler
+            Retour
           </button>
-          <button
-            type="submit"
-            disabled={loading}
-            className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors w-1/2 ml-2"
-          >
-            {loading ? "En cours..." : "Valider"}
-          </button>
+          
+          <div className="flex space-x-3">
+            <button
+              type="button"
+              onClick={() => router.back()}
+              className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 transition-colors"
+            >
+              Annuler
+            </button>
+            
+            <button
+              type="submit"
+              disabled={loading}
+              className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition-colors"
+            >
+              {loading ? "En cours..." : "Enregistrer"}
+            </button>
+          </div>
         </div>
       </form>
     </div>
