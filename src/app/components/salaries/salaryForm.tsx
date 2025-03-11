@@ -5,7 +5,7 @@ import { SalaryService } from "@/app/services/salaryService";
 import FormComponent from "@/app/components/global/FormComponent";
 import FormField from "@/app/types/formField";
 
-export default function SalaryForm({ userId, salary }: { userId: number, salary?: Salary }) {
+export default function SalaryForm({ userId, salary, update = false }: { userId: number, salary?: Salary, update?: boolean }) {
   const initialData = { ...defaultSalary(), ...salary, userId };
 
   const fields: FormField[] = [
@@ -21,8 +21,12 @@ export default function SalaryForm({ userId, salary }: { userId: number, salary?
   ];
 
   const onSubmit = async (data: Salary) => {
-    await SalaryService.addSalary({ ...data, createdAt: new Date() });
+    if(update) {
+      await SalaryService.updateSalary(salary!.id!, { ...data, createdAt: new Date() });
+    } else {
+      await SalaryService.addSalary({ ...data, createdAt: new Date() });
+    }
   };
 
-  return <FormComponent initialData={initialData} fields={fields} onSubmit={onSubmit} title="Créer un salaire" />;
+  return <FormComponent initialData={initialData} fields={fields} onSubmit={onSubmit} title={update ? "Modifier le salaire" : "Créer un salaire"} />;
 }

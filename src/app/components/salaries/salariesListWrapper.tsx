@@ -5,6 +5,8 @@ import React from 'react';
 import { Salary } from '@/app/db/schema';
 import { SalaryService } from '@/app/services/salaryService';
 import SalariesList from '@/app/components/salaries/salariesList';
+import BackLink from '@/app/components/global/BackLink';
+import CreateNew from '@/app/components/global/CreateNew';
 
 export default function SalariesListWrapper({ userId }: {userId: number}) {
   const [salaries, setSalaries] = useState<Salary[]>([]);
@@ -20,23 +22,34 @@ export default function SalariesListWrapper({ userId }: {userId: number}) {
   };
   
   return (
-      <Suspense fallback={<SalaryListSkeleton />}>
-        {salaries.map((salary) => (
-          <SalariesList 
-            key={salary.id} 
-            id={salary.id!} 
-            userId={userId}
-            totalSalary={salary.totalSalary} 
-            avsAiApgContribution={salary.avsAiApgContribution}
-            vdLpcfamDeduction={salary.vdLpcfamDeduction}
-            acDeduction={salary.acDeduction}
-            aanpDeduction={salary.aanpDeduction}
-            ijmA1Deduction={salary.ijmA1Deduction}
-            lppDeduction={salary.lppDeduction}
-            onDelete={handleDeleteAccount} 
-          />
-        ))}
-      </Suspense>
+    <>
+      <div className="flex justify-between items-center mb-6">
+        <BackLink href={`/users`} />
+        <h1 className="text-3xl font-bold mb-6">Gestion des salaires</h1>
+        <CreateNew href="salaries/new" title="+ Créer un salaire" />
+      </div>
+      <div className="bg-white shadow-lg rounded-xl overflow-hidden">
+        <div className="divide-y divide-gray-100">
+          <Suspense fallback={<SalaryListSkeleton />}>
+            {salaries.map((salary) => (
+              <SalariesList 
+                key={salary.id} 
+                id={salary.id!} 
+                userId={userId}
+                totalSalary={salary.totalSalary} 
+                avsAiApgContribution={salary.avsAiApgContribution}
+                vdLpcfamDeduction={salary.vdLpcfamDeduction}
+                acDeduction={salary.acDeduction}
+                aanpDeduction={salary.aanpDeduction}
+                ijmA1Deduction={salary.ijmA1Deduction}
+                lppDeduction={salary.lppDeduction}
+                onDelete={handleDeleteAccount} 
+              />
+            ))}
+          </Suspense>
+      </div>
+    </div>
+  </>
   );
 };
 

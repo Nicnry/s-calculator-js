@@ -25,5 +25,5 @@ export default function AccountForm({ userId, account, update = false }: { userI
     }
   };
 
-  return <FormComponent initialData={initialData} fields={fields} onSubmit={onSubmit} title="Créer un compte" />;
+  return <FormComponent initialData={initialData} fields={fields} onSubmit={onSubmit}  title={update ? "Modifier le compte" : "Créer un compte"} />;
 }

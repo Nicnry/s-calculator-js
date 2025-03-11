@@ -25,5 +25,5 @@ export default function UserForm({ user, update = false }: { user?: User, update
     }
   };
 
-  return <FormComponent initialData={initialData} fields={fields} onSubmit={onSubmit} title="Créer un utilisateur" />;
+  return <FormComponent initialData={initialData} fields={fields} onSubmit={onSubmit} title={update ? "Modifier l'utilisateur" : "Créer un utilisateur"} />;
 }

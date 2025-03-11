@@ -7,6 +7,8 @@ export default async function SalaryPage({ params }: { params: Promise<{ userId:
   if (isNaN(id)) return <p>ID invalide</p>;
 
   return (
-    <SalariesListWrapper userId={id} />
+    <div className="container mx-auto px-4 py-8">
+      <SalariesListWrapper userId={id} />
+    </div>
   );
 }
