@@ -8,7 +8,7 @@ import AccountsList from '@/app/components/accounts/accountsList';
 import BackLink from '@/app/components/global/BackLink';
 import CreateNew from '@/app/components/global/CreateNew';
 
-export default function AccountsListWrapper({ userId }: {userId: number}) {
+export default function AccountsListWrapper({ userId }: { userId: number }) {
   const [accounts, setAccounts] = useState<BankAccount[]>([]);
 
   useEffect(() => {

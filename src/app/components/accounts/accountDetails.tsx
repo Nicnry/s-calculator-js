@@ -66,7 +66,6 @@ export default function AccountDetails({ userId, accountId }: { userId: number; 
   const handleDelete = async (): Promise<void> => {
     if (confirm("Voulez-vous vraiment supprimer ce compte ?")) {
       try {
-        // Implement deletion logic here
         // const success = await UserAccountService.deleteUserAccount(accountId);
         alert("Compte supprimé avec succès.");
         window.location.href = "..";
@@ -105,7 +104,6 @@ export default function AccountDetails({ userId, accountId }: { userId: number; 
     }
   };
 
-  // Define background color based on bank name for a personalized touch
   const getBankColor = () => {
     const bankName = account.bankName.toLowerCase();
     if (bankName.includes('ubs')) return 'from-red-500 to-red-600';
@@ -113,7 +111,7 @@ export default function AccountDetails({ userId, accountId }: { userId: number; 
     if (bankName.includes('raiffeisen')) return 'from-yellow-500 to-yellow-600';
     if (bankName.includes('post') || bankName.includes('postfinance')) return 'from-yellow-400 to-amber-500';
     if (bankName.includes('bcv')) return 'from-green-500 to-green-600';
-    return 'from-blue-500 to-blue-600'; // Default
+    return 'from-blue-500 to-blue-600';
   };
 
   return (

@@ -12,7 +12,7 @@ export class AccountTransactionService {
     }
   }
 
-  static async getAccountById(id: number): Promise<AccountTransaction> {
+  static async getAccountTransactionById(id: number): Promise<AccountTransaction> {
     try {
       await localDb.ensureOpen();
       const account = await localDb.accountTransactions.get(id);

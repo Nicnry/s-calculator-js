@@ -8,6 +8,8 @@ import TransactionsList from '@/app/components/transactions/transactionsList';
 import Link from 'next/link';
 import { AccountService } from '@/app/services/accountService';
 import { UserService } from '@/app/services/userService';
+import BackLink from '@/app/components/global/BackLink';
+import CreateNew from '@/app/components/global/CreateNew';
 
 export default function TransactionsListWrapper({ userId, accountId }: { userId: number, accountId: number }) {
   const [transactions, setTransactions] = useState<AccountTransaction[]>([]);
@@ -29,13 +31,9 @@ export default function TransactionsListWrapper({ userId, accountId }: { userId:
   return (
     <>
     <div className="flex justify-between items-center mb-6">
-
+        <BackLink />
         <h1 className="text-3xl font-bold mb-6">Gestion des comptes transactions pour le compte{account?.accountNumber} de {user?.name}</h1>
-        <Link 
-          href={`transactions/new`} 
-          className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition"
-          title="+ Ajouter une transaction"
-        >+ Ajouter une transaction</Link>
+        <CreateNew href="transactions/new" title="+ Ajouter une transaction" />
       </div>
       <div className="bg-white shadow-lg rounded-xl overflow-hidden">
         <div className="divide-y divide-gray-100">

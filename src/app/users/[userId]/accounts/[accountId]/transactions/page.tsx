@@ -8,6 +8,8 @@ export default async function TransactionsPage({ params }: { params: Promise<{ u
   if (isNaN(id)) return <p>ID invalide</p>;
 
   return (
-    <TransactionsListWrapper userId={id} accountId={aId} />
+    <div className="container mx-auto px-4 py-8">
+      <TransactionsListWrapper userId={id} accountId={aId} />
+    </div>
   );
 }
