@@ -38,7 +38,7 @@ export default function FormComponent<T extends Record<string, string | number |
   };
 
   const renderField = (field: FormField) => {
-    const { name, label, type = "text", options = [], icon } = field;
+    const { name, label, type = "text", options = [], icon, placeholder, value } = field;
     
     const labelElement = (
       <label 
@@ -48,8 +48,79 @@ export default function FormComponent<T extends Record<string, string | number |
         <span>{label}</span>
       </label>
     );
+
+    switch(type) { 
+      case "select": { 
+        return (
+          <div className="space-y-2" key={name}>
+            {labelElement}
+            <select
+              name={name}
+              value={value}
+              onChange={handleChange}
+              required
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              {options.map((option) => (
+                <option key={option} value={option}>
+                  {option}
+                </option>
+              ))}
+            </select>
+          </div>
+        );
+      } 
+      case "number": { 
+        return (
+          <div className="space-y-2" key={name}>
+            {labelElement}
+            <input
+              type={type}
+              name={name}
+              value={Number(formData[name])}
+              onChange={handleChange}
+              required
+              placeholder={placeholder}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+        );
+      } 
+      case "date": { 
+        return (
+          <div className="space-y-2" key={name}>
+            {labelElement}
+            <input
+              type={type}
+              name={name}
+              value={(formData[name] as Date).toISOString().split('T')[0]}
+              onChange={handleChange}
+              required
+              placeholder={placeholder}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+        );
+      } 
+      default: { 
+        return (
+          <div className="space-y-2" key={name}>
+            {labelElement}
+            <input
+              type={type}
+              name={name}
+              value={value}
+              onChange={handleChange}
+              required
+              placeholder={placeholder}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+        );
+      } 
+   } 
     
-    if (type === "select") {
+    /* if (type === "select") {
       return (
         <div className="space-y-2" key={name}>
           {labelElement}
@@ -68,9 +139,9 @@ export default function FormComponent<T extends Record<string, string | number |
           </select>
         </div>
       );
-    }
+    } */
 
-    return (
+    /* return (
       <div className="space-y-2" key={name}>
         {labelElement}
         <input
@@ -79,10 +150,11 @@ export default function FormComponent<T extends Record<string, string | number |
           value={formData[name] instanceof Date ? (formData[name] as Date).toISOString().split('T')[0] : formData[name]}
           onChange={handleChange}
           required
+          placeholder={placeholder}
           className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
       </div>
-    );
+    ); */
   };
 
   const mainTitle = title.split(':')[0];
