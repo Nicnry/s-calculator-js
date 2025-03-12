@@ -1,17 +1,17 @@
 'use client';
 
-import { AccountTransaction, BankAccount, defaultAccountTransaction } from "@/app/db/schema";
+import { AccountTransaction, defaultAccountTransaction } from "@/app/db/schema";
 import FormComponent from "@/app/components/global/FormComponent";
 import FormField from "@/app/types/formField";
 import { AccountTransactionService } from "@/app/services/accountTransactionService";
 import { DollarSign, ListChecks, Tag, Calendar, FileText } from "lucide-react";
 
-export default function AccountTransactionForm({ userId, account, accountTransaction, update = false }: { userId: number, account: BankAccount, accountTransaction?: AccountTransaction, update?: boolean }) {
+export default function AccountTransactionForm({ userId, accountId, accountTransaction, update = false }: { userId: number, accountId: number, accountTransaction?: AccountTransaction, update?: boolean }) {
   const initialData = {
     ...defaultAccountTransaction(),
     ...accountTransaction,
     userId,
-    bankAccountId: accountTransaction?.bankAccountId || account.id!
+    bankAccountId: accountTransaction?.bankAccountId || accountId
   };
   console.log(accountTransaction, initialData);
 

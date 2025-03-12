@@ -77,7 +77,7 @@ export default function FormComponent<T extends Record<string, string | number |
             <input
               type={type}
               name={name}
-              value={Number(formData[name])}
+              value={value ?? Number(formData[name])}
               onChange={handleChange}
               required
               placeholder={placeholder}
@@ -109,7 +109,7 @@ export default function FormComponent<T extends Record<string, string | number |
             <input
               type={type}
               name={name}
-              value={String(formData[name])}
+              value={value ?? String(formData[name])}
               onChange={handleChange}
               required
               placeholder={placeholder}

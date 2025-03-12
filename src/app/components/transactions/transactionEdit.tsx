@@ -22,7 +22,7 @@ export default function AccountEdit({ userId, accountId, transactionId }: { user
 
   return (
     <div>
-      {user && account && transaction ? <AccountTransactionForm userId={user.id!} account={account} accountTransaction={transaction} update /> : <p>Chargement...</p>}
+      {user && account && transaction ? <AccountTransactionForm userId={user.id!} accountId={accountId} accountTransaction={transaction} update /> : <p>Chargement...</p>}
     </div>
   );
 }
