@@ -56,7 +56,7 @@ export default function FormComponent<T extends Record<string, string | number |
             {labelElement}
             <select
               name={name}
-              value={value}
+              value={String(formData[name])}
               onChange={handleChange}
               required
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -109,7 +109,7 @@ export default function FormComponent<T extends Record<string, string | number |
             <input
               type={type}
               name={name}
-              value={value}
+              value={String(formData[name])}
               onChange={handleChange}
               required
               placeholder={placeholder}

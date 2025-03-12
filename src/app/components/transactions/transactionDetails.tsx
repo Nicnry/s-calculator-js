@@ -139,7 +139,7 @@ export default function TransactionDetails({ userId, accountId, transactionId }:
         <div className="text-center">
           <p className="text-lg text-red-600 mb-4">Transaction non trouvée</p>
           <Link 
-            href={`/accounts/${accountId}`} 
+            href={`../..`} 
             className="text-blue-600 hover:underline"
           >
             Retour au compte
@@ -167,7 +167,7 @@ export default function TransactionDetails({ userId, accountId, transactionId }:
         <p className="opacity-75 mb-4">{formattedDate}</p>
         
         <Link 
-          href={`/accounts/${accountId}/transactions/${transaction.id}/edit`} 
+          href={`accounts/${accountId}/transactions/${transaction.id}/edit`} 
           className="flex items-center space-x-2 bg-white/20 hover:bg-white/30 backdrop-blur-sm px-4 py-2 rounded-full transition-colors"
         >
           <Edit size={16} />
@@ -243,7 +243,7 @@ export default function TransactionDetails({ userId, accountId, transactionId }:
 
       <div className="bg-gray-100 px-6 py-4 flex justify-between items-center">
         <Link 
-          href={`/accounts/${accountId}`} 
+          href={`../..`} 
           className="flex items-center space-x-2 text-blue-600 hover:text-blue-800 transition-colors"
         >
           <ArrowLeft size={16} />
@@ -252,7 +252,7 @@ export default function TransactionDetails({ userId, accountId, transactionId }:
         
         <div className="flex space-x-3">
           <Link 
-            href={`/accounts/${accountId}/transactions/${transaction.id}/edit`} 
+            href={`${transaction.id}/edit`} 
             className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors flex items-center gap-2"
           >
             <Edit size={16} />
