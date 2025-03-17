@@ -1,8 +1,6 @@
 'use client'
 import React, { useState } from 'react';
-
 import { localDb } from '@/app/db/database';
-import { User, BankAccount, Salary, AccountTransaction } from '@/app/db/schema';
 
 const ImportCSVButton: React.FC = () => {
   const [isImporting, setIsImporting] = useState(false);
@@ -19,43 +17,45 @@ const ImportCSVButton: React.FC = () => {
     for (let i = 0; i < lines.length; i++) {
       const line = lines[i].trim();
       
-      if (!line || (line.startsWith('#') && !line.includes('UTILISATEURS') && 
-          !line.includes('COMPTES BANCAIRES') && !line.includes('SALAIRES') && 
-          !line.includes('TRANSACTIONS'))) {
+      if (!line) {
         continue;
       }
       
-      if (line.startsWith('# UTILISATEURS')) {
+      if (line.startsWith('---')) {
         if (currentSection && headers.length > 0 && currentData.length > 0) {
           sections.push({ section: currentSection, data: currentData });
         }
-        currentSection = 'users';
+        
+        const sectionMatch = line.match(/^--- (.*) ---$/);
+        if (sectionMatch) {
+          currentSection = sectionMatch[1];
+          headers = [];
+          currentData = [];
+        }
+        continue;
+      }
+      
+      if (line.startsWith('# ')) {
+        if (currentSection && headers.length > 0 && currentData.length > 0) {
+          sections.push({ section: currentSection, data: currentData });
+        }
+        
+        const sectionName = line.substring(2).trim();
+        
+        const sectionMap: { [key: string]: string } = {
+          'UTILISATEURS': 'users',
+          'COMPTES BANCAIRES': 'bankAccounts',
+          'SALAIRES': 'salaries',
+          'TRANSACTIONS': 'accountTransactions'
+        };
+        
+        currentSection = sectionMap[sectionName] || sectionName.toLowerCase();
         headers = [];
         currentData = [];
         continue;
-      } else if (line.startsWith('# COMPTES BANCAIRES')) {
-        if (currentSection && headers.length > 0 && currentData.length > 0) {
-          sections.push({ section: currentSection, data: currentData });
-        }
-        currentSection = 'bankAccounts';
-        headers = [];
-        currentData = [];
-        continue;
-      } else if (line.startsWith('# SALAIRES')) {
-        if (currentSection && headers.length > 0 && currentData.length > 0) {
-          sections.push({ section: currentSection, data: currentData });
-        }
-        currentSection = 'salaries';
-        headers = [];
-        currentData = [];
-        continue;
-      } else if (line.startsWith('# TRANSACTIONS')) {
-        if (currentSection && headers.length > 0 && currentData.length > 0) {
-          sections.push({ section: currentSection, data: currentData });
-        }
-        currentSection = 'accountTransactions';
-        headers = [];
-        currentData = [];
+      }
+      
+      if (line.startsWith('#')) {
         continue;
       }
       
@@ -79,20 +79,18 @@ const ImportCSVButton: React.FC = () => {
               continue;
             }
             
-            const numericFields = [
-              'balance', 'totalSalary', 'taxableSalary', 'avsAiApgContribution', 
-              'vdLpcfamDeduction', 'acDeduction', 'aanpDeduction', 'ijmA1Deduction', 
-              'lppDeduction', 'monthlyPayments', 'amount', 'userId', 'bankAccountId'
-            ];
-            
-            if (numericFields.includes(header) && value !== '') {
-              rowData[header] = Number(value);
+            if (value === '') {
+              rowData[header] = null;
             } else if (value === 'true') {
               rowData[header] = true;
             } else if (value === 'false') {
               rowData[header] = false;
-            } else if (value === '') {
-              rowData[header] = null;
+            } else if (!isNaN(Number(value)) && value.trim() !== '') {
+              if (!/[a-zA-Z]/.test(value)) {
+                rowData[header] = Number(value);
+              } else {
+                rowData[header] = value;
+              }
             } else {
               rowData[header] = value;
             }
@@ -153,60 +151,60 @@ const ImportCSVButton: React.FC = () => {
       const fileContent = await file.text();
       const sections = parseCSV(fileContent);
       
+      if (sections.length === 0) {
+        throw new Error("Aucune donnée valide trouvée dans le fichier CSV");
+      }
+      
       await localDb.ensureOpen();
       
-      await localDb.transaction('rw', 
-        [localDb.users, localDb.bankAccounts, localDb.salaries, localDb.accountTransactions], 
-        async () => {
-          await localDb.accountTransactions.clear();
-          await localDb.salaries.clear();
-          await localDb.bankAccounts.clear();
-          await localDb.users.clear();
-          
-          setProgress(20);
-          
-          for (const section of sections) {
-            switch (section.section) {
-              case 'users':
-                const usersData = section.data.map(item => {
-                  const { id, ...rest } = item;
-                  return rest;
-                });
-                await localDb.users.bulkAdd(usersData);
-                break;
-              case 'bankAccounts':
-                const accountsData = section.data.map(item => {
-                  const { id, ...rest } = item;
-                  return rest;
-                });
-                await localDb.bankAccounts.bulkAdd(accountsData);
-                break;
-              case 'salaries':
-                const salariesData = section.data.map(item => {
-                  const { id, ...rest } = item;
-                  return rest;
-                });
-                await localDb.salaries.bulkAdd(salariesData);
-                break;
-              case 'accountTransactions':
-                const transactionsData = section.data.map(item => {
-                  const { id, ...rest } = item;
-                  return rest;
-                });
-                await localDb.accountTransactions.bulkAdd(transactionsData);
-                break;
-            }
-            
-            setProgress(prev => prev + Math.floor(80 / sections.length));
-          }
+      const availableTables: string[] = [];
+      for (const key in localDb) {
+        if (
+          typeof localDb[key] === 'object' && 
+          localDb[key] !== null && 
+          'bulkAdd' in localDb[key] && 
+          'clear' in localDb[key]
+        ) {
+          availableTables.push(key);
         }
+      }
+      
+      const validSections = sections.filter(section => 
+        availableTables.includes(section.section)
       );
+      
+      const tablesToClear = validSections.map(section => localDb[section.section]);
+      
+      await localDb.transaction('rw', tablesToClear, async () => {
+        setProgress(10);
+        
+        for (const section of validSections) {
+          await localDb[section.section].clear();
+        }
+        
+        setProgress(20);
+        
+        const totalSections = validSections.length;
+        let processedSections = 0;
+        
+        for (const section of validSections) {
+          const tableData = section.data.map(item => {
+            const { id, ...rest } = item;
+            return rest;
+          });
+          
+          await localDb[section.section].bulkAdd(tableData);
+          
+          processedSections++;
+          setProgress(20 + Math.floor((processedSections / totalSections) * 80));
+        }
+      });
       
       setProgress(100);
       alert('Importation réussie! La base de données a été mise à jour.');
     } catch (error) {
       console.error('Erreur lors de l\'importation:', error);
-      alert('Une erreur est survenue lors de l\'importation des données.');
+      alert(`Une erreur est survenue lors de l'importation des données: ${error instanceof Error ? error.message : 'Erreur inconnue'}`);
     } finally {
       setIsImporting(false);
     }
@@ -216,7 +214,7 @@ const ImportCSVButton: React.FC = () => {
     const file = e.target.files?.[0];
     if (file && (file.type === 'text/csv' || file.name.endsWith('.csv'))) {
       const confirmImport = window.confirm(
-        'Cette opération va supprimer toutes les données existantes et les remplacer par celles du fichier CSV. Êtes-vous sûr de vouloir continuer?'
+        'Cette opération va supprimer toutes les données existantes des tables concernées et les remplacer par celles du fichier CSV. Êtes-vous sûr de vouloir continuer?'
       );
       
       if (confirmImport) {
