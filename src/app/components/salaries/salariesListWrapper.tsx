@@ -34,7 +34,7 @@ export default function SalariesListWrapper({ userId }: {userId: number}) {
             {salaries.map((salary) => (
               <SalariesList 
                 key={salary.id} 
-                id={salary.id} 
+                id={salary.id!} 
                 userId={userId}
                 totalSalary={salary.totalSalary} 
                 avsAiApgContribution={salary.avsAiApgContribution}

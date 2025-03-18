@@ -32,7 +32,8 @@ export interface AccountTransaction {
 }
 
 
-export interface SalaryCreate {
+export interface Salary {
+  id?: number;
   userId: number;
   totalSalary: number;
   taxableSalary: number;
@@ -43,11 +44,7 @@ export interface SalaryCreate {
   ijmA1Deduction: number;
   lppDeduction: number;
   monthlyPayments: number;
-}
-
-export interface Salary extends SalaryCreate {
-  id: number;
-  createdAt: Date;
+  createdAt?: Date;
 }
 
 export interface FixedExpenseCreate {
@@ -84,7 +81,7 @@ export function defaultAccountTransaction(): Omit<AccountTransaction, "id" | "ba
   };
 }
 
-export function defaultSalary(): Omit<SalaryCreate, "userId"> {
+export function defaultSalary(): Omit<Salary, "userId"> {
   return {
     totalSalary: 5000,
     taxableSalary: 5000,
@@ -94,7 +91,8 @@ export function defaultSalary(): Omit<SalaryCreate, "userId"> {
     aanpDeduction: 0.4528,
     ijmA1Deduction: 0.5265,
     lppDeduction: 261.95,
-    monthlyPayments: 12
+    monthlyPayments: 12,
+    createdAt: new Date(),
   };
 }
 

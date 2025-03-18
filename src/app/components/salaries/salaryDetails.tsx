@@ -36,6 +36,7 @@ export default function SalaryDetails({ userId, salaryId }: SalaryDetailsProps) 
     ijmA1Deduction: 0, 
     lppDeduction: 0,
     monthlyPayments: 0,
+    createdAt: new Date(),
   });
   
   const [isLoading, setIsLoading] = useState<boolean>(true);
