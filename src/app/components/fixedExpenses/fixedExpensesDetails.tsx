@@ -28,7 +28,7 @@ export default function FixedExpensesDetails({ userId, fixedExpenseId }: { userI
     const fetchExpense = async (): Promise<void> => {
       try {
         setIsLoading(true);
-        const expenseData = await FixedExpenseService.getAccountTransactionById(fixedExpenseId);
+        const expenseData = await FixedExpenseService.getUserFixedExpenseById(fixedExpenseId);
         setFixedExpense(expenseData);
       } catch (error) {
         console.error("Erreur lors du chargement des données de la charge fixe:", error);
@@ -212,7 +212,7 @@ export default function FixedExpensesDetails({ userId, fixedExpenseId }: { userI
             <DetailItem 
               icon={<UserIcon size={18} className="text-blue-500" />} 
               label="ID Utilisateur" 
-              value={String(fixedExpense.userId)} 
+              value={String(userId)} 
             />
             
             <DetailItem 
