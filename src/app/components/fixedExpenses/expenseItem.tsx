@@ -11,17 +11,17 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import { FixedExpense } from "@/app/db/schema";
-import FixedExpanseService from "@/app/services/fixedExpanseService";
+import FixedExpenseService from "@/app/services/fixedExpenseService";
 
-export default function ExpanseItem({ expanse, onDelete }: { expanse: FixedExpense, onDelete: (id: number) => void; }) {
+export default function ExpenseItem({ expense, onDelete }: { expense: FixedExpense, onDelete: (id: number) => void; }) {
   const [isDeleting, setIsDeleting] = useState(false);
 
   const handleDelete = async () => {
     setIsDeleting(true);
-    const success = await FixedExpanseService.deleteExpanse(expanse.id);
+    const success = await FixedExpenseService.deleteExpense(expense.id);
     if (success) {
       alert("Charge fixe supprimée avec succès.");
-      onDelete(expanse.id);
+      onDelete(expense.id);
     } else {
       alert("Erreur lors de la suppression de la charge fixe.");
     }
@@ -33,7 +33,7 @@ export default function ExpanseItem({ expanse, onDelete }: { expanse: FixedExpen
     style: 'currency', 
     currency: 'CHF',
     minimumFractionDigits: 2
-  }).format(expanse.amount);
+  }).format(expense.amount);
 
   // Formatage de la date
   const formatDate = (dateString: string) => {
@@ -74,16 +74,16 @@ export default function ExpanseItem({ expanse, onDelete }: { expanse: FixedExpen
   return (
     <div 
       className="px-6 py-4 hover:bg-gray-50 border-b border-gray-200 transition-colors duration-200"
-      key={expanse.id}
+      key={expense.id}
     >
       <div className="flex flex-col md:flex-row md:items-center justify-between">
         {/* En-tête avec titre et montant */}
         <div className="flex items-center mb-3 md:mb-0">
-          <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold mr-3 ${getCategoryColor(expanse.category)}`}>
-            {expanse.title.charAt(0).toUpperCase()}
+          <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold mr-3 ${getCategoryColor(expense.category)}`}>
+            {expense.title.charAt(0).toUpperCase()}
           </div>
           <div>
-            <p className="font-semibold text-gray-800 text-lg">{expanse.title}</p>
+            <p className="font-semibold text-gray-800 text-lg">{expense.title}</p>
             <p className="font-bold text-lg text-blue-600">{formattedAmount}</p>
           </div>
         </div>
@@ -92,37 +92,37 @@ export default function ExpanseItem({ expanse, onDelete }: { expanse: FixedExpen
         <div className="grid grid-cols-2 md:grid-cols-4 gap-x-4 gap-y-2 mb-3 md:mb-0">
           <div className="flex items-center">
             <Tag size={16} className="text-gray-500 mr-2" />
-            <span className="text-sm">{expanse.category}</span>
+            <span className="text-sm">{expense.category}</span>
           </div>
           
           <div className="flex items-center">
             <Calendar size={16} className="text-gray-500 mr-2" />
-            <span className="text-sm">{formatDate(expanse.date)}</span>
+            <span className="text-sm">{formatDate(expense.date)}</span>
           </div>
           
           <div className="flex items-center">
             <CreditCard size={16} className="text-gray-500 mr-2" />
-            <span className="text-sm">{expanse.paymentMethod || 'Non spécifié'}</span>
+            <span className="text-sm">{expense.paymentMethod || 'Non spécifié'}</span>
           </div>
           
           <div className="flex items-center">
-            {expanse.paid ? (
+            {expense.paid ? (
               <CheckCircle size={16} className="text-green-500 mr-2" />
             ) : (
               <XCircle size={16} className="text-red-500 mr-2" />
             )}
-            <span className="text-sm">{expanse.paid ? 'Payé' : 'Non payé'}</span>
+            <span className="text-sm">{expense.paid ? 'Payé' : 'Non payé'}</span>
           </div>
         </div>
 
         {/* Badge de récurrence */}
         <div className="mb-3 md:mb-0">
           <span className="inline-block px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-            {getRecurrenceLabel(expanse.recurrence)}
+            {getRecurrenceLabel(expense.recurrence)}
           </span>
-          {expanse.endDate && (
+          {expense.endDate && (
             <span className="inline-block ml-2 text-xs text-gray-500">
-              jusqu'au {formatDate(expanse.endDate)}
+              jusqu'au {formatDate(expense.endDate)}
             </span>
           )}
         </div>
@@ -130,7 +130,7 @@ export default function ExpanseItem({ expanse, onDelete }: { expanse: FixedExpen
         {/* Actions */}
         <div className="flex items-center space-x-3">
           <Link 
-            href={`fixedExpanses/${expanse.id}`} 
+            href={`fixed-expenses/${expense.id}`} 
             className="text-gray-500 hover:text-blue-600 transition-colors"
             title="Voir détails"
           >
@@ -138,7 +138,7 @@ export default function ExpanseItem({ expanse, onDelete }: { expanse: FixedExpen
           </Link>
           
           <Link 
-            href={`fixedExpanses/${expanse.id}/edit`} 
+            href={`fixed-expenses/${expense.id}/edit`} 
             className="text-gray-500 hover:text-yellow-600 transition-colors"
             title="Modifier"
           >

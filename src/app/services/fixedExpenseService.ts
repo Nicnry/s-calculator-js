@@ -1,8 +1,8 @@
 import { FixedExpense, FixedExpenseTimeStamps } from "@/app/db/schema";
 import { localDb } from "@/app/db/database";
 
-export default class FixedExpanseService {
-  static async getAllUserExpanses(userId: number): Promise<FixedExpense[]> {
+export default class FixedExpenseService {
+  static async getAllUserExpenses(userId: number): Promise<FixedExpense[]> {
     try {
       await localDb.ensureOpen();
       return await localDb.fixedExpenses.where('userId').equals(userId).toArray();
@@ -15,8 +15,8 @@ export default class FixedExpanseService {
   static async getAccountTransactionById(id: number): Promise<FixedExpense> {
     try {
       await localDb.ensureOpen();
-      const expanses = await localDb.fixedExpenses.get(id);
-      return expanses!;
+      const expenses = await localDb.fixedExpenses.get(id);
+      return expenses!;
     } catch (error) {
       console.error('Erreur lors de la récupération du compte', error);
       throw new Error('Compte non trouvé');
@@ -34,15 +34,15 @@ export default class FixedExpanseService {
     }
   }
 
-  static async updateFixedExpanse(id: number, updatedExpanse: Partial<FixedExpense>): Promise<boolean> {
+  static async updateFixedExpense(id: number, updatedExpense: Partial<FixedExpense>): Promise<boolean> {
     try {
       await localDb.ensureOpen();
-      const expanse = await localDb.fixedExpenses.get(id);
-      if (!expanse) {
+      const expense = await localDb.fixedExpenses.get(id);
+      if (!expense) {
         console.error('Compte introuvable');
         return false;
       }
-      await localDb.fixedExpenses.update(id, { ...updatedExpanse });
+      await localDb.fixedExpenses.update(id, { ...updatedExpense });
       return true;
     } catch (error) {
       console.error("Erreur lors de la mise à jour de l'compte", error);
@@ -50,11 +50,11 @@ export default class FixedExpanseService {
     }
   }
 
-  static async deleteExpanse(id: number): Promise<boolean> {
+  static async deleteExpense(id: number): Promise<boolean> {
     try {
       await localDb.ensureOpen();
-      const expanse = await localDb.fixedExpenses.get(id);
-      if (!expanse) {
+      const expense = await localDb.fixedExpenses.get(id);
+      if (!expense) {
         console.error('Compte introuvable');
         return false;
       }

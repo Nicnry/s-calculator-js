@@ -1,30 +1,30 @@
 'use client'
 
-import FixedExpanseService from "@/app/services/fixedExpanseService";
+import FixedExpenseService from "@/app/services/fixedExpenseService";
 import { FixedExpense, FixedExpenseCreate } from "@/app/db/schema";
 import FormComponent from "@/app/components/global/FormComponent";
 import FormField from "@/app/types/formField";
 import { Tag, Calculator, RotateCcw, CheckSquare, CreditCard } from "lucide-react";
 
-export default function ExpanseForm({ 
+export default function ExpenseForm({ 
   userId, 
-  expanse, 
+  expense, 
   update = false 
 }: { 
   userId: number, 
-  expanse?: FixedExpenseCreate | FixedExpense | undefined, 
+  expense?: FixedExpenseCreate | FixedExpense | undefined, 
   update?: boolean 
 }) {
   const initialData = { 
     userId,
-    title: expanse?.title || "",
-    amount: expanse?.amount || 0,
-    category: expanse?.category || "",
-    date: expanse?.date || new Date().toISOString().split('T')[0],
-    recurrence: expanse?.recurrence || "mensuelle",
-    paid: expanse?.paid ? "true" : "false",
-    paymentMethod: expanse?.paymentMethod || "Autre",
-    endDate: expanse?.endDate || "",
+    title: expense?.title || "",
+    amount: expense?.amount || 0,
+    category: expense?.category || "",
+    date: expense?.date || new Date().toISOString().split('T')[0],
+    recurrence: expense?.recurrence || "mensuelle",
+    paid: expense?.paid ? "true" : "false",
+    paymentMethod: expense?.paymentMethod || "Autre",
+    endDate: expense?.endDate || "",
   };
 
   const fields: FormField[] = [
@@ -77,13 +77,13 @@ export default function ExpanseForm({
     };
 
     if (update) {
-      if (expanse && 'id' in expanse) {
-        await FixedExpanseService.updateFixedExpanse(expanse.id, submissionData);
+      if (expense && 'id' in expense) {
+        await FixedExpenseService.updateFixedExpense(expense.id, submissionData);
       } else {
-        throw new Error("Expanse must have an 'id' to be updated.");
+        throw new Error("Expense must have an 'id' to be updated.");
       }
     } else {
-      await FixedExpanseService.addFixedExpense(submissionData);
+      await FixedExpenseService.addFixedExpense(submissionData);
     }
   };
 

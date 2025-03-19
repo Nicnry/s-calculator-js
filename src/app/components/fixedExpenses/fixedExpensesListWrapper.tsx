@@ -3,38 +3,38 @@
 import { Suspense, useEffect, useState } from 'react';
 import React from 'react';
 import { FixedExpense } from '@/app/db/schema';
-import ExpansesList from '@/app/components/fixedExpanses/expanseList';
+import ExpensesList from '@/app/components/fixedExpenses/expenseList';
 import BackLink from '@/app/components/global/BackLink';
 import CreateNew from '@/app/components/global/CreateNew';
-import FixedExpanseService from '@/app/services/fixedExpanseService';
+import FixedExpenseService from '@/app/services/fixedExpenseService';
 import { DollarSign, Calendar, CreditCard } from 'lucide-react';
 
-export default function FixedExpansesListWrapper({ userId }: { userId: number }) {
-  const [expanses, setExpanses] = useState<FixedExpense[]>([]);
+export default function FixedExpensesListWrapper({ userId }: { userId: number }) {
+  const [expenses, setExpenses] = useState<FixedExpense[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     (async () => {
       setLoading(true);
-      const data = await FixedExpanseService.getAllUserExpanses(userId);
-      setExpanses(data);
+      const data = await FixedExpenseService.getAllUserExpenses(userId);
+      setExpenses(data);
       setLoading(false);
     })();
   }, [userId]);
 
-  const handleDeleteExpanse = (deletedId: number) => {
-    setExpanses((prevExpanse) => prevExpanse.filter((expanse) => expanse.id !== deletedId));
+  const handleDeleteExpense = (deletedId: number) => {
+    setExpenses((prevExpense) => prevExpense.filter((expense) => expense.id !== deletedId));
   };
   
   // Calculer les totaux des charges
   const calculateTotals = () => {
-    if (expanses.length === 0) return { total: 0, monthly: 0, annual: 0 };
+    if (expenses.length === 0) return { total: 0, monthly: 0, annual: 0 };
     
     let totalAmount = 0;
     let monthlyAmount = 0;
     let annualAmount = 0;
     
-    expanses.forEach(expense => {
+    expenses.forEach(expense => {
       const amount = expense.amount;
       
       // Calculer le total général
@@ -87,7 +87,7 @@ export default function FixedExpansesListWrapper({ userId }: { userId: number })
       <div className="flex justify-between items-center mb-6">
         <BackLink />
         <h1 className="text-3xl font-bold">Gestion des charges</h1>
-        <CreateNew href="fixedExpanses/new" title="+ Ajouter une charge" />
+        <CreateNew href="fixed-expenses/new" title="+ Ajouter une charge" />
       </div>
       
       {/* Résumé des charges */}
@@ -133,11 +133,11 @@ export default function FixedExpansesListWrapper({ userId }: { userId: number })
       <div className="bg-white shadow-lg rounded-xl overflow-hidden">
         {loading ? (
           <UserListSkeleton />
-        ) : expanses.length === 0 ? (
+        ) : expenses.length === 0 ? (
           <div className="p-8 text-center">
             <p className="text-gray-500">Aucune charge fixe n'a été ajoutée.</p>
             <p className="mt-2">
-              <a href="fixedExpanses/new" className="text-blue-500 hover:underline">
+              <a href="fixed-expenses/new" className="text-blue-500 hover:underline">
                 Cliquez ici pour ajouter votre première charge
               </a>
             </p>
@@ -145,11 +145,11 @@ export default function FixedExpansesListWrapper({ userId }: { userId: number })
         ) : (
           <div className="divide-y divide-gray-100">
             <Suspense fallback={<UserListSkeleton />}>
-              {expanses.map((expanse) => (
-                <ExpansesList 
-                  key={expanse.id}
-                  expanse={expanse}
-                  onDelete={handleDeleteExpanse} 
+              {expenses.map((expense) => (
+                <ExpensesList 
+                  key={expense.id}
+                  expense={expense}
+                  onDelete={handleDeleteExpense} 
                 />
               ))}
             </Suspense>

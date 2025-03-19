@@ -1,6 +1,6 @@
-import ExpanseForm from "@/app/components/fixedExpanses/expanseForm";
+import ExpenseForm from "@/app/components/fixedExpenses/expenseForm";
 
-export default async function NewExpansePage({ params, }: { params: Promise<{ userId: string }> }) {
+export default async function NewExpensePage({ params, }: { params: Promise<{ userId: string }> }) {
 
   const { userId } = await params;
   const id = Number(userId);
@@ -9,7 +9,7 @@ export default async function NewExpansePage({ params, }: { params: Promise<{ us
   return (
     <div className="p-6">
       <h1 className="text-2xl font-bold mb-4">Créer un compte pour le user {id}</h1>
-      <ExpanseForm userId={id} />
+      <ExpenseForm userId={id} />
     </div>
   );
 }

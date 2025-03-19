@@ -66,7 +66,7 @@ export default function UsersItem({ id, name, email, onDelete }: { id: number; n
         </Link>
 
         <Link 
-          href={`/users/${id}/fixedExpanses`} 
+          href={`/users/${id}/fixed-expenses`} 
           className="text-gray-500 hover:text-yellow-600 transition-colors"
           title="Dépenses fixes"
         >
