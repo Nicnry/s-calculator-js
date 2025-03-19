@@ -1,12 +1,12 @@
-import AccountEdit from "@/app/components/accounts/accountEdit";
+import FixedExpenseEdit from "@/app/components/fixedExpenses/fixedExpenseEdit";
 
-export default async function EditAccountPage({ params, }: { params: Promise<{ userId: string, accountId: string }> }) {
-  const { userId, accountId } = await params;
+export default async function EditFixedExpensesPage({ params, }: { params: Promise<{ userId: string, fixedExpenseId: string }> }) {
+  const { userId, fixedExpenseId } = await params;
   const uId = Number(userId);
-  const aId = Number(accountId);
+  const fId = Number(fixedExpenseId);
 
-  if (isNaN(uId) || isNaN(aId)) return <p>ID invalide</p>;
+  if (isNaN(uId) || isNaN(fId)) return <p>ID invalide</p>;
   
-  return <AccountEdit userId={uId} accountId={aId} />;
+  return <FixedExpenseEdit userId={uId} fixedExpenseId={fId} />;
     
 }

@@ -12,7 +12,7 @@ export default class FixedExpenseService {
     }
   }
 
-  static async getAccountTransactionById(id: number): Promise<FixedExpense> {
+  static async getUserFixedExpenseById(id: number): Promise<FixedExpense> {
     try {
       await localDb.ensureOpen();
       const expenses = await localDb.fixedExpenses.get(id);
