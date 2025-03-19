@@ -7,7 +7,7 @@ S-Calculator is a local finance management application that uses **IndexedDB** t
 With this app, you can:  
 ✅ Manage multiple **users**  
 ✅ Create and track **bank accounts**  
-✅ Record and categorize **transactions**  
+✅ Record and categorize **transactions** && **Fixed expenses**  
 ✅ Calculate and monitor **income and salaries**  
 ✅ Estimate **local taxes**  
 
