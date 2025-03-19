@@ -50,7 +50,7 @@ export default function FormComponent<T extends Record<string, string | number |
     );
 
     switch(type) { 
-      case "select": { 
+      case "select": {
         return (
           <div className="space-y-2" key={name}>
             {labelElement}

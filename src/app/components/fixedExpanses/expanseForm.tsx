@@ -21,7 +21,7 @@ export default function ExpanseForm({
     amount: expanse?.amount || 0,
     category: expanse?.category || "",
     date: expanse?.date || new Date().toISOString().split('T')[0],
-    recurrence: expanse?.recurrence || "ponctuelle",
+    recurrence: expanse?.recurrence || "mensuelle",
     paid: expanse?.paid ? "true" : "false",
     paymentMethod: expanse?.paymentMethod || "Autre",
     endDate: expanse?.endDate || "",

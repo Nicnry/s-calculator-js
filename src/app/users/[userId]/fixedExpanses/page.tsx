@@ -1,6 +1,6 @@
 import FixedExpansesListWrapper from "@/app/components/fixedExpanses/fixedExpansesListWrapper";
 
-export default async function FixedExpensePage({ params }: { params: Promise<{ userId: string }> }) {
+export default async function FixedExpansePage({ params }: { params: Promise<{ userId: string }> }) {
   const { userId } = await params;
   const id = Number(userId);
 
