@@ -4,7 +4,8 @@ import {
   Edit, 
   Trash2,
   Landmark,
-  Calculator
+  Calculator,
+  Receipt
 } from "lucide-react";
 import { useState } from "react";
 import { UserService } from "@/app/services/userService";
@@ -62,6 +63,14 @@ export default function UsersItem({ id, name, email, onDelete }: { id: number; n
           title="Comptes"
         >
           <Landmark size={20} />
+        </Link>
+
+        <Link 
+          href={`/users/${id}/fixed-expenses`} 
+          className="text-gray-500 hover:text-yellow-600 transition-colors"
+          title="Dépenses fixes"
+        >
+          <Receipt size={20} />
         </Link>
 
         <Link 

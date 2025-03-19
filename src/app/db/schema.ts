@@ -31,6 +31,7 @@ export interface AccountTransaction {
   createdAt?: Date;
 }
 
+
 export interface Salary {
   id?: number;
   userId: number;
@@ -45,6 +46,29 @@ export interface Salary {
   monthlyPayments: number;
   createdAt?: Date;
 }
+
+export interface FixedExpenseCreate {
+  userId: number;
+  title: string;
+  amount: number;
+  category: string;
+  date: string;
+  recurrence: 'quotidienne' | 'hebdomadaire' | 'mensuelle' | 'annuelle' | 'ponctuelle';
+  paid?: boolean;
+  paymentMethod?: 'Carte' | 'Virement' | 'Prélèvement' | 'Espèces' | 'Autre';
+  endDate?: string;
+}
+
+
+export interface FixedExpenseTimeStamps extends FixedExpenseCreate {
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface FixedExpense extends FixedExpenseCreate {
+  id: number;
+}
+
 
 export function defaultAccountTransaction(): Omit<AccountTransaction, "id" | "bankAccountId"> {
   return {
@@ -68,7 +92,7 @@ export function defaultSalary(): Omit<Salary, "userId"> {
     ijmA1Deduction: 0.5265,
     lppDeduction: 261.95,
     monthlyPayments: 12,
-    createdAt: new Date,
+    createdAt: new Date(),
   };
 }
 
