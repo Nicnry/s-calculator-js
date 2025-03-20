@@ -1,7 +1,7 @@
 'use client';
 
 import { Salary, defaultSalary } from "@/app/db/schema";
-import { SalaryService } from "@/app/services/salaryService";
+import SalaryService from "@/app/services/salaryService";
 import FormComponent from "@/app/components/global/FormComponent";
 import FormField from "@/app/types/formField";
 import { Wallet, FileText, ShieldCheck, PiggyBank, Briefcase, HeartPulse, Repeat, Percent } from "lucide-react";

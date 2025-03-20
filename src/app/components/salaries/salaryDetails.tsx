@@ -1,7 +1,7 @@
 'use client';
 
 import { Salary } from "@/app/db/schema";
-import { SalaryService } from "@/app/services/salaryService";
+import SalaryService from "@/app/services/salaryService";
 import { useState, useEffect } from "react";
 import { 
   User as UserIcon, 

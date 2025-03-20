@@ -5,7 +5,7 @@ import {
   Trash2
 } from "lucide-react";
 import { useState } from "react";
-import { SalaryService } from "@/app/services/salaryService";
+import SalaryService from "@/app/services/salaryService";
 import { Salary } from "@/app/db/schema";
 
 export default function SalariesItem({ salary, onDelete }:   { salary: Salary, onDelete: (id: number) => void; }) {
