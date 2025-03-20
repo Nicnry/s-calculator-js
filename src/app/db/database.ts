@@ -14,7 +14,7 @@ export class LocalDatabase extends Dexie {
     this.version(1).stores({
       users: '++id, name, email, createdAt',
       bankAccounts: '++id, userId, bankName, accountNumber, accountType, balance, currency, createdAt',
-      salaries: '++id, userId, totalSalary, taxableSalary, avsAiApgContribution, vdLpcfamDeduction, acDeduction, aanpDeduction, ijmA1Deduction, lppDeduction, monthlyPayments, createdAt',
+      salaries: '++id, userId, totalSalary, taxableSalary, avsAiApgContribution, vdLpcfamDeduction, acDeduction, aanpDeduction, ijmA1Deduction, lppDeduction, monthlyPayments, employmentRate, createdAt',
       accountTransactions: '++id, bankAccountId, amount, type, category, date, description, createdAt',
       fixedExpenses: '++id, userId, title, amount, category, date, recurrence, paid, paymentMethod, endDate'
     });

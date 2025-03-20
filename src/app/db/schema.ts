@@ -44,6 +44,7 @@ export interface Salary {
   ijmA1Deduction: number;
   lppDeduction: number;
   monthlyPayments: number;
+  employmentRate: number;
   createdAt?: Date;
 }
 
@@ -92,6 +93,7 @@ export function defaultSalary(): Omit<Salary, "userId"> {
     ijmA1Deduction: 0.5265,
     lppDeduction: 261.95,
     monthlyPayments: 12,
+    employmentRate: 100,
     createdAt: new Date(),
   };
 }

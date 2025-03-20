@@ -6,22 +6,24 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import { SalaryService } from "@/app/services/salaryService";
+import { Salary } from "@/app/db/schema";
 
-export default function SalariesItem({ id, userId, totalSalary, avsAiApgContribution, vdLpcfamDeduction, acDeduction, aanpDeduction, ijmA1Deduction, lppDeduction, onDelete }:   { id: number, userId: number, totalSalary: number, avsAiApgContribution: number, vdLpcfamDeduction: number, acDeduction: number, aanpDeduction: number, ijmA1Deduction: number, lppDeduction: number, onDelete: (id: number) => void; }) {
+export default function SalariesItem({ salary, onDelete }:   { salary: Salary, onDelete: (id: number) => void; }) {
+  const {id, userId, totalSalary, avsAiApgContribution, vdLpcfamDeduction, acDeduction, aanpDeduction, ijmA1Deduction, lppDeduction, employmentRate} = salary;
   const [isDeleting, setIsDeleting] = useState<boolean>(false);
   
   const netSalary = getNetSalary(
-    totalSalary, 
+    (totalSalary / 100 * (employmentRate || 100)), 
     [avsAiApgContribution, vdLpcfamDeduction, acDeduction, aanpDeduction, ijmA1Deduction], 
     [lppDeduction]
   );
 
   const handleDelete = async (): Promise<void> => {
     setIsDeleting(true);
-    const success = await SalaryService.deleteSalary(id);
+    const success = await SalaryService.deleteSalary(id!);
     if (success) {
       alert("Salaire supprimé avec succès.");
-      onDelete(id);
+      onDelete(id!);
     } else {
       alert("Erreur lors de la suppression du salaire.");
     }
