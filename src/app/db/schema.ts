@@ -17,6 +17,8 @@ export interface BankAccount {
   accountType: string;
   balance: number;
   currency: string;
+  from: Date;
+  to: Date;
   createdAt?: Date;
 }
 
@@ -45,6 +47,8 @@ export interface Salary {
   lppDeduction: number;
   monthlyPayments: number;
   employmentRate: number;
+  from: Date;
+  to: Date;
   createdAt?: Date;
 }
 
@@ -57,6 +61,8 @@ export interface FixedExpenseCreate {
   recurrence: 'quotidienne' | 'hebdomadaire' | 'mensuelle' | 'annuelle' | 'ponctuelle';
   paid?: boolean;
   paymentMethod?: 'Carte' | 'Virement' | 'Prélèvement' | 'Espèces' | 'Autre';
+  from: Date;
+  to: Date;
   endDate?: string;
 }
 
@@ -83,6 +89,8 @@ export function defaultAccountTransaction(): Omit<AccountTransaction, "id" | "ba
 }
 
 export function defaultSalary(): Omit<Salary, "userId"> {
+  const { today, nextYear } = getTodayAndNextYear();
+
   return {
     totalSalary: 5000,
     taxableSalary: 5000,
@@ -94,16 +102,22 @@ export function defaultSalary(): Omit<Salary, "userId"> {
     lppDeduction: 261.95,
     monthlyPayments: 12,
     employmentRate: 100,
-    createdAt: new Date(),
+    from: today,
+    to: nextYear,
+    createdAt: today,
   };
 }
 
 export function defaultAccount(): Omit<BankAccount, "userId"> {
+  const { today, nextYear } = getTodayAndNextYear();
+
   return {
     bankName: "",
     accountNumber: "",
     accountType: "",
     balance: 0,
+    from: today,
+    to: nextYear,
     currency: "",
   }
 }
@@ -115,3 +129,10 @@ export function defaultUser(): User {
     password: "",
   }
 }
+
+const getTodayAndNextYear = (): { today: Date; nextYear: Date } => {
+  const today = new Date();
+  const nextYear = new Date(today);
+  nextYear.setFullYear(today.getFullYear() + 1);
+  return { today, nextYear };
+};
