@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { ChangeEvent, FormEvent, useState } from "react";
 import BackLink from "@/app/components/global/BackLink";
 
-export default function FormComponent<T extends Record<string, string | number | Date>>({
+export default function FormComponent<T extends Record<string, string | number | Date | boolean>>({
   initialData,
   fields,
   onSubmit,

@@ -76,6 +76,19 @@ export interface FixedExpense extends FixedExpenseCreate {
   id: number;
 }
 
+export function defaultFixedExpense(): Omit<FixedExpense, "id" | "userId"> {
+  return {
+    title: 'Loyer',
+    amount: 800,
+    category: 'Appartement',
+    date: new Date().toISOString().split('T')[0],
+    recurrence: 'mensuelle',
+    paid: false,
+    paymentMethod: 'Virement',
+    from: new Date(),
+    to: new Date(),
+  };
+}
 
 export function defaultAccountTransaction(): Omit<AccountTransaction, "id" | "bankAccountId"> {
   return {

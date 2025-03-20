@@ -37,6 +37,8 @@ export default function SalaryDetails({ userId, salaryId }: SalaryDetailsProps) 
     lppDeduction: 0,
     monthlyPayments: 0,
     employmentRate: 0,
+    from: new Date(),
+    to: new Date(),
     createdAt: new Date(),
   });
   
