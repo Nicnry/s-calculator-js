@@ -3,20 +3,13 @@
 import { UserAccountService } from "@/app/services/userAccountService";
 import { BankAccount, defaultAccount } from "@/app/db/schema";
 import FormComponent from "@/app/components/global/FormComponent";
-import FormField from "@/app/types/formField";
-import { Banknote, Hash, Wallet, DollarSign, Coins } from "lucide-react";
+import { accountFormFields } from "@/app/components/accounts/accountFormFields";
+//import useAccountForm from "@/app/db/hooks/useAccountForm";
 
 
 export default function AccountForm({ userId, account, update = false }: { userId: number, account?: BankAccount, update?: boolean }) {
   const initialData = { ...defaultAccount(), ...account, userId };
-
-  const fields: FormField[] = [
-    { name: "bankName", label: "Nom banque", placeholder: "UBS", icon: <Banknote /> },
-    { name: "accountNumber", label: "No compte", placeholder: "CH1589144187277187766", icon: <Hash /> },
-    { name: "accountType", label: "Type de compte", type: "select", options: ["Courant", "Épargne"], icon: <Wallet /> },
-    { name: "balance", label: "Montant", type: "number", icon: <DollarSign /> },
-    { name: "currency", label: "Monnaie", placeholder: "CHF", icon: <Coins /> },
-  ];
+  //const { initialData, submitAccount, loading, error } = useAccountForm(userId, account, update);
 
   const onSubmit = async (data: BankAccount) => {
     if(update) {
@@ -26,5 +19,5 @@ export default function AccountForm({ userId, account, update = false }: { userI
     }
   };
 
-  return <FormComponent initialData={initialData} fields={fields} onSubmit={onSubmit}  title={update ? "Modifier le compte" : "Créer un compte"} />;
+  return <FormComponent initialData={initialData} fields={accountFormFields} onSubmit={onSubmit}  title={update ? "Modifier le compte" : "Créer un compte"} />;
 }
