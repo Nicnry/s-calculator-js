@@ -7,16 +7,18 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import { UserAccountService } from "@/app/services/userAccountService";
+import { BankAccount } from "@/app/db/schema";
 
-export default function AccountsItem({ id, userId, bankName, accountNumber, accountType, balance, currency, onDelete }: { id: number, userId: number, bankName: string, accountNumber: string, accountType: string, balance: number, currency: string, onDelete: (id: number) => void; }) {
+export default function AccountsItem({ account, onDelete }: { account: BankAccount, onDelete: (id: number) => void; }) {
+  const {id, userId, bankName, accountNumber, accountType, balance, currency} = account;
   const [isDeleting, setIsDeleting] = useState(false);
 
   const handleDelete = async () => {
     setIsDeleting(true);
-    const success = await UserAccountService.deleteAccount(id);
+    const success = await UserAccountService.deleteAccount(id!);
     if (success) {
       alert("Utilisateur supprimé avec succès.");
-      onDelete(id);
+      onDelete(id!);
     } else {
       alert("Erreur lors de la suppression de l'utilisateur.");
     }
