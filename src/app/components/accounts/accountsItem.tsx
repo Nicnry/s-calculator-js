@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { 
   Eye, 
   Edit,
@@ -8,6 +7,7 @@ import {
 import { useState } from "react";
 import { UserAccountService } from "@/app/services/userAccountService";
 import { BankAccount } from "@/app/db/schema";
+import ActionMenu, { ActionItem } from "@/app/components/global/ActionMenu";
 
 export default function AccountsItem({ account, onDelete }: { account: BankAccount, onDelete: (id: number) => void; }) {
   const {id, userId, bankName, accountNumber, accountType, balance, currency} = account;
@@ -24,6 +24,31 @@ export default function AccountsItem({ account, onDelete }: { account: BankAccou
     }
     setIsDeleting(false);
   };
+
+  const actions: ActionItem[] = [
+    {
+      icon: <Eye size={18} />,
+      label: "Voir détails",
+      href: `accounts/${id}`
+    },
+    {
+      icon: <Edit size={18} />,
+      label: "Modifier",
+      href: `accounts/${id}/edit`
+    },
+    {
+      icon: <ArrowLeftRight size={18} />,
+      label: "Transactions",
+      href: `accounts/${id}/transactions`
+    },
+    {
+      icon: <Trash2 size={18} />,
+      label: "Supprimer",
+      onClick: handleDelete,
+      variant: "danger",
+      isLoading: isDeleting
+    }
+  ];
   
   return (
     <div 
@@ -45,38 +70,7 @@ export default function AccountsItem({ account, onDelete }: { account: BankAccou
       </div>
   
       <div className="flex items-center space-x-3">
-        <Link 
-          href={`accounts/${id}`} 
-          className="text-gray-500 hover:text-blue-600 transition-colors"
-          title="Voir détails"
-        >
-          <Eye size={20} />
-        </Link>
-        
-        <Link 
-          href={`accounts/${id}/edit`} 
-          className="text-gray-500 hover:text-yellow-600 transition-colors"
-          title="Modifier"
-        >
-          <Edit size={20} />
-        </Link>
-        
-        <Link 
-          href={`accounts/${id}/transactions`} 
-          className="text-gray-500 hover:text-yellow-600 transition-colors"
-          title="Modifier"
-        >
-          <ArrowLeftRight size={20} />
-        </Link>
-        
-        <button 
-          onClick={handleDelete}
-          className="text-gray-500 hover:text-red-600 transition-colors"
-          title="Supprimer"
-          disabled={isDeleting}
-        >
-          <Trash2 size={20} />
-        </button>
+        <ActionMenu actions={actions} direction="up" />
       </div>
     </div>
   );

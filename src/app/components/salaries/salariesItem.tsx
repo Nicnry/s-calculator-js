@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { 
   Eye, 
   Edit, 
@@ -8,6 +7,7 @@ import {
 import { useState } from "react";
 import SalaryService from "@/app/services/salaryService";
 import { Salary } from "@/app/db/schema";
+import ActionMenu, { ActionItem } from "@/app/components/global/ActionMenu";
 
 export default function SalariesItem({ salary, onDelete }: { salary: Salary, onDelete: (id: number) => void; }) {
   const {
@@ -62,6 +62,26 @@ export default function SalariesItem({ salary, onDelete }: { salary: Salary, onD
       day: 'numeric'
     }).format(new Date(date));
   };
+
+  const actions: ActionItem[] = [
+    {
+      icon: <Eye size={18} />,
+      label: "Voir détails",
+      href: `salaries/${id}`
+    },
+    {
+      icon: <Edit size={18} />,
+      label: "Modifier",
+      href: `salaries/${id}/edit`
+    },
+    {
+      icon: <Trash2 size={18} />,
+      label: "Supprimer",
+      onClick: handleDelete,
+      variant: "danger",
+      isLoading: isDeleting
+    }
+  ];
   
   return (
     <div className="bg-white rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition-all duration-200 mb-4 overflow-hidden">
@@ -88,36 +108,7 @@ export default function SalariesItem({ salary, onDelete }: { salary: Salary, onD
             </div>
           </div>
           
-          <div className="flex items-center space-x-2">
-            <Link 
-              href={`salaries/${id}`} 
-              className="p-2 text-gray-500 hover:text-blue-600 hover:bg-blue-50 rounded-full transition-colors"
-              title="Voir détails"
-            >
-              <Eye size={20} />
-            </Link>
-            
-            <Link 
-              href={`salaries/${id}/edit`} 
-              className="p-2 text-gray-500 hover:text-yellow-600 hover:bg-yellow-50 rounded-full transition-colors"
-              title="Modifier"
-            >
-              <Edit size={20} />
-            </Link>
-            
-            <button 
-              onClick={handleDelete}
-              className="p-2 text-gray-500 hover:text-red-600 hover:bg-red-50 rounded-full transition-colors"
-              title="Supprimer"
-              disabled={isDeleting}
-            >
-              {isDeleting ? (
-                <span className="inline-block w-5 h-5 border-2 border-gray-300 border-t-gray-600 rounded-full animate-spin" />
-              ) : (
-                <Trash2 size={20} />
-              )}
-            </button>
-          </div>
+          <ActionMenu actions={actions} />
         </div>
         
         <div className="flex items-center text-sm text-gray-500 mb-3">
