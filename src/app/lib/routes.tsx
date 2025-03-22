@@ -40,7 +40,7 @@ export const getMenuItems = (id: number): MenuItem[] => [
     dropdownItems: [
       { href: `/users/${id}/salaries/new`, label: "Ajouter" },
       { href: `/users/${id}/salaries`, label: "Voir tout" },
-      { href: `/users/${id}/salaries/stats`, label: "Statistiques" }
+      { href: `/users/${id}/salaries/statistics`, label: "Statistiques" }
     ]
   },
   { 

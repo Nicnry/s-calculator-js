@@ -19,7 +19,6 @@ import Link from "next/link";
 import DetailItem from "@/app/components/global/DetailItem";
 import { AccountTransactionService } from "@/app/services/accountTransactionService";
 
-// Interface fournie
 interface AccountTransaction {
   id?: number;
   bankAccountId: number;
