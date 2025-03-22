@@ -70,7 +70,7 @@ export default function AccountsItem({ account, onDelete }: { account: BankAccou
       </div>
   
       <div className="flex items-center space-x-3">
-        <ActionMenu actions={actions} direction="up" />
+        <ActionMenu actions={actions} />
       </div>
     </div>
   );
