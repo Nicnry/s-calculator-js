@@ -32,15 +32,9 @@ export default function AccountsListWrapper({ userId }: { userId: number }) {
         <div className="divide-y divide-gray-100">
           <Suspense fallback={<UserListSkeleton />}>
           {accounts.map((account) => (
-              <AccountsList 
-                key={account.id} 
-                id={account.id!} 
-                userId={userId}
-                bankName={account.bankName} 
-                accountNumber={account.accountNumber}
-                accountType={account.accountType}
-                balance={account.balance}
-                currency={account.currency}
+              <AccountsList
+                key={account.id}
+                account={account}
                 onDelete={handleDeleteAccount} />
             ))}
           </Suspense>

@@ -1,7 +1,7 @@
 'use client';
 
 import { Salary } from "@/app/db/schema";
-import { SalaryService } from "@/app/services/salaryService";
+import SalaryService from "@/app/services/salaryService";
 import { useState, useEffect } from "react";
 import { 
   User as UserIcon, 
@@ -36,13 +36,15 @@ export default function SalaryDetails({ userId, salaryId }: SalaryDetailsProps) 
     ijmA1Deduction: 0, 
     lppDeduction: 0,
     monthlyPayments: 0,
+    employmentRate: 0,
+    from: new Date(),
+    to: new Date(),
     createdAt: new Date(),
   });
   
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [formattedCreatedAt, setFormattedCreatedAt] = useState<string>('');
   const [isAnnualView, setIsAnnualView] = useState<boolean>(false);
-
   useEffect(() => {
     const fetchSalary = async (): Promise<void> => {
       try {

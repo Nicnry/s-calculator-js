@@ -1,7 +1,17 @@
 import { Salary } from "@/app/db/schema";
 import { localDb } from "@/app/db/database";
 
-export class SalaryService {
+export default class SalaryService {
+  static async getAllUserSalaries(userId: number): Promise<Salary[]> {
+    try {
+      await localDb.ensureOpen();
+      return await localDb.salaries.where('userId').equals(userId).toArray();
+    } catch (error) {
+      console.error('Erreur lors de la récupération des salaires', error);
+      return [];
+    }
+  }
+
   static async getAllSalaries(): Promise<Salary[]> {
     try {
       await localDb.ensureOpen();

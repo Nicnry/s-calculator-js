@@ -4,7 +4,7 @@ import { Salary, User } from "@/app/db/schema";
 import { UserService } from "@/app/services/userService";
 import { useState, useEffect } from "react";
 import SalaryForm from "@/app/components/salaries/salaryForm";
-import { SalaryService } from "@/app/services/salaryService";
+import SalaryService from "@/app/services/salaryService";
 
 export default function SalaryEdit({ userId, salaryId }: { userId: number; salaryId: number }) {
   const [user, setUser] = useState<User>();

@@ -1,7 +1,8 @@
 import React from 'react';
 import SalariesItem from '@/app/components/salaries/salariesItem';
+import { Salary } from '@/app/db/schema';
 
-export default function SalariesList({ id, userId, totalSalary, avsAiApgContribution, vdLpcfamDeduction, acDeduction, aanpDeduction, ijmA1Deduction, lppDeduction, onDelete }:   { id: number, userId: number, totalSalary: number, avsAiApgContribution: number, vdLpcfamDeduction: number, acDeduction: number, aanpDeduction: number, ijmA1Deduction: number, lppDeduction: number, onDelete: (id: number) => void; }) {
+export default function SalariesList({ salary, onDelete }:   { salary: Salary, onDelete: (id: number) => void; }) {
   
-  return (<SalariesItem id={id} userId={userId} totalSalary={totalSalary} avsAiApgContribution={avsAiApgContribution} vdLpcfamDeduction={vdLpcfamDeduction} acDeduction={acDeduction} aanpDeduction={aanpDeduction} ijmA1Deduction={ijmA1Deduction} lppDeduction={lppDeduction} onDelete={onDelete} />);
+  return (<SalariesItem salary={salary} onDelete={onDelete} />);
 };

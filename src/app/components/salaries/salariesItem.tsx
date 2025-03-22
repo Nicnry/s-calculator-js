@@ -2,26 +2,45 @@ import Link from "next/link";
 import { 
   Eye, 
   Edit, 
-  Trash2
+  Trash2,
+  Calendar
 } from "lucide-react";
 import { useState } from "react";
-import { SalaryService } from "@/app/services/salaryService";
+import SalaryService from "@/app/services/salaryService";
+import { Salary } from "@/app/db/schema";
 
-export default function SalariesItem({ id, userId, totalSalary, avsAiApgContribution, vdLpcfamDeduction, acDeduction, aanpDeduction, ijmA1Deduction, lppDeduction, onDelete }:   { id: number, userId: number, totalSalary: number, avsAiApgContribution: number, vdLpcfamDeduction: number, acDeduction: number, aanpDeduction: number, ijmA1Deduction: number, lppDeduction: number, onDelete: (id: number) => void; }) {
+export default function SalariesItem({ salary, onDelete }: { salary: Salary, onDelete: (id: number) => void; }) {
+  const {
+    id, 
+    userId, 
+    totalSalary, 
+    taxableSalary,
+    avsAiApgContribution, 
+    vdLpcfamDeduction, 
+    acDeduction, 
+    aanpDeduction, 
+    ijmA1Deduction, 
+    lppDeduction, 
+    employmentRate,
+    monthlyPayments,
+    from,
+    to,
+  } = salary;
+  
   const [isDeleting, setIsDeleting] = useState<boolean>(false);
   
   const netSalary = getNetSalary(
-    totalSalary, 
+    taxableSalary, 
     [avsAiApgContribution, vdLpcfamDeduction, acDeduction, aanpDeduction, ijmA1Deduction], 
     [lppDeduction]
   );
 
   const handleDelete = async (): Promise<void> => {
     setIsDeleting(true);
-    const success = await SalaryService.deleteSalary(id);
+    const success = await SalaryService.deleteSalary(id!);
     if (success) {
       alert("Salaire supprimé avec succès.");
-      onDelete(id);
+      onDelete(id!);
     } else {
       alert("Erreur lors de la suppression du salaire.");
     }
@@ -34,6 +53,14 @@ export default function SalariesItem({ id, userId, totalSalary, avsAiApgContribu
       minimumFractionDigits: 2,
       maximumFractionDigits: 2
     }).format(amount);
+  };
+  
+  const formatDate = (date: Date): string => {
+    return new Intl.DateTimeFormat('fr-CH', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric'
+    }).format(new Date(date));
   };
   
   return (
@@ -52,6 +79,11 @@ export default function SalariesItem({ id, userId, totalSalary, avsAiApgContribu
                 <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
                   Net: CHF {formatCurrency(netSalary)}
                 </span>
+                {monthlyPayments > 1 && (
+                  <span className="ml-2 inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
+                    {monthlyPayments} paiements
+                  </span>
+                )}
               </div>
             </div>
           </div>
@@ -88,10 +120,20 @@ export default function SalariesItem({ id, userId, totalSalary, avsAiApgContribu
           </div>
         </div>
         
+        <div className="flex items-center text-sm text-gray-500 mb-3">
+          <Calendar size={16} className="mr-1" />
+          <span>Période: {formatDate(from)} - {formatDate(to)}</span>
+        </div>
+        
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 border-t border-gray-100 pt-4">
           <div className="flex flex-col">
             <span className="text-xs text-gray-500">Salaire brut</span>
             <span className="font-semibold text-gray-800">CHF {formatCurrency(totalSalary)}</span>
+          </div>
+          
+          <div className="flex flex-col">
+            <span className="text-xs text-gray-500">Salaire imposable</span>
+            <span className="font-semibold text-gray-800">CHF {formatCurrency(taxableSalary)}</span>
           </div>
           
           <div className="flex flex-col">
@@ -122,6 +164,11 @@ export default function SalariesItem({ id, userId, totalSalary, avsAiApgContribu
           <div className="flex flex-col">
             <span className="text-xs text-gray-500">LPP</span>
             <span className="font-semibold text-gray-800">CHF {formatCurrency(lppDeduction)}</span>
+          </div>
+          
+          <div className="flex flex-col">
+            <span className="text-xs text-gray-500">Taux d'emploi</span>
+            <span className="font-semibold text-gray-800">{employmentRate}%</span>
           </div>
           
           <div className="flex flex-col">

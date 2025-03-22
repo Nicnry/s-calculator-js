@@ -1,7 +1,8 @@
 import React from 'react';
 import AccountsItem from '@/app/components/accounts/accountsItem';
+import { BankAccount } from '@/app/db/schema';
 
-export default function UserList({ id, userId, bankName, accountNumber, accountType, balance, currency, onDelete }: { id: number, userId: number, bankName: string, accountNumber: string, accountType: string, balance: number, currency: string, onDelete: (id: number) => void; }) {
+export default function UserList({ account, onDelete }: { account: BankAccount, onDelete: (id: number) => void; }) {
 
-  return (<AccountsItem id={id} userId={userId} bankName={bankName} accountNumber={accountNumber} accountType={accountType} balance={balance} currency={currency} onDelete={onDelete} />);
+  return (<AccountsItem key={account.id} account={account} onDelete={onDelete} />);
 };

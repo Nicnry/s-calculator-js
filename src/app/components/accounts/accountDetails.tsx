@@ -21,7 +21,7 @@ import DetailItem from "@/app/components/global/DetailItem";
 import { AccountTransactionService } from "@/app/services/accountTransactionService";
 
 export default function AccountDetails({ userId, accountId }: { userId: number; accountId: number; }) {
-  const [account, setAccount] = useState<BankAccount>({ userId: userId, bankName: '', accountNumber: '', accountType: '', balance: 0, currency: ''});
+  const [account, setAccount] = useState<BankAccount>({ userId: userId, bankName: '', accountNumber: '', accountType: '', balance: 0, currency: '', from: new Date(), to: new Date });
   const [transactions, setTransactions] = useState<AccountTransaction[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [formattedCreatedAt, setFormattedCreatedAt] = useState('');

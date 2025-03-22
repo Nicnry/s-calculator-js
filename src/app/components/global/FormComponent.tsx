@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { ChangeEvent, FormEvent, useState } from "react";
 import BackLink from "@/app/components/global/BackLink";
 
-export default function FormComponent<T extends Record<string, string | number | Date>>({
+export default function FormComponent<T extends Record<string, string | number | Date | boolean>>({
   initialData,
   fields,
   onSubmit,
@@ -19,7 +19,7 @@ export default function FormComponent<T extends Record<string, string | number |
 
     if (formData[name] instanceof Date) {
       setFormData({ ...formData, [name]: new Date(value) });
-    } else if (e.target.type === "number") {
+    } else if (e.target.type === "number" || e.target.type === "range") {
 
       setFormData({ ...formData, [name]: value === "" ? "" : Number(value) });
     } else {
@@ -120,7 +120,36 @@ export default function FormComponent<T extends Record<string, string | number |
             />
           </div>
         );
-      } 
+      }
+      case "range": {
+        const rangeValue = value !== undefined 
+          ? Number(value) 
+          : formData[name] !== undefined && formData[name] !== null 
+            ? Number(formData[name]) 
+            : 100;
+            
+        return (
+          <div className="space-y-2" key={name}>
+            {labelElement}
+            <div className="flex items-center space-x-3">
+              <input
+                id={name}
+                type="range"
+                name={name}
+                value={rangeValue}
+                onChange={handleChange}
+                min={field.min || 0}
+                max={field.max || 100}
+                step={field.step || 5}
+                className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
+              />
+              <span className="text-lg font-semibold w-16 text-center">
+                {rangeValue}%
+              </span>
+            </div>
+          </div>
+        );
+      }
       default: {
         const textValue = value !== undefined 
           ? String(value) 
