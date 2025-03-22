@@ -42,7 +42,6 @@ export default function FixedExpensesDetails({ userId, fixedExpenseId }: { userI
 
   useEffect(() => {
     if (fixedExpense) {
-      // Format createdAt date if it exists
       if (fixedExpense.createdAt) {
         const createdDate = new Date(fixedExpense.createdAt);
         setFormattedCreatedAt(
@@ -54,7 +53,6 @@ export default function FixedExpensesDetails({ userId, fixedExpenseId }: { userI
         );
       }
 
-      // Format date
       const mainDate = new Date(fixedExpense.date);
       setFormattedDate(
         mainDate.toLocaleDateString('fr-FR', {
@@ -64,7 +62,6 @@ export default function FixedExpensesDetails({ userId, fixedExpenseId }: { userI
         })
       );
 
-      // Format endDate if it exists
       if (fixedExpense.endDate) {
         const endDate = new Date(fixedExpense.endDate);
         setFormattedEndDate(
