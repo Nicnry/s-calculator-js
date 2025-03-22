@@ -2,18 +2,35 @@ import Link from "next/link";
 import { 
   Eye, 
   Edit, 
-  Trash2
+  Trash2,
+  Calendar
 } from "lucide-react";
 import { useState } from "react";
 import SalaryService from "@/app/services/salaryService";
 import { Salary } from "@/app/db/schema";
 
-export default function SalariesItem({ salary, onDelete }:   { salary: Salary, onDelete: (id: number) => void; }) {
-  const {id, userId, totalSalary, avsAiApgContribution, vdLpcfamDeduction, acDeduction, aanpDeduction, ijmA1Deduction, lppDeduction, employmentRate} = salary;
+export default function SalariesItem({ salary, onDelete }: { salary: Salary, onDelete: (id: number) => void; }) {
+  const {
+    id, 
+    userId, 
+    totalSalary, 
+    taxableSalary,
+    avsAiApgContribution, 
+    vdLpcfamDeduction, 
+    acDeduction, 
+    aanpDeduction, 
+    ijmA1Deduction, 
+    lppDeduction, 
+    employmentRate,
+    monthlyPayments,
+    from,
+    to,
+  } = salary;
+  
   const [isDeleting, setIsDeleting] = useState<boolean>(false);
   
   const netSalary = getNetSalary(
-    (totalSalary / 100 * (employmentRate || 100)), 
+    taxableSalary, 
     [avsAiApgContribution, vdLpcfamDeduction, acDeduction, aanpDeduction, ijmA1Deduction], 
     [lppDeduction]
   );
@@ -38,6 +55,14 @@ export default function SalariesItem({ salary, onDelete }:   { salary: Salary, o
     }).format(amount);
   };
   
+  const formatDate = (date: Date): string => {
+    return new Intl.DateTimeFormat('fr-CH', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric'
+    }).format(new Date(date));
+  };
+  
   return (
     <div className="bg-white rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition-all duration-200 mb-4 overflow-hidden">
       <div className="p-5">
@@ -54,6 +79,11 @@ export default function SalariesItem({ salary, onDelete }:   { salary: Salary, o
                 <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
                   Net: CHF {formatCurrency(netSalary)}
                 </span>
+                {monthlyPayments > 1 && (
+                  <span className="ml-2 inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
+                    {monthlyPayments} paiements
+                  </span>
+                )}
               </div>
             </div>
           </div>
@@ -90,10 +120,20 @@ export default function SalariesItem({ salary, onDelete }:   { salary: Salary, o
           </div>
         </div>
         
+        <div className="flex items-center text-sm text-gray-500 mb-3">
+          <Calendar size={16} className="mr-1" />
+          <span>Période: {formatDate(from)} - {formatDate(to)}</span>
+        </div>
+        
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 border-t border-gray-100 pt-4">
           <div className="flex flex-col">
             <span className="text-xs text-gray-500">Salaire brut</span>
             <span className="font-semibold text-gray-800">CHF {formatCurrency(totalSalary)}</span>
+          </div>
+          
+          <div className="flex flex-col">
+            <span className="text-xs text-gray-500">Salaire imposable</span>
+            <span className="font-semibold text-gray-800">CHF {formatCurrency(taxableSalary)}</span>
           </div>
           
           <div className="flex flex-col">
@@ -124,6 +164,11 @@ export default function SalariesItem({ salary, onDelete }:   { salary: Salary, o
           <div className="flex flex-col">
             <span className="text-xs text-gray-500">LPP</span>
             <span className="font-semibold text-gray-800">CHF {formatCurrency(lppDeduction)}</span>
+          </div>
+          
+          <div className="flex flex-col">
+            <span className="text-xs text-gray-500">Taux d'emploi</span>
+            <span className="font-semibold text-gray-800">{employmentRate}%</span>
           </div>
           
           <div className="flex flex-col">

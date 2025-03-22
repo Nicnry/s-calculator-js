@@ -45,7 +45,6 @@ export default function SalaryDetails({ userId, salaryId }: SalaryDetailsProps) 
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [formattedCreatedAt, setFormattedCreatedAt] = useState<string>('');
   const [isAnnualView, setIsAnnualView] = useState<boolean>(false);
-
   useEffect(() => {
     const fetchSalary = async (): Promise<void> => {
       try {
