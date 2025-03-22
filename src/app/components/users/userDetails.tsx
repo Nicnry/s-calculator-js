@@ -86,12 +86,6 @@ export default function UserDetail({ id }: { id: number; }) {
       </div>
 
       <div className="bg-gray-50 px-6 py-4 flex justify-between items-center">
-        <Link 
-          href="/users" 
-          className="text-blue-600 hover:underline"
-        >
-          Retour à la liste
-        </Link>
         
         <div className="flex space-x-3">
           <Link 

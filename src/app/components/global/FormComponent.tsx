@@ -1,8 +1,10 @@
 import FormComponentProps from "@/app/types/props/formComponentProps";
-import FormField from "@/app/types/formField";
+import { FormEvent } from "react";
 import { useRouter } from "next/navigation";
-import { ChangeEvent, FormEvent, useState } from "react";
-import BackLink from "@/app/components/global/BackLink";
+import { useFormData } from "@/app/hooks/useFormData";
+import { FormHeader } from "@/app/components/global/FormHeader";
+import { FormFields } from "@/app/components/global/FormFields";
+import { FormActions } from "@/app/components/global/FormActions";
 
 export default function FormComponent<T extends Record<string, string | number | Date | boolean>>({
   initialData,
@@ -11,21 +13,7 @@ export default function FormComponent<T extends Record<string, string | number |
   title,
 }: FormComponentProps<T>) {
   const router = useRouter();
-  const [formData, setFormData] = useState<T>(initialData);
-  const [loading, setLoading] = useState(false);
-
-  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    const { name, value } = e.target;
-
-    if (formData[name] instanceof Date) {
-      setFormData({ ...formData, [name]: new Date(value) });
-    } else if (e.target.type === "number" || e.target.type === "range") {
-
-      setFormData({ ...formData, [name]: value === "" ? "" : Number(value) });
-    } else {
-      setFormData({ ...formData, [name]: value });
-    }
-  };
+  const { formData, loading, setLoading, handleChange } = useFormData<T>(initialData);
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -40,188 +28,17 @@ export default function FormComponent<T extends Record<string, string | number |
     }
   };
 
-  const renderField = (field: FormField) => {
-    const { name, label, type = "text", options = [], icon, placeholder, value } = field;
-    
-    const labelElement = (
-      <label 
-        className={`text-sm font-semibold text-gray-700 ${icon ? 'flex items-center' : ''}`}
-        htmlFor={name}
-      >
-        {icon && <span className="mr-2">{icon}</span>}
-        <span>{label}</span>
-      </label>
-    );
-
-    switch(type) { 
-      case "select": {
-        return (
-          <div className="space-y-2" key={name}>
-            {labelElement}
-            <select
-              id={name}
-              name={name}
-              value={String(formData[name])}
-              onChange={handleChange}
-              required
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            >
-              {options.map((option) => (
-                <option key={option} value={option}>
-                  {option}
-                </option>
-              ))}
-            </select>
-          </div>
-        );
-      } 
-      case "number": { 
-        const numberValue = value !== undefined 
-          ? String(value) 
-          : formData[name] !== undefined && formData[name] !== null 
-            ? String(formData[name]) 
-            : "";
-            
-        return (
-          <div className="space-y-2" key={name}>
-            {labelElement}
-            <input
-              id={name}
-              type="number"
-              inputMode="numeric"
-              pattern="[0-9]*"
-              name={name}
-              value={numberValue}
-              onChange={handleChange}
-              required
-              placeholder={placeholder}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-          </div>
-        );
-      } 
-      case "date": { 
-        const dateValue = formData[name] instanceof Date 
-          ? (formData[name] as Date).toISOString().split('T')[0] 
-          : String(formData[name]);
-          
-        return (
-          <div className="space-y-2" key={name}>
-            {labelElement}
-            <input
-              id={name}
-              type={type}
-              name={name}
-              value={dateValue}
-              onChange={handleChange}
-              required
-              placeholder={placeholder}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-          </div>
-        );
-      }
-      case "range": {
-        const rangeValue = value !== undefined 
-          ? Number(value) 
-          : formData[name] !== undefined && formData[name] !== null 
-            ? Number(formData[name]) 
-            : 100;
-            
-        return (
-          <div className="space-y-2" key={name}>
-            {labelElement}
-            <div className="flex items-center space-x-3">
-              <input
-                id={name}
-                type="range"
-                name={name}
-                value={rangeValue}
-                onChange={handleChange}
-                min={field.min || 0}
-                max={field.max || 100}
-                step={field.step || 5}
-                className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
-              />
-              <span className="text-lg font-semibold w-16 text-center">
-                {rangeValue}%
-              </span>
-            </div>
-          </div>
-        );
-      }
-      default: {
-        const textValue = value !== undefined 
-          ? String(value) 
-          : formData[name] !== undefined && formData[name] !== null 
-            ? String(formData[name]) 
-            : "";
-            
-        return (
-          <div className="space-y-2" key={name}>
-            {labelElement}
-            <input
-              id={name}
-              type={type}
-              name={name}
-              value={textValue}
-              onChange={handleChange}
-              required
-              placeholder={placeholder}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-          </div>
-        );
-      } 
-   } 
-  };
-
-  const mainTitle = title.split(':')[0];
-  const subTitle = title.includes(':') ? title.split(':')[1].trim() : '';
-
   return (
-    <div className="max-w-2xl mx-auto bg-white shadow-lg rounded-xl overflow-hidden">
-      <BackLink href={"/users"} />
-      <div className="bg-blue-50 px-6 py-8 flex flex-col items-center">
-        <div className="w-24 h-24 bg-blue-200 rounded-full flex items-center justify-center text-blue-700 text-4xl font-bold mb-4">
-          {mainTitle.charAt(0).toUpperCase()}
-        </div>
-        <h1 className="text-2xl font-bold text-gray-800">{mainTitle}</h1>
-        {subTitle && <p className="text-gray-500 mb-4">{subTitle}</p>}
-      </div>
+    <div className="">
+      <FormHeader title={title} />
 
       <form onSubmit={handleSubmit}>
-        <div className="p-6 space-y-4">
-          {fields.map(renderField)}
-        </div>
-
-        <div className="bg-gray-50 px-6 py-4 flex justify-between items-center">
-          <button
-            type="button"
-            onClick={() => router.back()}
-            className="text-blue-600 hover:underline"
-          >
-            Retour
-          </button>
-          
-          <div className="flex space-x-3">
-            <button
-              type="button"
-              onClick={() => router.back()}
-              className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 transition-colors"
-            >
-              Annuler
-            </button>
-            
-            <button
-              type="submit"
-              disabled={loading}
-              className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition-colors"
-            >
-              {loading ? "En cours..." : "Enregistrer"}
-            </button>
-          </div>
-        </div>
+        <FormFields 
+          fields={fields} 
+          formData={formData} 
+          handleChange={handleChange} 
+        />
+        <FormActions loading={loading} />
       </form>
     </div>
   );
