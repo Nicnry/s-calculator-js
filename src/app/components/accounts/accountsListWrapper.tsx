@@ -1,19 +1,21 @@
 'use client';
 
-import { Suspense, useEffect, useState } from 'react';
-import React from 'react';
+import { useEffect, useState } from 'react';
 import { BankAccount } from '@/app/db/schema';
 import { UserAccountService } from '@/app/services/userAccountService';
 import AccountsList from '@/app/components/accounts/accountsList';
-import BackLink from '@/app/components/global/BackLink';
-import CreateNew from '@/app/components/global/CreateNew';
+import GenericListWrapper from '@/app/components/global/GenericListWrapper';
 
 export default function AccountsListWrapper({ userId }: { userId: number }) {
   const [accounts, setAccounts] = useState<BankAccount[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     (async () => {
-      setAccounts(await UserAccountService.getAllUserAccounts(userId))
+      setLoading(true);
+      const data = await UserAccountService.getAllUserAccounts(userId);
+      setAccounts(data);
+      setLoading(false);
     })();
   }, [userId]);
 
@@ -22,38 +24,21 @@ export default function AccountsListWrapper({ userId }: { userId: number }) {
   };
   
   return (
-    <>
-      <div className="flex justify-between items-center mb-6">
-        <BackLink />
-        <h1 className="text-3xl font-bold mb-6">Gestion des comptes</h1>
-        <CreateNew href="accounts/new" title="+ Créer un compte" />
-      </div>
-      <div className="bg-white shadow-lg rounded-xl overflow-hidden">
-        <div className="divide-y divide-gray-100">
-          <Suspense fallback={<UserListSkeleton />}>
-          {accounts.map((account) => (
-              <AccountsList
-                key={account.id}
-                account={account}
-                onDelete={handleDeleteAccount} />
-            ))}
-          </Suspense>
-        </div>
-      </div>
-    </>
-    );
-};
-
-function UserListSkeleton() {
-  return (
-    <div className="animate-pulse">
-      <div className="h-4 bg-gray-200 rounded w-48 mb-4"></div>
-      {[1, 2, 3].map((_, index) => (
-        <div 
-          key={index} 
-          className="h-16 bg-gray-100 rounded mb-2"
-        ></div>
-      ))}
-    </div>
+    <GenericListWrapper
+      title="Gestion des comptes"
+      createNewHref="accounts/new"
+      createNewTitle="+ Créer un compte"
+      items={accounts}
+      isLoading={loading}
+      renderItem={(account) => (
+        <AccountsList
+          key={account.id}
+          account={account}
+          onDelete={handleDeleteAccount}
+        />
+      )}
+      onDelete={handleDeleteAccount}
+      emptyMessage="Aucun compte trouvé. Créez votre premier compte."
+    />
   );
 }
