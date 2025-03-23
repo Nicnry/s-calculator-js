@@ -90,42 +90,44 @@ export default function SalariesItem({ salary, onDelete }: { salary: Salary, onD
   return (
     <div className="bg-white rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition-all duration-200 mb-4 overflow-hidden">
       <div className="p-5">
-        <div className="flex items-center justify-between mb-4">
+        <div className="flex flex-col md:flex-row md:items-center justify-between mb-4 gap-4">
           <div className="flex items-center">
-            <div className="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold">
+            <div className="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold shrink-0">
               {userId}
             </div>
-            <div className="ml-4">
-              <h3 className="text-lg font-bold text-gray-800">
+            <div className="ml-4 min-w-0">
+              <h3 className="text-lg font-bold text-gray-800 truncate">
                 Employé #{userId}
               </h3>
-              <div className="flex items-center mt-1">
+              <div className="flex flex-wrap items-center gap-2 mt-1">
                 <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
                   Net: CHF {formatCurrency(netSalary)}
                 </span>
                 {monthlyPayments > 1 && (
-                  <span className="ml-2 inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
+                  <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
                     {monthlyPayments} paiements
                   </span>
                 )}
-                <span className="ml-2 inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-purple-100 text-purple-800">
+                <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-purple-100 text-purple-800">
                   <Percent size={14} className="mr-1" /> {employmentRate}
                 </span>
               </div>
             </div>
           </div>
           
-          <ActionMenu actions={actions} />
+          <div className="flex justify-end self-end md:self-auto">
+            <ActionMenu actions={actions} />
+          </div>
         </div>
         
         <div className="flex items-center text-sm text-gray-500 mb-3">
-          <Calendar size={16} className="mr-1" />
-          <span>Période: {formatDate(from)} - {formatDate(to)}</span>
+          <Calendar size={16} className="mr-1 shrink-0" />
+          <span className="truncate">Période: {formatDate(from)} - {formatDate(to)}</span>
         </div>
         
         <div className="mb-4 p-3 bg-gray-50 rounded-lg border border-gray-100">
           <h4 className="text-sm font-semibold text-gray-700 mb-2">Salaires</h4>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="flex flex-col">
               <div className="flex flex-col mb-1">
                 <span className="text-xs text-gray-500">Salaire brut de base</span>
