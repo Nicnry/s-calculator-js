@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { FixedExpense } from '@/app/db/schema';
 import FixedExpenseService from '@/app/services/fixedExpenseService';
 import { 
@@ -79,7 +79,7 @@ export default function FixedExpensesStatistics({ userId }: { userId: number }) 
     fetchData();
   }, [userId]);
 
-  const formatExpenseData = () => {
+  const formatExpenseData = useCallback(() => {
     return expenses.map(expense => {
       try {
         const fromDate = new Date(expense.from);
@@ -121,7 +121,7 @@ export default function FixedExpensesStatistics({ userId }: { userId: number }) 
         };
       }
     });
-  };
+  }, [expenses]);
 
   useEffect(() => {
     const formattedExpenses = formatExpenseData();

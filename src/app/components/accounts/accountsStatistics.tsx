@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { BankAccount } from '@/app/db/schema';
 import { UserAccountService } from '@/app/services/userAccountService';
 import { 
@@ -58,7 +58,8 @@ export default function BankAccountsStatistics({ userId }: { userId: number }) {
     fetchData();
   }, [userId]);
 
-  const formatAccountData = () => {
+  // Utilisation de useCallback pour mémoriser la fonction formatAccountData
+  const formatAccountData = useCallback(() => {
     return accounts.map(account => ({
       ...account,
       period: `${new Date(account.from).toLocaleDateString('fr-CH', { month: 'short', year: 'numeric' })}`,
@@ -67,7 +68,7 @@ export default function BankAccountsStatistics({ userId }: { userId: number }) {
       toDate: new Date(account.to).toLocaleDateString('fr-CH'),
       monthYear: new Date(account.from).toLocaleDateString('fr-CH', { month: 'long', year: 'numeric' })
     }));
-  };
+  }, [accounts]); // Dépendance uniquement sur accounts
 
   useEffect(() => {
     const formattedAccounts = formatAccountData();
@@ -85,9 +86,9 @@ export default function BankAccountsStatistics({ userId }: { userId: number }) {
     } else {
       setFilteredAccounts(formattedAccounts);
     }
-  }, [accounts, startDate, endDate]);
+  }, [accounts, startDate, endDate, formatAccountData]);
 
-  const calculateStats = () => {
+  const calculateStats = useCallback(() => {
     if (!accounts.length) return null;
 
     const totalBalance = accounts.reduce((sum, account) => sum + account.balance, 0);
@@ -121,9 +122,9 @@ export default function BankAccountsStatistics({ userId }: { userId: number }) {
       bankBalances,
       currencyDistribution
     };
-  };
+  }, [accounts]);
 
-  const prepareAccountTypesPieData = () => {
+  const prepareAccountTypesPieData = useCallback(() => {
     if (!accounts.length) return [];
     
     const accountsByType = accounts.reduce((acc, account) => {
@@ -135,9 +136,9 @@ export default function BankAccountsStatistics({ userId }: { userId: number }) {
       name,
       value
     }));
-  };
+  }, [accounts]);
 
-  const prepareBanksPieData = () => {
+  const prepareBanksPieData = useCallback(() => {
     if (!accounts.length) return [];
     
     const accountsByBank = accounts.reduce((acc, account) => {
@@ -149,9 +150,9 @@ export default function BankAccountsStatistics({ userId }: { userId: number }) {
       name,
       value
     }));
-  };
+  }, [accounts]);
 
-  const prepareCurrenciesPieData = () => {
+  const prepareCurrenciesPieData = useCallback(() => {
     if (!accounts.length) return [];
     
     const accountsByCurrency = accounts.reduce((acc, account) => {
@@ -163,15 +164,15 @@ export default function BankAccountsStatistics({ userId }: { userId: number }) {
       name,
       value
     }));
-  };
+  }, [accounts]);
 
-  const prepareBalanceOverTimeData = () => {
+  const prepareBalanceOverTimeData = useCallback(() => {
     return filteredAccounts.map(account => ({
       period: account.period,
       balance: account.balance,
       currency: account.currency
     }));
-  };
+  }, [filteredAccounts]);
 
   const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>, type: 'start' | 'end') => {
     if (type === 'start') {
