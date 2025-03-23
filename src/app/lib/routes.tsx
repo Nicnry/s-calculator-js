@@ -29,7 +29,7 @@ export const getMenuItems = (id: number): MenuItem[] => [
     dropdownItems: [
       { href: `/users/${id}/fixed-expenses/new`, label: "Ajouter" },
       { href: `/users/${id}/fixed-expenses`, label: "Voir tout" },
-      { href: `/users/${id}/fixed-expenses/stats`, label: "Statistiques" }
+      { href: `/users/${id}/fixed-expenses/statistics`, label: "Statistiques" }
     ]
   },
   { 
@@ -51,7 +51,7 @@ export const getMenuItems = (id: number): MenuItem[] => [
     dropdownItems: [
       { href: `/users/${id}/accounts/new`, label: "Nouveau compte" },
       { href: `/users/${id}/accounts`, label: "Voir tout" },
-      { href: `/users/${id}/accounts/stats`, label: "Statistiques" }
+      { href: `/users/${id}/accounts/statistics`, label: "Statistiques" }
     ]
   }
 ];
