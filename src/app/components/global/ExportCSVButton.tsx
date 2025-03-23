@@ -1,37 +1,45 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client'
 
 import { AccountService } from '@/app/services/accountService';
-import { SalaryService } from '@/app/services/salaryService';
+import SalaryService from '@/app/services/salaryService';
 import { TransactionService } from '@/app/services/transactionService';
 import { UserService } from '@/app/services/userService';
 import React from 'react';
-import { localDb } from '@/app/db/database';
-import { User, BankAccount, Salary, AccountTransaction } from '@/app/db/schema';
+import FixedExpenseService from '@/app/services/fixedExpenseService';
 
 async function getAllDatas() {
   const users = await UserService.getAllUsers();
   const bankAccounts = await AccountService.getAllAccounts();
   const salaries = await SalaryService.getAllSalaries();
   const accountTransactions = await TransactionService.getAllTransactions();
-  return {users, bankAccounts, salaries, accountTransactions};
+  const fixedExpenses = await FixedExpenseService.getAllExpenses();
+
+  return {users, bankAccounts, salaries, accountTransactions, fixedExpenses};
 }
 
-function transformData(data) {
-  let result = {};
+function transformData(data: any) {
+  const result: Record<string, { 
+    keys: string[], 
+    values: (string | number | boolean | null)[][] 
+  }> = {};
 
-  for (let key in data) {
+  for (const key in data) {
+    if (Object.prototype.hasOwnProperty.call(data, key)) {
       if (Array.isArray(data[key]) && data[key].length > 0) {
-          let keys = Object.keys(data[key][0]);
-          let values = data[key].map(obj => keys.map(k => obj[k]));
+        const keys = Object.keys(data[key][0]);
+        const values = data[key].map(obj => keys.map(k => obj[k]));
 
-          result[key] = { keys, values };
+        result[key] = { keys, values };
       }
+    }
   }
 
   return result;
 }
 
-function convertToSingleCSV(data) {
+function convertToSingleCSV(data: any) {
+  console.log(data)
   let csvContent = '';
   
   for (const tableName in data) {
@@ -42,7 +50,7 @@ function convertToSingleCSV(data) {
     csvContent += tableData.keys.join(',') + '\n';
     
     for (const row of tableData.values) {
-      const formattedRow = row.map(value => {
+      const formattedRow = row.map((value: any) => {
         if (value === null || value === undefined) return '';
         const strValue = String(value);
         if (strValue.includes(',') || strValue.includes('"') || strValue.includes('\n')) {
@@ -59,7 +67,7 @@ function convertToSingleCSV(data) {
   return csvContent;
 }
 
-function downloadSingleCSV(csvContent, filename = 'export_data.csv') {
+function downloadSingleCSV(csvContent: string, filename = 'export_data.csv') {
   const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
   const link = document.createElement('a');
   

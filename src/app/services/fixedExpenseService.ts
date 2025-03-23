@@ -12,6 +12,16 @@ export default class FixedExpenseService {
     }
   }
 
+  static async getAllExpenses(): Promise<FixedExpense[]> {
+    try {
+      await localDb.ensureOpen();
+      return await localDb.fixedExpenses.toArray();
+    } catch (error) {
+      console.error('Erreur lors de la récupération des charges', error);
+      return [];
+    }
+  }
+
   static async getUserFixedExpenseById(id: number): Promise<FixedExpense> {
     try {
       await localDb.ensureOpen();

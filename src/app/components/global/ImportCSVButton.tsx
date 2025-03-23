@@ -1,230 +1,210 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client'
+
 import React, { useState } from 'react';
 import { localDb } from '@/app/db/database';
+import Dexie from 'dexie';
 
 const ImportCSVButton: React.FC = () => {
   const [isImporting, setIsImporting] = useState(false);
   const [progress, setProgress] = useState(0);
-
-  const parseCSV = (csvText: string): { section: string; data: any[] }[] => {
-    const lines = csvText.split('\n');
-    const sections: { section: string; data: any[] }[] = [];
+  
+  const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
     
-    let currentSection = '';
-    let headers: string[] = [];
-    let currentData: any[] = [];
+    console.log("Début de l'importation");
+    setIsImporting(true);
+    setProgress(10);
+    
+    try {
+      await localDb.ensureOpen();
+      
+      const content = await readFileAsText(file);
+      setProgress(20);
+      
+      const parsedData = parseCSVContent(content);
+      console.log("Données parsées:", parsedData);
+      setProgress(30);
+      
+      await clearAndImportData(parsedData);
+      
+      setProgress(100);
+      console.log("Importation terminée avec succès");
+      
+      setTimeout(() => {
+        setIsImporting(false);
+      }, 500);
+      
+    } catch (error) {
+      console.error("Erreur lors de l'importation:", error);
+      alert(`Erreur lors de l'importation: ${(error as Error).message}`);
+      setIsImporting(false);
+    }
+    
+    event.target.value = '';
+  };
+  
+  const readFileAsText = (file: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = (e) => resolve(e.target?.result as string);
+      reader.onerror = reject;
+      reader.readAsText(file);
+    });
+  };
+  
+  const parseCSVContent = (csvContent: string) => {
+    const result: Record<string, { columns: string[], values: any[][] }> = {};
+    
+    const lines = csvContent.split('\n');
+    let currentTable = '';
     
     for (let i = 0; i < lines.length; i++) {
       const line = lines[i].trim();
       
-      if (!line) {
+      if (!line) continue;
+      
+      const tableMatch = line.match(/---\s+(\w+)\s+---/);
+      if (tableMatch) {
+        currentTable = tableMatch[1];
+        result[currentTable] = { columns: [], values: [] };
         continue;
       }
       
-      if (line.startsWith('---')) {
-        if (currentSection && headers.length > 0 && currentData.length > 0) {
-          sections.push({ section: currentSection, data: currentData });
-        }
-        
-        const sectionMatch = line.match(/^--- (.*) ---$/);
-        if (sectionMatch) {
-          currentSection = sectionMatch[1];
-          headers = [];
-          currentData = [];
-        }
-        continue;
-      }
-      
-      if (line.startsWith('# ')) {
-        if (currentSection && headers.length > 0 && currentData.length > 0) {
-          sections.push({ section: currentSection, data: currentData });
-        }
-        
-        const sectionName = line.substring(2).trim();
-        
-        const sectionMap: { [key: string]: string } = {
-          'UTILISATEURS': 'users',
-          'COMPTES BANCAIRES': 'bankAccounts',
-          'SALAIRES': 'salaries',
-          'TRANSACTIONS': 'accountTransactions'
-        };
-        
-        currentSection = sectionMap[sectionName] || sectionName.toLowerCase();
-        headers = [];
-        currentData = [];
-        continue;
-      }
-      
-      if (line.startsWith('#')) {
-        continue;
-      }
-      
-      if (currentSection && headers.length === 0) {
-        headers = parseCSVRow(line);
-        continue;
-      }
-      
-      if (currentSection && headers.length > 0) {
-        const values = parseCSVRow(line);
-        
-        if (values.length === headers.length) {
-          const rowData: Record<string, any> = {};
-          
-          for (let j = 0; j < headers.length; j++) {
-            const header = headers[j].replace(/^"(.*)"$/, '$1');
-            let value = values[j];
-            
-            if (header === 'id') {
-              rowData[header] = value === '' ? undefined : value;
-              continue;
-            }
-            
-            if (value === '') {
-              rowData[header] = null;
-            } else if (value === 'true') {
-              rowData[header] = true;
-            } else if (value === 'false') {
-              rowData[header] = false;
-            } else if (!isNaN(Number(value)) && value.trim() !== '') {
-              if (!/[a-zA-Z]/.test(value)) {
-                rowData[header] = Number(value);
-              } else {
-                rowData[header] = value;
-              }
-            } else {
-              rowData[header] = value;
-            }
-          }
-          
-          if (rowData['createdAt'] && typeof rowData['createdAt'] === 'string') {
-            rowData['createdAt'] = new Date(rowData['createdAt']);
-          }
-          if (rowData['date'] && typeof rowData['date'] === 'string') {
-            rowData['date'] = new Date(rowData['date']);
-          }
-          
-          currentData.push(rowData);
+      if (currentTable) {
+        if (result[currentTable].columns.length === 0) {
+          const columns = line.split(',').map(col => col.trim());
+          result[currentTable].columns = columns;
+        } else {
+          const values = parseCSVLine(line);
+          result[currentTable].values.push(values);
         }
       }
     }
     
-    if (currentSection && headers.length > 0 && currentData.length > 0) {
-      sections.push({ section: currentSection, data: currentData });
-    }
-    
-    return sections;
+    return result;
   };
   
-  const parseCSVRow = (row: string): string[] => {
-    const result: string[] = [];
+  const parseCSVLine = (line: string): any[] => {
+    const values: any[] = [];
     let inQuotes = false;
     let currentValue = '';
     
-    for (let i = 0; i < row.length; i++) {
-      const char = row[i];
+    for (let i = 0; i < line.length; i++) {
+      const char = line[i];
       
       if (char === '"') {
-        if (i < row.length - 1 && row[i + 1] === '"') {
+        if (inQuotes && i + 1 < line.length && line[i + 1] === '"') {
           currentValue += '"';
           i++;
         } else {
           inQuotes = !inQuotes;
         }
       } else if (char === ',' && !inQuotes) {
-        result.push(currentValue);
+        values.push(convertValue(currentValue));
         currentValue = '';
       } else {
         currentValue += char;
       }
     }
     
-    result.push(currentValue);
+    values.push(convertValue(currentValue));
     
-    return result;
+    return values;
   };
+  
+  const convertValue = (value: string): any => {
+    value = value.trim();
+    
+    if (value.startsWith('"') && value.endsWith('"')) {
+      value = value.substring(1, value.length - 1);
+    }
+    
+    if (value === '' || value.toLowerCase() === 'null') return null;
+    if (value.toLowerCase() === 'true') return true;
+    if (value.toLowerCase() === 'false') return false;
+    
+    const num = Number(value);
+    if (!isNaN(num) && value !== '') return num;
+    
+    if (/^\d{4}-\d{2}-\d{2}/.test(value) || 
+        /^[A-Za-z]{3}\s[A-Za-z]{3}\s\d{2}/.test(value) ||
+        /^\w{3}\s\w{3}\s\d{1,2}\s\d{4}/.test(value)) {
+      try {
+        return new Date(value);
+      } catch {
 
-  const importData = async (file: File) => {
+      }
+    }
+    
+    return value;
+  };
+  
+  const clearAndImportData = async (data: Record<string, { columns: string[], values: any[][] }>) => {
     try {
-      setIsImporting(true);
-      setProgress(0);
-      
-      const fileContent = await file.text();
-      const sections = parseCSV(fileContent);
-      
-      if (sections.length === 0) {
-        throw new Error("Aucune donnée valide trouvée dans le fichier CSV");
-      }
-      
-      await localDb.ensureOpen();
-      
-      const availableTables: string[] = [];
-      for (const key in localDb) {
-        if (
-          typeof localDb[key] === 'object' && 
-          localDb[key] !== null && 
-          'bulkAdd' in localDb[key] && 
-          'clear' in localDb[key]
-        ) {
-          availableTables.push(key);
-        }
-      }
-      
-      const validSections = sections.filter(section => 
-        availableTables.includes(section.section)
-      );
-      
-      const tablesToClear = validSections.map(section => localDb[section.section]);
-      
-      await localDb.transaction('rw', tablesToClear, async () => {
-        setProgress(10);
-        
-        for (const section of validSections) {
-          await localDb[section.section].clear();
-        }
-        
-        setProgress(20);
-        
-        const totalSections = validSections.length;
-        let processedSections = 0;
-        
-        for (const section of validSections) {
-          const tableData = section.data.map(item => {
-            const { id, ...rest } = item;
-            return rest;
-          });
+      await localDb.transaction('rw', 
+        [localDb.users, localDb.bankAccounts, localDb.salaries, localDb.accountTransactions, localDb.fixedExpenses], 
+        async () => {
           
-          await localDb[section.section].bulkAdd(tableData);
+        await localDb.users.clear();
+        await localDb.bankAccounts.clear();
+        await localDb.salaries.clear();
+        await localDb.accountTransactions.clear();
+        await localDb.fixedExpenses.clear();
+        
+        setProgress(40);
+        
+        const tableMap: Record<string, Dexie.Table<any, any>> = {
+          users: localDb.users,
+          bankAccounts: localDb.bankAccounts,
+          salaries: localDb.salaries,
+          accountTransactions: localDb.accountTransactions,
+          fixedExpenses: localDb.fixedExpenses
+        };
+        
+        const tableCount = Object.keys(data).length;
+        let processedTables = 0;
+        
+        for (const tableName in data) {
+          if (!tableMap[tableName]) {
+            console.warn(`Table ${tableName} non reconnue, ignorée.`);
+            processedTables++;
+            continue;
+          }
           
-          processedSections++;
-          setProgress(20 + Math.floor((processedSections / totalSections) * 80));
+          const { columns, values } = data[tableName];
+          const table = tableMap[tableName];
+          
+          for (const rowValues of values) {
+            const obj: Record<string, any> = {};
+            
+            columns.forEach((column, index) => {
+              if (index < rowValues.length) {
+                obj[column] = rowValues[index];
+              }
+            });
+            
+            if (obj.id) {
+              await table.put(obj);
+            } else {
+              await table.add(obj);
+            }
+          }
+          
+          processedTables++;
+          setProgress(40 + Math.floor((processedTables / tableCount) * 50));
         }
       });
       
-      setProgress(100);
-      alert('Importation réussie! La base de données a été mise à jour.');
-    } catch (error) {
-      console.error('Erreur lors de l\'importation:', error);
-      alert(`Une erreur est survenue lors de l'importation des données: ${error instanceof Error ? error.message : 'Erreur inconnue'}`);
-    } finally {
-      setIsImporting(false);
-    }
-  };
-
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file && (file.type === 'text/csv' || file.name.endsWith('.csv'))) {
-      const confirmImport = window.confirm(
-        'Cette opération va supprimer toutes les données existantes des tables concernées et les remplacer par celles du fichier CSV. Êtes-vous sûr de vouloir continuer?'
-      );
+      console.log("Données importées avec succès");
       
-      if (confirmImport) {
-        importData(file);
-      }
-    } else if (file) {
-      alert('Veuillez sélectionner un fichier CSV valide.');
+    } catch (error) {
+      console.error("Erreur lors de l'importation des données:", error);
+      throw error;
     }
   };
-
+  
   return (
     <div className="flex flex-col items-start gap-2">
       <label 
