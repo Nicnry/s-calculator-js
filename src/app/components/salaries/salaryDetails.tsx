@@ -41,7 +41,8 @@ export default function SalaryDetails({ userId, salaryId }: SalaryDetailsProps) 
     to: new Date(),
     createdAt: new Date(),
   });
-  
+
+  const percentedSalary = SalaryService.calculateAdjustedSalary(salary);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [formattedCreatedAt, setFormattedCreatedAt] = useState<string>('');
   const [isAnnualView, setIsAnnualView] = useState<boolean>(false);
@@ -85,11 +86,14 @@ export default function SalaryDetails({ userId, salaryId }: SalaryDetailsProps) 
     ];
     
     const totalPercentDeduction = percentDeductions.reduce(
-      (acc, percent) => acc + (salary.totalSalary * percent / 100), 
+      (acc, percent) => {
+
+        return acc + (percentedSalary * percent / 100)
+      }, 
       0
     );
-    
-    return salary.totalSalary - totalPercentDeduction - salary.lppDeduction;
+
+    return percentedSalary - totalPercentDeduction - salary.lppDeduction;
   };
 
   const netSalary = calculateNetSalary();
@@ -200,13 +204,13 @@ export default function SalaryDetails({ userId, salaryId }: SalaryDetailsProps) 
             <DetailItem 
               icon={<DollarSign size={18} className="text-green-600" />} 
               label={`Salaire brut ${isAnnualView ? 'annuel' : ''}`}
-              value={`CHF ${formatCurrency(getDisplayAmount(salary.totalSalary))}`} 
+              value={`CHF ${formatCurrency(getDisplayAmount(percentedSalary))}`} 
             />
             
             <DetailItem 
               icon={<CreditCard size={18} className="text-green-600" />} 
               label={`Salaire imposable ${isAnnualView ? 'annuel' : ''}`}
-              value={`CHF ${formatCurrency(getDisplayAmount(salary.taxableSalary))}`} 
+              value={`CHF ${formatCurrency(getDisplayAmount(salary.taxableSalary / 100 * salary.employmentRate))}`} 
             />
             
             <div className="flex items-start py-2">
@@ -229,31 +233,31 @@ export default function SalaryDetails({ userId, salaryId }: SalaryDetailsProps) 
             <DetailItem 
               icon={<Percent size={18} className="text-red-500" />} 
               label="AVS/AI/APG" 
-              value={`${salary.avsAiApgContribution}% (CHF ${formatCurrency(getDisplayAmount(salary.totalSalary * salary.avsAiApgContribution / 100))})`} 
+              value={`${salary.avsAiApgContribution}% (CHF ${formatCurrency(getDisplayAmount(percentedSalary * salary.avsAiApgContribution / 100))})`} 
             />
             
             <DetailItem 
               icon={<Percent size={18} className="text-red-500" />} 
               label="VD/LPCFam" 
-              value={`${salary.vdLpcfamDeduction}% (CHF ${formatCurrency(getDisplayAmount(salary.totalSalary * salary.vdLpcfamDeduction / 100))})`} 
+              value={`${salary.vdLpcfamDeduction}% (CHF ${formatCurrency(getDisplayAmount(percentedSalary * salary.vdLpcfamDeduction / 100))})`} 
             />
             
             <DetailItem 
               icon={<Percent size={18} className="text-red-500" />} 
               label="AC" 
-              value={`${salary.acDeduction}% (CHF ${formatCurrency(getDisplayAmount(salary.totalSalary * salary.acDeduction / 100))})`} 
+              value={`${salary.acDeduction}% (CHF ${formatCurrency(getDisplayAmount(percentedSalary * salary.acDeduction / 100))})`} 
             />
             
             <DetailItem 
               icon={<Percent size={18} className="text-red-500" />} 
               label="AANP" 
-              value={`${salary.aanpDeduction}% (CHF ${formatCurrency(getDisplayAmount(salary.totalSalary * salary.aanpDeduction / 100))})`} 
+              value={`${salary.aanpDeduction}% (CHF ${formatCurrency(getDisplayAmount(percentedSalary * salary.aanpDeduction / 100))})`} 
             />
             
             <DetailItem 
               icon={<Percent size={18} className="text-red-500" />} 
               label="IJM A1" 
-              value={`${salary.ijmA1Deduction}% (CHF ${formatCurrency(getDisplayAmount(salary.totalSalary * salary.ijmA1Deduction / 100))})`} 
+              value={`${salary.ijmA1Deduction}% (CHF ${formatCurrency(getDisplayAmount(percentedSalary * salary.ijmA1Deduction / 100))})`} 
             />
             
             <DetailItem 

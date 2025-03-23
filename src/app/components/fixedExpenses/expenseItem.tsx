@@ -89,59 +89,61 @@ export default function ExpenseItem({ expense, onDelete }: { expense: FixedExpen
 
   return (
     <div 
-      className="px-6 py-4 hover:bg-gray-50 border-b border-gray-200 transition-colors duration-200"
+      className="px-4 sm:px-6 py-4 hover:bg-gray-50 border-b border-gray-200 transition-colors duration-200"
       key={expense.id}
     >
-      <div className="flex flex-col md:flex-row md:items-center justify-between">
-        <div className="flex items-center mb-3 md:mb-0">
-          <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold mr-3 ${getCategoryColor(expense.category)}`}>
-            {expense.title.charAt(0).toUpperCase()}
+      <div className="flex flex-col space-y-3">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center">
+            <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold mr-3 shrink-0 ${getCategoryColor(expense.category)}`}>
+              {expense.title.charAt(0).toUpperCase()}
+            </div>
+            <div className="min-w-0">
+              <p className="font-semibold text-gray-800 text-lg truncate">{expense.title}</p>
+              <p className="font-bold text-lg text-blue-600">{formattedAmount}</p>
+            </div>
           </div>
-          <div>
-            <p className="font-semibold text-gray-800 text-lg">{expense.title}</p>
-            <p className="font-bold text-lg text-blue-600">{formattedAmount}</p>
+
+          <div className="self-start">
+            <ActionMenu actions={actions} />
           </div>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-x-4 gap-y-2 mb-3 md:mb-0">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-x-4 gap-y-2">
           <div className="flex items-center">
-            <Tag size={16} className="text-gray-500 mr-2" />
-            <span className="text-sm">{expense.category}</span>
+            <Tag size={16} className="text-gray-500 mr-2 shrink-0" />
+            <span className="text-sm truncate">{expense.category}</span>
           </div>
           
           <div className="flex items-center">
-            <Calendar size={16} className="text-gray-500 mr-2" />
-            <span className="text-sm">{formatDate(expense.date)}</span>
+            <Calendar size={16} className="text-gray-500 mr-2 shrink-0" />
+            <span className="text-sm truncate">{formatDate(expense.date)}</span>
           </div>
           
           <div className="flex items-center">
-            <CreditCard size={16} className="text-gray-500 mr-2" />
-            <span className="text-sm">{expense.paymentMethod || 'Non spécifié'}</span>
+            <CreditCard size={16} className="text-gray-500 mr-2 shrink-0" />
+            <span className="text-sm truncate">{expense.paymentMethod || 'Non spécifié'}</span>
           </div>
           
           <div className="flex items-center">
             {expense.paid ? (
-              <CheckCircle size={16} className="text-green-500 mr-2" />
+              <CheckCircle size={16} className="text-green-500 mr-2 shrink-0" />
             ) : (
-              <XCircle size={16} className="text-red-500 mr-2" />
+              <XCircle size={16} className="text-red-500 mr-2 shrink-0" />
             )}
-            <span className="text-sm">{expense.paid ? 'Payé' : 'Non payé'}</span>
+            <span className="text-sm truncate">{expense.paid ? 'Payé' : 'Non payé'}</span>
           </div>
         </div>
 
-        <div className="mb-3 md:mb-0">
+        <div className="flex items-center flex-wrap gap-2">
           <span className="inline-block px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
             {getRecurrenceLabel(expense.recurrence)}
           </span>
           {expense.endDate && (
-            <span className="inline-block ml-2 text-xs text-gray-500">
+            <span className="inline-block text-xs text-gray-500">
               jusqu'au {formatDate(expense.endDate)}
             </span>
           )}
-        </div>
-  
-        <div className="flex items-center space-x-3">
-          <ActionMenu actions={actions} />
         </div>
       </div>
     </div>
