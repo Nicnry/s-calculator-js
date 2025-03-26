@@ -1,6 +1,5 @@
 'use client';
 
-import { User } from "@/app/db/schema";
 import { UserService } from "@/app/services/userService";
 import { useState, useEffect } from "react";
 import { 
@@ -11,13 +10,10 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import DetailItem from "@/app/components/global/DetailItem";
+import { useUser } from "@/app/contexts/UserContext";
 
 export default function UserDetail({ id }: { id: number; }) {
-  const [user, setUser] = useState<User>({ name: '', email: '', password: ''});
-
-  useEffect(() => {
-    (async () => setUser(await UserService.getUserById(id)))();
-  }, [id]);
+  const { user } = useUser();
 
   const [formattedCreatedAt, setFormattedCreatedAt] = useState('');
 
@@ -32,6 +28,14 @@ export default function UserDetail({ id }: { id: number; }) {
       );
     }
   }, [user?.createdAt]);
+
+  if (!user) {
+    return <div>Chargement...</div>;
+  }
+  
+  if (user.id !== id) {
+    return <div>Erreur: Les données utilisateur ne correspondent pas à l'ID demandé</div>;
+  }
 
   const handleDelete = async () => {
     if(confirm("Voulez-vous vraiment supprimer cet utilisateur ?")) {
