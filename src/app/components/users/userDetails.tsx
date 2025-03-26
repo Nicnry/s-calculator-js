@@ -12,7 +12,8 @@ import Link from "next/link";
 import DetailItem from "@/app/components/global/DetailItem";
 import { useUserRequired } from "@/app/hooks/useUserRequired";
 
-export default function UserDetail({ id }: { id: number; }) {
+
+export default function UserDetail({ id }: UserDetailProps) {
   const [formattedCreatedAt, setFormattedCreatedAt] = useState('');
   
   const { user, component, isReady } = useUserRequired({ 
@@ -114,4 +115,8 @@ export default function UserDetail({ id }: { id: number; }) {
       </div>
     </div>
   );
+}
+
+interface UserDetailProps {
+  id: number;
 }

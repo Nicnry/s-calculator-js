@@ -8,7 +8,7 @@ export default async function AccountPage({ params }: { params: Promise<{ userId
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <AccountsListWrapper userId={id} />
+      <AccountsListWrapper />
     </div>
   );
 }

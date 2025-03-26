@@ -18,15 +18,12 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import DetailItem from "@/app/components/global/DetailItem";
+import { useUser } from "@/app/contexts/UserContext";
 
-interface SalaryDetailsProps {
-  userId: number;
-  salaryId: number;
-}
-
-export default function SalaryDetails({ userId, salaryId }: SalaryDetailsProps) {
+export default function SalaryDetails({ salaryId }: SalaryDetailsProps) {
+  const { user } = useUser();
   const [salary, setSalary] = useState<Salary>({ 
-    userId: userId, 
+    userId: user!.id!,
     totalSalary: 0, 
     taxableSalary: 0, 
     avsAiApgContribution: 0, 
@@ -298,4 +295,8 @@ export default function SalaryDetails({ userId, salaryId }: SalaryDetailsProps) 
       </div>
     </div>
   );
+}
+
+interface SalaryDetailsProps {
+  salaryId: number;
 }
