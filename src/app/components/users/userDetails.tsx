@@ -10,17 +10,22 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import DetailItem from "@/app/components/global/DetailItem";
-import { useUser } from "@/app/contexts/UserContext";
+import { useUserRequired } from "@/app/hooks/useUserRequired";
 
 export default function UserDetail({ id }: { id: number; }) {
-  const { user } = useUser();
-
   const [formattedCreatedAt, setFormattedCreatedAt] = useState('');
+  
+  const { user, component, isReady } = useUserRequired({ 
+    checkId: true, 
+    id,
+    loadingComponent: <div className="p-6 text-center">Chargement des informations utilisateur...</div>,
+    errorComponent: <div className="p-6 text-center text-red-500">Erreur: Les données utilisateur ne correspondent pas à l'ID demandé</div>
+  });
 
   useEffect(() => {
     if (user?.createdAt) {
       setFormattedCreatedAt(
-        new Date(user?.createdAt).toLocaleDateString('fr-FR', {
+        new Date(user.createdAt).toLocaleDateString('fr-FR', {
           day: '2-digit',
           month: '2-digit',
           year: 'numeric'
@@ -29,13 +34,13 @@ export default function UserDetail({ id }: { id: number; }) {
     }
   }, [user?.createdAt]);
 
+  if (component && !isReady) return component;
+
   if (!user) {
-    return <div>Chargement...</div>;
+    return <div>Erreur inattendue: utilisateur non disponible</div>;
   }
-  
-  if (user.id !== id) {
-    return <div>Erreur: Les données utilisateur ne correspondent pas à l'ID demandé</div>;
-  }
+
+  const userObj = user;
 
   const handleDelete = async () => {
     if(confirm("Voulez-vous vraiment supprimer cet utilisateur ?")) {
@@ -53,13 +58,13 @@ export default function UserDetail({ id }: { id: number; }) {
     <div className="max-w-2xl mx-auto bg-white shadow-lg rounded-xl overflow-hidden">
       <div className="bg-blue-50 px-6 py-8 flex flex-col items-center">
         <div className="w-24 h-24 bg-blue-200 rounded-full flex items-center justify-center text-blue-700 text-4xl font-bold mb-4">
-          {user?.name.charAt(0).toUpperCase()}
+          {userObj.name.charAt(0).toUpperCase()}
         </div>
-        <h1 className="text-2xl font-bold text-gray-800">{user?.name}</h1>
-        <p className="text-gray-500 mb-4">{user?.email}</p>
+        <h1 className="text-2xl font-bold text-gray-800">{userObj.name}</h1>
+        <p className="text-gray-500 mb-4">{userObj.email}</p>
         
         <Link 
-          href={`/users/${user?.id}/edit`} 
+          href={`/users/${userObj.id}/edit`} 
           className="flex items-center space-x-2 text-blue-600 hover:text-blue-800 transition-colors"
         >
           <Edit size={20} />
@@ -71,13 +76,13 @@ export default function UserDetail({ id }: { id: number; }) {
         <DetailItem 
           icon={<UserIcon size={20} />} 
           label="Nom complet" 
-          value={user.name} 
+          value={userObj.name} 
         />
         
         <DetailItem 
           icon={<Mail size={20} />} 
           label="Adresse email" 
-          value={user.email} 
+          value={userObj.email} 
         />
         
         {formattedCreatedAt && (
@@ -93,7 +98,7 @@ export default function UserDetail({ id }: { id: number; }) {
         
         <div className="flex space-x-3">
           <Link 
-            href={`/users/${user?.id}/edit`} 
+            href={`/users/${userObj.id}/edit`} 
             className="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600 transition-colors"
           >
             Modifier
