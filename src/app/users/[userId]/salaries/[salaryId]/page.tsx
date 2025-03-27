@@ -1,7 +1,6 @@
 import SalaryDetails from "@/app/components/salaries/salaryDetails";
 
-
-export default async function SalaryShowPage({ params }: SalaryShowPageProps) {
+export default async function SalaryShowPage({ params }: { params: Promise<{ salaryId: string }> }) {
   const { salaryId } = await params;
   const aId = Number(salaryId);
 
@@ -12,13 +11,4 @@ export default async function SalaryShowPage({ params }: SalaryShowPageProps) {
       <SalaryDetails salaryId={aId} />
     </div>
   );
-}
-
-
-interface SalaryShowPageParams {
-  salaryId: string;
-}
-
-interface SalaryShowPageProps {
-  params: SalaryShowPageParams;
 }
