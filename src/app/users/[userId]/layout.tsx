@@ -2,7 +2,7 @@ import Sidebar from "@/app/components/global/Sidebar";
 import { UserProvider } from "@/app/providers/UserProvider";
 import { getUserById } from "@/app/services/userService";
 
-interface LayoutProps {
+type LayoutProps = {
   children: React.ReactNode;
   params: Promise<{ userId: string }>;
 }
