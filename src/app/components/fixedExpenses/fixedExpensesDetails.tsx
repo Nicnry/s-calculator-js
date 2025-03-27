@@ -15,14 +15,20 @@ import {
 import Link from "next/link";
 import DetailItem from "@/app/components/global/DetailItem";
 import FixedExpenseService from "@/app/services/fixedExpenseService";
+import { useUser } from "@/app/contexts/UserContext";
 
-export default function FixedExpensesDetails({ userId, fixedExpenseId }: { userId: number; fixedExpenseId: number; }) {
+type FixedExpenseDetailsProps = {
+  fixedExpenseId: number;
+};
+
+export default function FixedExpensesDetails({ fixedExpenseId }: FixedExpenseDetailsProps) {
   const [fixedExpense, setFixedExpense] = useState<(FixedExpense & Partial<FixedExpenseTimeStamps>) | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [formattedCreatedAt, setFormattedCreatedAt] = useState<string>('');
   const [formattedDate, setFormattedDate] = useState<string>('');
   const [formattedEndDate, setFormattedEndDate] = useState<string>('');
   const [isAnnualView, setIsAnnualView] = useState<boolean>(false);
+  const { user } = useUser(); 
 
   useEffect(() => {
     const fetchExpense = async (): Promise<void> => {
@@ -208,8 +214,8 @@ export default function FixedExpensesDetails({ userId, fixedExpenseId }: { userI
             <h2 className="font-semibold text-gray-700 mb-3">Informations générales</h2>
             <DetailItem 
               icon={<UserIcon size={18} className="text-blue-500" />} 
-              label="ID Utilisateur" 
-              value={String(userId)} 
+              label="Utilisateur" 
+              value={user!.name} 
             />
             
             <DetailItem 

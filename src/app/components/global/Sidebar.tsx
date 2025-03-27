@@ -5,11 +5,13 @@ import { useSidebarState } from "@/app/hooks/useSidebarState";
 import MenuItemComponent from "@/app/components/global/MenuItem";
 import { Menu, X } from "lucide-react";
 import { useState, useEffect } from "react";
+import { useUser } from "@/app/contexts/UserContext";
 
-export default function Sidebar({ id }: { id: number }) {
+export default function Sidebar() {
   const pathname = usePathname();
   const { toggleDropdown, isDropdownOpen } = useSidebarState();
-  const menuItems = getMenuItems(id);
+  const { user } = useUser();
+  const menuItems = getMenuItems(user!.id!);
   
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   
@@ -73,7 +75,7 @@ export default function Sidebar({ id }: { id: number }) {
                 key={item.href}
                 item={item}
                 pathname={pathname}
-                userId={id}
+                userId={user!.id!}
                 isOpen={isDropdownOpen(item.href)}
                 toggleDropdown={toggleDropdown}
               />

@@ -6,18 +6,12 @@ import { MenuItem, SubMenuItem } from "@/app/lib/routes";
 interface MenuItemProps {
   item: MenuItem;
   pathname: string;
-  userId: number;
+  userId: number
   isOpen: boolean;
   toggleDropdown: (key: string) => void;
 }
 
-export default function MenuItemComponent({ 
-  item, 
-  pathname, 
-  userId, 
-  isOpen, 
-  toggleDropdown 
-}: MenuItemProps) {
+export default function MenuItemComponent({ item, pathname, userId, isOpen, toggleDropdown }: MenuItemProps) {
   const isActive = 
     pathname === item.href || 
     (pathname.startsWith(item.href + '/') && item.href !== `/users/${userId}`) || 

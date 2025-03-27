@@ -19,9 +19,11 @@ import {
 import Link from "next/link";
 import DetailItem from "@/app/components/global/DetailItem";
 import { AccountTransactionService } from "@/app/services/accountTransactionService";
+import { useUser } from "@/app/contexts/UserContext";
 
-export default function AccountDetails({ userId, accountId }: { userId: number; accountId: number; }) {
-  const [account, setAccount] = useState<BankAccount>({ userId: userId, bankName: '', accountNumber: '', accountType: '', balance: 0, currency: '', from: new Date(), to: new Date });
+export default function AccountDetails({ accountId }: AccountDetailsProps) {
+  const { user } = useUser();
+  const [account, setAccount] = useState<BankAccount>({ userId: user!.id!, bankName: '', accountNumber: '', accountType: '', balance: 0, currency: '', from: new Date(), to: new Date });
   const [transactions, setTransactions] = useState<AccountTransaction[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [formattedCreatedAt, setFormattedCreatedAt] = useState('');
@@ -31,7 +33,7 @@ export default function AccountDetails({ userId, accountId }: { userId: number; 
       try {
         setIsLoading(true);
         setTransactions(await AccountTransactionService.getAllAccountTransactions(accountId));
-        const accountData = await UserAccountService.getUserAccountById(userId, accountId);
+        const accountData = await UserAccountService.getUserAccountById(user!.id!, accountId);
         setAccount(accountData);
       } catch (error) {
         console.error("Erreur lors du chargement des données du compte:", error);
@@ -40,7 +42,7 @@ export default function AccountDetails({ userId, accountId }: { userId: number; 
       }
     };
     fetchAccount();
-  }, [accountId, userId]);
+  }, [accountId, user]);
 
 
   useEffect(() => {
@@ -139,8 +141,8 @@ export default function AccountDetails({ userId, accountId }: { userId: number; 
             <h2 className="font-semibold text-gray-700 mb-3">Informations générales</h2>
             <DetailItem 
               icon={<UserIcon size={18} className="text-blue-500" />} 
-              label="ID Utilisateur" 
-              value={String(account.userId)} 
+              label="Utilisateur" 
+              value={user!.name} 
             />
             
             <DetailItem 
@@ -263,3 +265,7 @@ export default function AccountDetails({ userId, accountId }: { userId: number; 
     </div>
   );
 }
+
+type AccountDetailsProps = {
+  accountId: number;
+};

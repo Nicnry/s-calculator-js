@@ -24,7 +24,7 @@ export default async function Layout({ children, params }: LayoutProps) {
   return (
     <UserProvider user={user}>
       <div className="flex flex-col md:flex-row min-h-screen bg-gray-50">
-        <Sidebar id={user.id} />
+        <Sidebar />
         <main className="flex-1 p-4 md:p-6 pt-16 md:pt-6">
           <div className="max-w-7xl mx-auto">
             <div className="bg-white rounded-lg shadow-sm p-4 md:p-6">
