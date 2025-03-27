@@ -8,16 +8,10 @@ import {
   XAxis, YAxis, CartesianGrid, Tooltip, Legend, 
   ResponsiveContainer, Cell
 } from 'recharts';
+import { useUser } from '@/app/contexts/UserContext';
 
-interface FormattedBankAccount extends BankAccount {
-  period: string;
-  dateObj: Date;
-  fromDate: string;
-  toDate: string;
-  monthYear: string;
-}
-
-export default function BankAccountsStatistics({ userId }: { userId: number }) {
+export default function BankAccountsStatistics() {
+  const { user } = useUser();
   const [accounts, setAccounts] = useState<BankAccount[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -34,7 +28,7 @@ export default function BankAccountsStatistics({ userId }: { userId: number }) {
       try {
         setLoading(true);
         
-        const accountsData = await UserAccountService.getAllUserAccounts(userId);
+        const accountsData = await UserAccountService.getAllUserAccounts(user!.id!);
         const sortedAccounts = [...accountsData].sort((a, b) => 
           new Date(a.from).getTime() - new Date(b.from).getTime()
         );
@@ -56,9 +50,8 @@ export default function BankAccountsStatistics({ userId }: { userId: number }) {
     };
 
     fetchData();
-  }, [userId]);
+  }, [user]);
 
-  // Utilisation de useCallback pour mémoriser la fonction formatAccountData
   const formatAccountData = useCallback(() => {
     return accounts.map(account => ({
       ...account,
@@ -719,4 +712,12 @@ export default function BankAccountsStatistics({ userId }: { userId: number }) {
       </div>
     </div>
   );
+}
+
+interface FormattedBankAccount extends BankAccount {
+  period: string;
+  dateObj: Date;
+  fromDate: string;
+  toDate: string;
+  monthYear: string;
 }

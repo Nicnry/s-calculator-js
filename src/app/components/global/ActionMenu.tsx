@@ -1,30 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { MoreVertical } from 'lucide-react';
 
-export type ActionItem = {
-  icon: React.ReactNode;
-  label: string;
-  onClick?: () => void;
-  href?: string;
-  variant?: 'default' | 'danger' | 'success' | 'warning';
-  isLoading?: boolean;
-};
-
-interface ActionMenuProps {
-  actions: ActionItem[];
-  position?: 'left' | 'right';
-  buttonSize?: number;
-  menuWidth?: number;
-  className?: string;
-}
-
-export default function ActionMenu({
-  actions,
-  position = 'right',
-  buttonSize = 20,
-  menuWidth = 48,
-  className = '',
-}: ActionMenuProps) {
+export default function ActionMenu({ actions, position = 'right', buttonSize = 20, menuWidth = 48, className = '', }: ActionMenuProps) {
   const [menuOpen, setMenuOpen] = useState<boolean>(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
@@ -123,4 +100,21 @@ export default function ActionMenu({
       )}
     </div>
   );
+}
+
+export interface ActionItem {
+  icon: React.ReactNode;
+  label: string;
+  onClick?: () => void;
+  href?: string;
+  variant?: 'default' | 'danger' | 'success' | 'warning';
+  isLoading?: boolean;
+};
+
+type ActionMenuProps = {
+  actions: ActionItem[];
+  position?: 'left' | 'right';
+  buttonSize?: number;
+  menuWidth?: number;
+  className?: string;
 }

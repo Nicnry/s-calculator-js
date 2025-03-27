@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-export default function CreateNew({ href, title }: { href: string, title: string }) {
+export default function CreateNew({ href, title }: CreateNewProps) {
   return (
   <Link 
     href={href} 
@@ -11,3 +11,8 @@ export default function CreateNew({ href, title }: { href: string, title: string
   </Link>
   );
 }
+
+type CreateNewProps = {
+  href: string;
+  title: string;
+};

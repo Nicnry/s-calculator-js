@@ -4,18 +4,6 @@ import React, { Suspense, ReactNode } from 'react';
 import CreateNew from '@/app/components/global/CreateNew';
 import ListSkeleton from '@/app/components/global/ListSkeleton';
 
-interface GenericListWrapperProps<T> {
-  title: string;
-  createNewHref: string;
-  createNewTitle: string;
-  items: T[];
-  isLoading?: boolean;
-  renderItem: (item: T) => ReactNode;
-  onDelete: (id: number) => void;
-  emptyMessage?: string;
-  statsComponent?: ReactNode;
-}
-
 export default function GenericListWrapper<T>({
   title,
   createNewHref,
@@ -65,4 +53,16 @@ export default function GenericListWrapper<T>({
       </div>
     </>
   );
+}
+
+interface GenericListWrapperProps<T> {
+  title: string;
+  createNewHref: string;
+  createNewTitle: string;
+  items: T[];
+  isLoading?: boolean;
+  renderItem: (item: T) => ReactNode;
+  onDelete: (id: number) => void;
+  emptyMessage?: string;
+  statsComponent?: ReactNode;
 }

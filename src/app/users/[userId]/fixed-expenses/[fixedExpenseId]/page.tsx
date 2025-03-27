@@ -1,15 +1,18 @@
 import FixedExpensesDetails from "@/app/components/fixedExpenses/fixedExpensesDetails";
 
-export default async function SalaryShowPage({ params, }: { params: Promise<{ userId: string, fixedExpenseId: string }> }) {
-  const { userId, fixedExpenseId } = await params;
-  const uId = Number(userId);
+export default async function FixedExpenseShowPage({ params }: FixedExpenseShowPageParams) {
+  const { fixedExpenseId } = await params;
   const fId = Number(fixedExpenseId);
 
-  if (isNaN(uId)) return <p>ID invalide</p>;
+  if (isNaN(fId)) return <p>ID invalide</p>;
   
   return (
     <div className="container mx-auto px-4 py-8">
-      <FixedExpensesDetails userId={uId} fixedExpenseId={fId} />
+      <FixedExpensesDetails fixedExpenseId={fId} />
     </div>
   );
 }
+
+type FixedExpenseShowPageParams = {
+  params: Promise<{ fixedExpenseId: string }>
+};

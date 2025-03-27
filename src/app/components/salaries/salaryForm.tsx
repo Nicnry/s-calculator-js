@@ -4,9 +4,12 @@ import { Salary, defaultSalary } from "@/app/db/schema";
 import SalaryService from "@/app/services/salaryService";
 import FormComponent from "@/app/components/global/FormComponent";
 import { salaryFields } from "@/app/components/salaries/salaryFormFields";
+import { useUser } from "@/app/contexts/UserContext";
 
-export default function SalaryForm({ userId, salary, update = false }: { userId: number, salary?: Salary, update?: boolean }) {
-  const initialData = { ...defaultSalary(), ...salary, userId };
+export default function SalaryForm({ salary, update = false }: SalaryFormProps) {
+  const { user } = useUser();
+
+  const initialData = { ...defaultSalary(), ...salary, userId: user!.id! };
 
   const onSubmit = async (data: Salary) => {
     if(update) {
@@ -17,4 +20,9 @@ export default function SalaryForm({ userId, salary, update = false }: { userId:
   };
 
   return <FormComponent initialData={initialData} fields={salaryFields} onSubmit={onSubmit} title={update ? "Modifier le salaire" : "Créer un salaire"} />;
+}
+
+interface SalaryFormProps {
+  salary?: Salary;
+  update?: boolean;
 }

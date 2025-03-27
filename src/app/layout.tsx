@@ -1,9 +1,5 @@
-'use client';
-
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-
-import { useEffect } from 'react';
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -15,31 +11,10 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
-
-  useEffect(() => {
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/service-worker.js')
-          .then(registration => {
-            console.info('Service Worker enregistré avec succès', registration);
-          })
-          .catch(error => {
-            console.log('Échec de l\'enregistrement du Service Worker:', error);
-          });
-      });
-    }
-  }, []);
-
+export default function RootLayout({ children }: Readonly<{ children: React.ReactNode; }>) {
   return (
     <html lang="fr">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col h-screen`}
-      >
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col h-screen`} >
         {children}
       </body>
     </html>

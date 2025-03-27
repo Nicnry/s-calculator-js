@@ -4,23 +4,22 @@ import FixedExpenseService from "@/app/services/fixedExpenseService";
 import { FixedExpense, FixedExpenseCreate, defaultFixedExpense } from "@/app/db/schema";
 import FormComponent from "@/app/components/global/FormComponent";
 import { fixedExpenseFormFields } from "@/app/components/fixedExpenses/fixedExpenseFormFields";
+import { useUser } from "@/app/contexts/UserContext";
 
-export default function ExpenseForm({ 
-  userId, 
-  expense, 
-  update = false 
-}: { 
-  userId: number, 
-  expense?: FixedExpenseCreate | FixedExpense | undefined, 
-  update?: boolean 
-}) {
-  const initialData = {...defaultFixedExpense(), ...expense, userId};
+type FixedExpenseFormProps = {
+  expense?: FixedExpenseCreate | FixedExpense;
+  update?: boolean;
+}
+
+export default function ExpenseForm({ expense, update = false }: FixedExpenseFormProps) {
+  const { user } = useUser();
+  const initialData = {...defaultFixedExpense(), ...expense, userId: user!.id!};
 
   const onSubmit = async (data: typeof initialData) => {
     const now = new Date();
     
     const submissionData = {
-      userId: userId,
+      userId: user!.id!,
       title: data.title,
       amount: Number(data.amount),
       category: data.category,

@@ -1,4 +1,4 @@
-export interface User {
+export type User = {
   id?: number;
   name: string;
   email: string;
@@ -9,7 +9,7 @@ export interface User {
   updatedAt?: Date;
 }
 
-export interface BankAccount {
+export type BankAccount = {
   id?: number;
   userId: number;
   bankName: string;
@@ -22,7 +22,7 @@ export interface BankAccount {
   createdAt?: Date;
 }
 
-export interface AccountTransaction {
+export type AccountTransaction = {
   id?: number;
   bankAccountId: number;
   amount: number;
@@ -34,7 +34,7 @@ export interface AccountTransaction {
 }
 
 
-export interface Salary {
+export type Salary = {
   id?: number;
   userId: number;
   totalSalary: number;
@@ -52,7 +52,7 @@ export interface Salary {
   createdAt?: Date;
 }
 
-export interface FixedExpenseCreate {
+export type FixedExpenseCreate = {
   userId: number;
   title: string;
   amount: number;
@@ -67,12 +67,12 @@ export interface FixedExpenseCreate {
 }
 
 
-export interface FixedExpenseTimeStamps extends FixedExpenseCreate {
+export type FixedExpenseTimeStamps = FixedExpenseCreate & {
   createdAt: Date;
   updatedAt: Date;
 }
 
-export interface FixedExpense extends FixedExpenseCreate {
+export type FixedExpense = FixedExpenseCreate & {
   id: number;
 }
 

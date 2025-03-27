@@ -8,21 +8,14 @@ import {
   XAxis, YAxis, CartesianGrid, Tooltip, Legend, 
   ResponsiveContainer, Cell, AreaChart, Area
 } from 'recharts';
+import { useUser } from '@/app/contexts/UserContext';
 
-interface FormattedSalary extends Salary {
-  period: string;
-  dateObj: Date;
-  fromDate: string;
-  toDate: string;
-  monthYear: string;
-  netSalary: number;
-}
-
-export default function SalariesStatistics({ userId }: { userId: number }) {
+export default function SalariesStatistics() {
   const [salaries, setSalaries] = useState<Salary[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<string>('evolution');
+  const { user } = useUser();
   
   const [startDate, setStartDate] = useState<string>('');
   const [endDate, setEndDate] = useState<string>('');
@@ -31,11 +24,10 @@ export default function SalariesStatistics({ userId }: { userId: number }) {
   const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884d8'];
 
   useEffect(() => {
-    console.log()
     const fetchSalaries = async () => {
       try {
         setLoading(true);
-        const data = await SalaryService.getAllUserSalaries(userId);
+        const data = await SalaryService.getAllUserSalaries(user!.id!);
         
         const sortedData = [...data].sort((a, b) => 
           new Date(a.from).getTime() - new Date(b.from).getTime()
@@ -59,7 +51,7 @@ export default function SalariesStatistics({ userId }: { userId: number }) {
     };
 
     fetchSalaries();
-  }, [userId]);
+  }, [user]);
 
   const formatSalaryData = () => {
     return salaries.map(salary => ({
@@ -617,4 +609,13 @@ export default function SalariesStatistics({ userId }: { userId: number }) {
       </div>
     </div>
   );
+}
+
+interface FormattedSalary extends Salary {
+  period: string;
+  dateObj: Date;
+  fromDate: string;
+  toDate: string;
+  monthYear: string;
+  netSalary: number;
 }

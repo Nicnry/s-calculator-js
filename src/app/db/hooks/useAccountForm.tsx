@@ -3,12 +3,6 @@
 import { UserAccountService } from "@/app/services/userAccountService"; */
 import { BankAccount, defaultAccount } from "@/app/db/schema";
 
-interface UseAccountFormProps {
-  userId: number;
-  existingAccount?: BankAccount | null;
-  isUpdate?: boolean;
-}
-
 export default function useAccountForm({userId, existingAccount = null, /* isUpdate = false */}: UseAccountFormProps) {
 const initialData = { ...defaultAccount(), ...existingAccount, userId };
 //const [loading, setLoading] = useState(false);
@@ -44,4 +38,10 @@ return {
   loading,
   error */
 };
+}
+
+type UseAccountFormProps = {
+  userId: number;
+  existingAccount?: BankAccount | null;
+  isUpdate?: boolean;
 }

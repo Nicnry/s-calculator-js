@@ -5,6 +5,7 @@ import { User } from '@/app/db/schema';
 import { UserService } from '@/app/services/userService';
 import CreateNew from '@/app/components/global/CreateNew';
 import BackLink from '@/app/components/global/BackLink';
+import ListSkeleton from '@/app/components/global/ListSkeleton';
 
 export default function UserListWrapper() {
   const [users, setUsers] = useState<User[]>([]);
@@ -27,7 +28,7 @@ export default function UserListWrapper() {
       </div>
       <div className="bg-white shadow-lg rounded-xl overflow-hidden">
         <div className="divide-y divide-gray-100">
-          <Suspense fallback={<UserListSkeleton />}>
+          <Suspense fallback={<ListSkeleton />}>
             {users.map((user) => (
               <UsersList 
                 key={user.id} 
@@ -42,17 +43,3 @@ export default function UserListWrapper() {
     </>
     );
 };
-
-function UserListSkeleton() {
-  return (
-    <div className="animate-pulse">
-      <div className="h-4 bg-gray-200 rounded w-48 mb-4"></div>
-      {[1, 2, 3].map((_, index) => (
-        <div 
-          key={index} 
-          className="h-16 bg-gray-100 rounded mb-2"
-        ></div>
-      ))}
-    </div>
-  );
-}

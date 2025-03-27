@@ -10,7 +10,7 @@ import {
 import { useState } from "react";
 import { UserService } from "@/app/services/userService";
 
-export default function UsersItem({ id, name, email, onDelete }: { id: number; name: string; email: string; onDelete: (id: number) => void }) {
+export default function UsersItem({ id, name, email, onDelete }: UsersItemProps) {
   const [isDeleting, setIsDeleting] = useState(false);
 
   const handleDelete = async () => {
@@ -93,3 +93,10 @@ export default function UsersItem({ id, name, email, onDelete }: { id: number; n
     </div>
   );
 }
+
+interface UsersItemProps {
+  id: number;
+  name: string;
+  email: string;
+  onDelete: (id: number) => void;
+};

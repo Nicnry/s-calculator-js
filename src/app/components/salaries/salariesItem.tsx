@@ -10,7 +10,7 @@ import SalaryService from "@/app/services/salaryService";
 import { Salary } from "@/app/db/schema";
 import ActionMenu, { ActionItem } from "@/app/components/global/ActionMenu";
 
-export default function SalariesItem({ salary, onDelete }: { salary: Salary, onDelete: (id: number) => void; }) {
+export default function SalariesItem({ salary, onDelete }: SalariesItemProps) {
   const {
     id,
     userId,
@@ -235,4 +235,9 @@ function getNetSalary(taxableSalary: number, percentDeductions: number[], fixedD
   const totalFixedDeduction = fixedDeductions.reduce((acc, deduction) => acc + deduction, 0);
 
   return taxableSalary - totalPercentDeduction - totalFixedDeduction;
+}
+
+interface SalariesItemProps {
+  salary: Salary;
+  onDelete: (id: number) => void;
 }

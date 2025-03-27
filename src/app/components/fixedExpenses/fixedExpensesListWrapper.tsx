@@ -6,19 +6,21 @@ import ExpensesList from '@/app/components/fixedExpenses/expenseList';
 import FixedExpenseService from '@/app/services/fixedExpenseService';
 import { DollarSign, Calendar, CreditCard } from 'lucide-react';
 import GenericListWrapper from '@/app/components/global/GenericListWrapper';
+import { useUser } from '@/app/contexts/UserContext';
 
-export default function FixedExpensesListWrapper({ userId }: { userId: number }) {
+export default function FixedExpensesListWrapper() {
   const [expenses, setExpenses] = useState<FixedExpense[]>([]);
   const [loading, setLoading] = useState(true);
+  const { user } = useUser();
 
   useEffect(() => {
     (async () => {
       setLoading(true);
-      const data = await FixedExpenseService.getAllUserExpenses(userId);
+      const data = await FixedExpenseService.getAllUserExpenses(user!.id!);
       setExpenses(data);
       setLoading(false);
     })();
-  }, [userId]);
+  }, [user]);
 
   const handleDeleteExpense = (deletedId: number) => {
     setExpenses((prevExpense) => prevExpense.filter((expense) => expense.id !== deletedId));

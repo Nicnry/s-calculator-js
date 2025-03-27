@@ -8,21 +8,14 @@ import {
   XAxis, YAxis, CartesianGrid, Tooltip, Legend, 
   ResponsiveContainer, Cell, AreaChart, Area
 } from 'recharts';
+import { useUser } from '@/app/contexts/UserContext';
 
-interface FormattedFixedExpense extends FixedExpense {
-  period: string;
-  dateObj: Date;
-  fromDate: string;
-  toDate: string;
-  monthYear: string;
-}
-
-export default function FixedExpensesStatistics({ userId }: { userId: number }) {
+export default function FixedExpensesStatistics() {
   const [expenses, setExpenses] = useState<FixedExpense[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<string>('overview');
-  
+  const { user } = useUser();
   const [startDate, setStartDate] = useState<string>('');
   const [endDate, setEndDate] = useState<string>('');
   const [filteredExpenses, setFilteredExpenses] = useState<FormattedFixedExpense[]>([]);
@@ -34,7 +27,7 @@ export default function FixedExpensesStatistics({ userId }: { userId: number }) 
       try {
         setLoading(true);
         
-        const expensesData = await FixedExpenseService.getAllUserExpenses(userId);
+        const expensesData = await FixedExpenseService.getAllUserExpenses(user!.id!);
         const sortedExpenses = [...expensesData].sort((a, b) => {
           const fromDateA = new Date(a.from);
           const fromDateB = new Date(b.from);
@@ -77,7 +70,7 @@ export default function FixedExpensesStatistics({ userId }: { userId: number }) 
     };
 
     fetchData();
-  }, [userId]);
+  }, [user]);
 
   const formatExpenseData = useCallback(() => {
     return expenses.map(expense => {
@@ -1061,4 +1054,12 @@ export default function FixedExpensesStatistics({ userId }: { userId: number }) 
       </div>
     </div>
   );
+}
+
+interface FormattedFixedExpense extends FixedExpense {
+  period: string;
+  dateObj: Date;
+  fromDate: string;
+  toDate: string;
+  monthYear: string;
 }
