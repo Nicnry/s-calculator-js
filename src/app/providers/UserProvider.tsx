@@ -13,6 +13,6 @@ export function UserProvider({ user, children }: UserProviderProps) {
 }
 
 type UserProviderProps = {
-  user: User | null;
+  user: User | undefined;
   children: ReactNode;
 }
