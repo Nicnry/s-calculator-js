@@ -6,6 +6,8 @@ import MenuItemComponent from "@/app/components/global/MenuItem";
 import { Menu, X } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useUser } from "@/app/contexts/UserContext";
+import ImportCSVButton from "./ImportCSVButton";
+import ExportCSVButton from "./ExportCSVButton";
 
 export default function Sidebar() {
   const pathname = usePathname();
@@ -80,6 +82,10 @@ export default function Sidebar() {
                 toggleDropdown={toggleDropdown}
               />
             ))}
+            <div className="flex items-center justify-center gap-4 py-4 px-6">
+              <ImportCSVButton />
+              <ExportCSVButton />
+            </div>
           </ul>
         </nav>
       </aside>

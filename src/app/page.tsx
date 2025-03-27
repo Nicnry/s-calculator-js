@@ -35,14 +35,14 @@ export default function Home() {
         
         <div className="text-sm text-gray-500 flex items-center justify-center gap-2">
           Version {packageInfo.version} • Développé par 
-          <Link 
+          <a 
             href="https:/github.com/Nicnry" 
             target="_blank" 
             rel="noopener noreferrer"
             className="inline-flex items-center text-blue-600 hover:underline"
           >
             Nicnry <Github size={14} className="ml-1" />
-          </Link>
+          </a>
         </div>
       </div>
     </div>

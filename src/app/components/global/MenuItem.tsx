@@ -13,9 +13,9 @@ interface MenuItemProps {
 
 export default function MenuItemComponent({ item, pathname, userId, isOpen, toggleDropdown }: MenuItemProps) {
   const isActive = 
-    pathname === item.href || 
+    (pathname === item.href || 
     (pathname.startsWith(item.href + '/') && item.href !== `/users/${userId}`) || 
-    (item.href === `/users/${userId}` && pathname === `/users/${userId}`);
+    (item.href === `/users/${userId}` && pathname === `/users/${userId}`)) && item.href !== '/users';
 
   return (
     <li className="flex flex-col">

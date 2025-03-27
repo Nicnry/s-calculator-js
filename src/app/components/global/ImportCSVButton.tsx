@@ -209,11 +209,11 @@ const ImportCSVButton: React.FC = () => {
     <div className="flex flex-col items-start gap-2">
       <label 
         htmlFor="csvImport"
-        className={`px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 
+        className={`px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 w-full text-center
                   focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 
                   transition-colors cursor-pointer ${isImporting ? 'opacity-50 cursor-not-allowed' : ''}`}
       >
-        Importer depuis CSV
+        Importer
         <input
           type="file"
           id="csvImport"
