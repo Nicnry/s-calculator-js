@@ -9,7 +9,7 @@ import { UserAccountService } from "@/app/services/userAccountService";
 import { BankAccount } from "@/app/db/schema";
 import ActionMenu, { ActionItem } from "@/app/components/global/ActionMenu";
 
-export default function AccountsItem({ account, onDelete }: { account: BankAccount, onDelete: (id: number) => void; }) {
+export default function AccountsItem({ account, onDelete }: AccountsItemProps) {
   const {id, userId, bankName, accountNumber, accountType, balance, currency} = account;
   const [isDeleting, setIsDeleting] = useState(false);
 
@@ -86,4 +86,9 @@ export default function AccountsItem({ account, onDelete }: { account: BankAccou
       </div>
     </div>
   );
+}
+
+interface AccountsItemProps {
+  account: BankAccount;
+  onDelete: (id: number) => void;
 }

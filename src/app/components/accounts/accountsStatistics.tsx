@@ -10,14 +10,6 @@ import {
 } from 'recharts';
 import { useUser } from '@/app/contexts/UserContext';
 
-interface FormattedBankAccount extends BankAccount {
-  period: string;
-  dateObj: Date;
-  fromDate: string;
-  toDate: string;
-  monthYear: string;
-}
-
 export default function BankAccountsStatistics() {
   const { user } = useUser();
   const [accounts, setAccounts] = useState<BankAccount[]>([]);
@@ -720,4 +712,12 @@ export default function BankAccountsStatistics() {
       </div>
     </div>
   );
+}
+
+interface FormattedBankAccount extends BankAccount {
+  period: string;
+  dateObj: Date;
+  fromDate: string;
+  toDate: string;
+  monthYear: string;
 }

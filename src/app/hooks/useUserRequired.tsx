@@ -4,19 +4,6 @@ import { ReactNode } from 'react';
 import { useUser } from '@/app/contexts/UserContext';
 import { User } from '@/app/db/schema';
 
-interface UseUserRequiredOptions {
-  checkId?: boolean;
-  id?: number;
-  loadingComponent?: ReactNode;
-  errorComponent?: ReactNode;
-}
-
-interface UseUserRequiredResult {
-  user: User | null;
-  component: ReactNode | null;
-  isReady: boolean;
-}
-
 export function useUserRequired(options: UseUserRequiredOptions = {}): UseUserRequiredResult {
   const {
     checkId = false,
@@ -48,4 +35,17 @@ export function useUserRequired(options: UseUserRequiredOptions = {}): UseUserRe
     component: null,
     isReady: true
   };
+}
+
+type UseUserRequiredOptions = {
+  checkId?: boolean;
+  id?: number;
+  loadingComponent?: ReactNode;
+  errorComponent?: ReactNode;
+}
+
+type UseUserRequiredResult = {
+  user: User | null;
+  component: ReactNode | null;
+  isReady: boolean;
 }

@@ -10,15 +10,6 @@ import {
 } from 'recharts';
 import { useUser } from '@/app/contexts/UserContext';
 
-interface FormattedSalary extends Salary {
-  period: string;
-  dateObj: Date;
-  fromDate: string;
-  toDate: string;
-  monthYear: string;
-  netSalary: number;
-}
-
 export default function SalariesStatistics() {
   const [salaries, setSalaries] = useState<Salary[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -618,4 +609,13 @@ export default function SalariesStatistics() {
       </div>
     </div>
   );
+}
+
+interface FormattedSalary extends Salary {
+  period: string;
+  dateObj: Date;
+  fromDate: string;
+  toDate: string;
+  monthYear: string;
+  netSalary: number;
 }

@@ -3,10 +3,6 @@
 import { createContext, useContext } from 'react';
 import { User } from '@/app/db/schema';
 
-interface UserContextType {
-  user: User | null;
-}
-
 export const UserContext = createContext<UserContextType>({ user: null });
 
 export function useUser() {
@@ -15,4 +11,8 @@ export function useUser() {
     throw new Error('useUser doit être utilisé à l\'intérieur d\'un UserProvider');
   }
   return context;
+}
+
+type UserContextType = {
+  user: User | null;
 }

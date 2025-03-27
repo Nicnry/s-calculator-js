@@ -10,14 +10,6 @@ import {
 } from 'recharts';
 import { useUser } from '@/app/contexts/UserContext';
 
-interface FormattedFixedExpense extends FixedExpense {
-  period: string;
-  dateObj: Date;
-  fromDate: string;
-  toDate: string;
-  monthYear: string;
-}
-
 export default function FixedExpensesStatistics() {
   const [expenses, setExpenses] = useState<FixedExpense[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -1062,4 +1054,12 @@ export default function FixedExpensesStatistics() {
       </div>
     </div>
   );
+}
+
+interface FormattedFixedExpense extends FixedExpense {
+  period: string;
+  dateObj: Date;
+  fromDate: string;
+  toDate: string;
+  monthYear: string;
 }

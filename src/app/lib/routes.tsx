@@ -1,19 +1,6 @@
 import { User, DollarSign, Briefcase, CreditCard } from "lucide-react";
 import React from "react";
 
-export interface SubMenuItem {
-  href: string;
-  label: string;
-}
-
-export interface MenuItem {
-  href: string;
-  label: string;
-  icon: React.ReactNode;
-  hasDropdown: boolean;
-  dropdownItems?: SubMenuItem[];
-}
-
 export const getMenuItems = (id: number): MenuItem[] => [
   { 
     href: `/users/${id}`, 
@@ -55,3 +42,16 @@ export const getMenuItems = (id: number): MenuItem[] => [
     ]
   }
 ];
+
+export type SubMenuItem = {
+  href: string;
+  label: string;
+}
+
+export type MenuItem = {
+  href: string;
+  label: string;
+  icon: React.ReactNode;
+  hasDropdown: boolean;
+  dropdownItems?: SubMenuItem[];
+}

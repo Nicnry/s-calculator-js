@@ -5,7 +5,7 @@ import { useState, useEffect } from "react";
 import SalaryForm from "@/app/components/salaries/salaryForm";
 import SalaryService from "@/app/services/salaryService";
 
-export default function SalaryEdit({ salaryId }: { salaryId: number }) {
+export default function SalaryEdit({ salaryId }: SalaryEditProps) {
   const [salary, setSalary] = useState<Salary>();
   
   useEffect(() => {
@@ -19,4 +19,8 @@ export default function SalaryEdit({ salaryId }: { salaryId: number }) {
       {salary ? <SalaryForm salary={salary} update /> : <p>Chargement...</p>}
     </div>
   );
+}
+
+type SalaryEditProps = {
+  salaryId: number;
 }

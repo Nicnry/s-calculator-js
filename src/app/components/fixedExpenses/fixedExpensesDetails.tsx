@@ -17,10 +17,6 @@ import DetailItem from "@/app/components/global/DetailItem";
 import FixedExpenseService from "@/app/services/fixedExpenseService";
 import { useUser } from "@/app/contexts/UserContext";
 
-type FixedExpenseDetailsProps = {
-  fixedExpenseId: number;
-};
-
 export default function FixedExpensesDetails({ fixedExpenseId }: FixedExpenseDetailsProps) {
   const [fixedExpense, setFixedExpense] = useState<(FixedExpense & Partial<FixedExpenseTimeStamps>) | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -308,3 +304,7 @@ export default function FixedExpensesDetails({ fixedExpenseId }: FixedExpenseDet
     </div>
   );
 }
+
+type FixedExpenseDetailsProps = {
+  fixedExpenseId: number;
+};

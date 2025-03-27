@@ -13,7 +13,7 @@ import { FixedExpense } from "@/app/db/schema";
 import FixedExpenseService from "@/app/services/fixedExpenseService";
 import ActionMenu, { ActionItem } from "@/app/components/global/ActionMenu";
 
-export default function ExpenseItem({ expense, onDelete }: { expense: FixedExpense, onDelete: (id: number) => void; }) {
+export default function ExpenseItem({ expense, onDelete }: ExpenseItemProps) {
   const [isDeleting, setIsDeleting] = useState(false);
 
   const handleDelete = async () => {
@@ -148,4 +148,9 @@ export default function ExpenseItem({ expense, onDelete }: { expense: FixedExpen
       </div>
     </div>
   );
+}
+
+interface ExpenseItemProps {
+  expense: FixedExpense;
+  onDelete: (id: number) => void;
 }

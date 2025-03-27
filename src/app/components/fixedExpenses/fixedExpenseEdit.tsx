@@ -5,10 +5,6 @@ import { useState, useEffect } from "react";
 import ExpenseForm from "@/app/components/fixedExpenses/expenseForm";
 import FixedExpenseService from "@/app/services/fixedExpenseService";
 
-type FixedExpenseEditProps = {
-  fixedExpenseId: number;
-};
-
 export default function FixedExpenseEdit({ fixedExpenseId }: FixedExpenseEditProps) {
   const [fixedExpense, setFixedExpense] = useState<FixedExpense>();
   
@@ -24,3 +20,7 @@ export default function FixedExpenseEdit({ fixedExpenseId }: FixedExpenseEditPro
     </div>
   );
 }
+
+type FixedExpenseEditProps = {
+  fixedExpenseId: number;
+};

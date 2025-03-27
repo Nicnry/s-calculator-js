@@ -5,7 +5,7 @@ import FormComponent from "@/app/components/global/FormComponent";
 import { AccountTransactionService } from "@/app/services/accountTransactionService";
 import { transactionFormFields } from "@/app/components/transactions/transactionFormFields";
 
-export default function AccountTransactionForm({ userId, accountId, accountTransaction, update = false }: { userId: number, accountId: number, accountTransaction?: AccountTransaction, update?: boolean }) {
+export default function AccountTransactionForm({ userId, accountId, accountTransaction, update = false }: AccountTransactionFormProps) {
   const initialData = {
     ...defaultAccountTransaction(),
     ...accountTransaction,
@@ -23,4 +23,11 @@ export default function AccountTransactionForm({ userId, accountId, accountTrans
   };
 
   return <FormComponent initialData={initialData} fields={transactionFormFields} onSubmit={onSubmit} title="Créer une transaction" />;
+}
+
+type AccountTransactionFormProps = {
+  userId: number;
+  accountId: number;
+  accountTransaction?: AccountTransaction;
+  update?: boolean;
 }
