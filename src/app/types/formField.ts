@@ -1,6 +1,6 @@
 import { ReactNode } from "react";
 
-export default interface FormField {
+type FormField = {
   name: string;
   label: string;
   type?: "text" | "number" | "date" | "select" | "email" | "password" | "range";
@@ -12,3 +12,5 @@ export default interface FormField {
   max?: number;
   step?: number;
 }
+
+export default FormField;

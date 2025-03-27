@@ -1,4 +1,3 @@
-import { Account } from "@/app/types/account";
 import { BankAccount } from "@/app/db/schema";
 import { localDb } from "@/app/db/database";
 
@@ -70,7 +69,7 @@ export class AccountService {
   }
 }
 
-export async function getAccounts(userId: number): Promise<Account[]> {
+export async function getAccounts(userId: number): Promise<BankAccount[]> {
   try {
     const res = await fetch(`${API_URL}/users/${userId}/accounts`, { cache: 'no-store' });
     
@@ -91,7 +90,7 @@ export async function getAccounts(userId: number): Promise<Account[]> {
   }
 }
 
-export async function addAccount(userId: number, account: { amount: number; date: string }): Promise<Account> {
+export async function addAccount(userId: number, account: { amount: number; date: string }): Promise<BankAccount> {
   const res = await fetch(`${API_URL}/${userId}/accounts`, {
     method: "POST",
     body: JSON.stringify(account),
