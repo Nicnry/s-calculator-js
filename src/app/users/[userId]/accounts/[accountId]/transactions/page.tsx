@@ -1,6 +1,6 @@
 import TransactionsListWrapper from "@/app/components/transactions/transactionsListWrapper";
 
-export default async function TransactionsPage({ params }: { params: Promise<{ accountId: string }> }) {
+export default async function TransactionsPage({ params }: TransactionsPageParams) {
   const { accountId } = await params;
   const aId = Number(accountId);
 
@@ -12,3 +12,7 @@ export default async function TransactionsPage({ params }: { params: Promise<{ a
     </div>
   );
 }
+
+type TransactionsPageParams = {
+  params: Promise<{ accountId: string }>
+};

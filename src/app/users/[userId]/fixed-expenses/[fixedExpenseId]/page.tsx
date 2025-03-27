@@ -1,6 +1,6 @@
 import FixedExpensesDetails from "@/app/components/fixedExpenses/fixedExpensesDetails";
 
-export default async function SalaryShowPage({ params, }: { params: Promise<{ fixedExpenseId: string }> }) {
+export default async function FixedExpenseShowPage({ params }: FixedExpenseShowPageParams) {
   const { fixedExpenseId } = await params;
   const fId = Number(fixedExpenseId);
 
@@ -12,3 +12,7 @@ export default async function SalaryShowPage({ params, }: { params: Promise<{ fi
     </div>
   );
 }
+
+type FixedExpenseShowPageParams = {
+  params: Promise<{ fixedExpenseId: string }>
+};

@@ -1,6 +1,6 @@
 import SalaryEdit from "@/app/components/salaries/salaryEdit";
 
-export default async function EditSalaryPage({ params }: { params: Promise<{ salaryId: string }> }) {
+export default async function EditSalaryPage({ params }: EditSalaryPageParams) {
   const { salaryId } = await params;
   const sId = Number(salaryId);
 
@@ -9,3 +9,7 @@ export default async function EditSalaryPage({ params }: { params: Promise<{ sal
   return <SalaryEdit salaryId={sId} />;
     
 }
+
+type EditSalaryPageParams = {
+  params: Promise<{ salaryId: string }>
+};

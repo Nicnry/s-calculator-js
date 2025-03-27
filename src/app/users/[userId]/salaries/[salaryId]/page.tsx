@@ -1,14 +1,18 @@
 import SalaryDetails from "@/app/components/salaries/salaryDetails";
 
-export default async function SalaryShowPage({ params }: { params: Promise<{ salaryId: string }> }) {
+export default async function SalaryShowPage({ params }: SalaryShowPageParams) {
   const { salaryId } = await params;
-  const aId = Number(salaryId);
+  const sId = Number(salaryId);
 
-  if (isNaN(aId)) return <p>ID invalide</p>;
+  if (isNaN(sId)) return <p>ID invalide</p>;
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <SalaryDetails salaryId={aId} />
+      <SalaryDetails salaryId={sId} />
     </div>
   );
 }
+
+type SalaryShowPageParams = {
+  params: Promise<{ salaryId: string }>
+};
