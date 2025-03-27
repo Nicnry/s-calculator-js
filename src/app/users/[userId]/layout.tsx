@@ -2,11 +2,6 @@ import Sidebar from "@/app/components/global/Sidebar";
 import { UserProvider } from "@/app/providers/UserProvider";
 import { getUserById } from "@/app/services/userService";
 
-type LayoutProps = {
-  children: React.ReactNode;
-  params: Promise<{ userId: string }>;
-}
-
 export default async function Layout({ children, params }: LayoutProps) {
   const { userId } = await params;
   const id = Number(userId);
@@ -35,4 +30,9 @@ export default async function Layout({ children, params }: LayoutProps) {
       </div>
     </UserProvider>
   );
+}
+
+type LayoutProps = {
+  children: React.ReactNode;
+  params: Promise<{ userId: string }>;
 }

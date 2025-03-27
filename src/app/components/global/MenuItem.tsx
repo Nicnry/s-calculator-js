@@ -3,14 +3,6 @@ import Link from "next/link";
 import { ChevronDown, ChevronRight } from "lucide-react";
 import { MenuItem, SubMenuItem } from "@/app/lib/routes";
 
-interface MenuItemProps {
-  item: MenuItem;
-  pathname: string;
-  userId: number
-  isOpen: boolean;
-  toggleDropdown: (key: string) => void;
-}
-
 export default function MenuItemComponent({ item, pathname, userId, isOpen, toggleDropdown }: MenuItemProps) {
   const isActive = 
     (pathname === item.href || 
@@ -70,4 +62,12 @@ function SubMenuItems({ items, pathname }: { items?: SubMenuItem[]; pathname: st
       ))}
     </ul>
   );
+}
+
+interface MenuItemProps {
+  item: MenuItem;
+  pathname: string;
+  userId: number
+  isOpen: boolean;
+  toggleDropdown: (key: string) => void;
 }
