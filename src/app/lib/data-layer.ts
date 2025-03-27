@@ -1,9 +1,11 @@
 'use client';
 
 import SalaryService from "@/app/services/salaryService";
-import { Salary } from '@/app/db/schema';
+import { defaultUser, Salary, User } from '@/app/db/schema';
+import { UserService } from "../services/userService";
 
 export interface DataSource {
+  getUser(userId: number): Promise<User>;
   getAllUserSalaries(userId: number): Promise<Salary[]>;
   getAllSalaries(): Promise<Salary[]>;
   getSalaryById(id: number): Promise<Salary>;
@@ -15,6 +17,10 @@ export interface DataSource {
 }
 
 export class IndexedDBDataSource implements DataSource {
+  async getUser(userId: number): Promise<User> {
+    return await UserService.getUserById(userId);
+  }
+
   async getAllUserSalaries(userId: number): Promise<Salary[]> {
     return await SalaryService.getAllUserSalaries(userId);
   }
@@ -49,6 +55,17 @@ export class IndexedDBDataSource implements DataSource {
 }
 
 export class ApiDataSource implements DataSource {
+  async getUser(userId: number): Promise<User> {
+    try {
+      const response = await fetch(`/api/users/${userId}/salaries`);
+      if (!response.ok) throw new Error('Erreur réseau');
+      return await response.json();
+    } catch (error) {
+      console.error('Erreur API:', error);
+      return defaultUser();
+    }
+  }
+
   async getAllUserSalaries(userId: number): Promise<Salary[]> {
     try {
       const response = await fetch(`/api/users/${userId}/salaries`);

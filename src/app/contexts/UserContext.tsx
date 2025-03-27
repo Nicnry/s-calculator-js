@@ -3,7 +3,7 @@
 import { createContext, useContext } from 'react';
 import { User } from '@/app/db/schema';
 
-export const UserContext = createContext<UserContextType>({ user: null });
+export const UserContext = createContext<UserContextType>({ user: undefined });
 
 export function useUser() {
   const context = useContext(UserContext);
@@ -14,5 +14,5 @@ export function useUser() {
 }
 
 type UserContextType = {
-  user: User | null;
+  user: User | undefined;
 }
