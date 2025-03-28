@@ -1,4 +1,4 @@
-export interface User {
+export type User = {
   id?: number;
   name: string;
   email: string;
@@ -9,7 +9,7 @@ export interface User {
   updatedAt?: Date;
 }
 
-export interface BankAccount {
+export type BankAccount = {
   id?: number;
   userId: number;
   bankName: string;
@@ -17,10 +17,12 @@ export interface BankAccount {
   accountType: string;
   balance: number;
   currency: string;
+  from: Date;
+  to: Date;
   createdAt?: Date;
 }
 
-export interface AccountTransaction {
+export type AccountTransaction = {
   id?: number;
   bankAccountId: number;
   amount: number;
@@ -31,7 +33,8 @@ export interface AccountTransaction {
   createdAt?: Date;
 }
 
-export interface Salary {
+
+export type Salary = {
   id?: number;
   userId: number;
   totalSalary: number;
@@ -43,7 +46,48 @@ export interface Salary {
   ijmA1Deduction: number;
   lppDeduction: number;
   monthlyPayments: number;
+  employmentRate: number;
+  from: Date;
+  to: Date;
   createdAt?: Date;
+}
+
+export type FixedExpenseCreate = {
+  userId: number;
+  title: string;
+  amount: number;
+  category: string;
+  date: string;
+  recurrence: 'quotidienne' | 'hebdomadaire' | 'mensuelle' | 'annuelle' | 'ponctuelle';
+  paid?: boolean;
+  paymentMethod?: 'Carte' | 'Virement' | 'Prélèvement' | 'Espèces' | 'Autre';
+  from: Date;
+  to: Date;
+  endDate?: string;
+}
+
+
+export type FixedExpenseTimeStamps = FixedExpenseCreate & {
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export type FixedExpense = FixedExpenseCreate & {
+  id: number;
+}
+
+export function defaultFixedExpense(): Omit<FixedExpense, "id" | "userId"> {
+  return {
+    title: 'Loyer',
+    amount: 800,
+    category: 'Appartement',
+    date: new Date().toISOString().split('T')[0],
+    recurrence: 'mensuelle',
+    paid: false,
+    paymentMethod: 'Virement',
+    from: new Date(),
+    to: new Date(),
+  };
 }
 
 export function defaultAccountTransaction(): Omit<AccountTransaction, "id" | "bankAccountId"> {
@@ -58,6 +102,8 @@ export function defaultAccountTransaction(): Omit<AccountTransaction, "id" | "ba
 }
 
 export function defaultSalary(): Omit<Salary, "userId"> {
+  const { today, nextYear } = getTodayAndNextYear();
+
   return {
     totalSalary: 5000,
     taxableSalary: 5000,
@@ -68,16 +114,23 @@ export function defaultSalary(): Omit<Salary, "userId"> {
     ijmA1Deduction: 0.5265,
     lppDeduction: 261.95,
     monthlyPayments: 12,
-    createdAt: new Date,
+    employmentRate: 100,
+    from: today,
+    to: nextYear,
+    createdAt: today,
   };
 }
 
 export function defaultAccount(): Omit<BankAccount, "userId"> {
+  const { today, nextYear } = getTodayAndNextYear();
+
   return {
     bankName: "",
     accountNumber: "",
     accountType: "",
     balance: 0,
+    from: today,
+    to: nextYear,
     currency: "",
   }
 }
@@ -89,3 +142,10 @@ export function defaultUser(): User {
     password: "",
   }
 }
+
+const getTodayAndNextYear = (): { today: Date; nextYear: Date } => {
+  const today = new Date();
+  const nextYear = new Date(today);
+  nextYear.setFullYear(today.getFullYear() + 1);
+  return { today, nextYear };
+};

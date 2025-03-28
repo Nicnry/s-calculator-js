@@ -1,15 +1,18 @@
 import AccountDetails from "@/app/components/accounts/accountDetails";
 
-export default async function SalaryShowPage({ params, }: { params: Promise<{ userId: string, accountId: string }> }) {
-  const { userId, accountId } = await params;
-  const uId = Number(userId);
+export default async function AccountShowPage({ params }: AccountShowPageParams) {
+  const { accountId } = await params;
   const aId = Number(accountId);
 
-  if (isNaN(uId)) return <p>ID invalide</p>;
+  if (isNaN(aId)) return <p>ID invalide</p>;
   
   return (
     <div className="container mx-auto px-4 py-8">
-      <AccountDetails userId={uId} accountId={aId} />
+      <AccountDetails accountId={aId} />
     </div>
   );
 }
+
+type AccountShowPageParams = {
+  params: Promise<{ accountId: string }>
+};

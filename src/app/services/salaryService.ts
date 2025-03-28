@@ -1,7 +1,17 @@
 import { Salary } from "@/app/db/schema";
 import { localDb } from "@/app/db/database";
 
-export class SalaryService {
+export default class SalaryService {
+  static async getAllUserSalaries(userId: number): Promise<Salary[]> {
+    try {
+      await localDb.ensureOpen();
+      return await localDb.salaries.where('userId').equals(userId).toArray();
+    } catch (error) {
+      console.error('Erreur lors de la récupération des salaires', error);
+      return [];
+    }
+  }
+
   static async getAllSalaries(): Promise<Salary[]> {
     try {
       await localDb.ensureOpen();
@@ -37,12 +47,12 @@ export class SalaryService {
   static async updateSalary(id: number, updatedSalary: Partial<Salary>): Promise<boolean> {
     try {
       await localDb.ensureOpen();
-      const account = await localDb.salaries.get(id);
-      if (!account) {
+      const salary = await localDb.salaries.get(id);
+      if (!salary) {
         console.error('Salaire introuvable');
         return false;
       }
-      await localDb.bankAccounts.update(id, { ...updatedSalary });
+      await localDb.salaries.update(id, { ...updatedSalary });
       return true;
     } catch (error) {
       console.error("Erreur lors de la mise à jour du salaire", error);
@@ -64,5 +74,13 @@ export class SalaryService {
       console.error("Erreur lors de la suppression du salaire", error);
       return false;
     }
+  }
+
+  static calculateAdjustedSalary(salary: Salary): number {
+    return (salary.totalSalary / 100) * salary.employmentRate;
+  }
+
+  static calculateAdjustedTaxableSalary(salary: Salary): number {
+    return (salary.taxableSalary / 100) * salary.employmentRate;
   }
 }

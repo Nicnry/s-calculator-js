@@ -1,16 +1,10 @@
 'use client';
 
-import { User } from "@/app/db/schema";
-import { UserService } from "@/app/services/userService";
-import { useState, useEffect } from "react";
 import UserForm from "@/app/components/users/userForm";
+import { useUser } from "@/app/contexts/UserContext";
 
-export default function UserEdit({ id }: { id: number; }) {
-  const [user, setUser] = useState<User>();
-  
-  useEffect(() => {
-    (async () => setUser(await UserService.getUserById(id)))();
-  }, [id]);
+export default function UserEdit() {
+  const { user } = useUser();
 
   return (
     <div>

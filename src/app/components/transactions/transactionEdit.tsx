@@ -7,7 +7,7 @@ import AccountTransactionForm from "@/app/components/transactions/accountTransac
 import { UserAccountService } from "@/app/services/userAccountService";
 import { AccountTransactionService } from "@/app/services/accountTransactionService";
 
-export default function AccountEdit({ userId, accountId, transactionId }: { userId: number; accountId: number, transactionId: number }) {
+export default function AccountEdit({ userId, accountId, transactionId }: AccountEditProps) {
   const [user, setUser] = useState<User>();
   const [account, setAccount] = useState<BankAccount>();
   const [transaction, setTransaction] = useState<AccountTransaction>();
@@ -25,4 +25,10 @@ export default function AccountEdit({ userId, accountId, transactionId }: { user
       {user && account && transaction ? <AccountTransactionForm userId={user.id!} accountId={accountId} accountTransaction={transaction} update /> : <p>Chargement...</p>}
     </div>
   );
+}
+
+type AccountEditProps = {
+  userId: number;
+  accountId: number;
+  transactionId: number;
 }

@@ -6,7 +6,7 @@ import FormComponent from "@/app/components/global/FormComponent";
 import FormField from "@/app/types/formField";
 import { Mail, User as UserIcon, RectangleEllipsis } from "lucide-react";
 
-export default function UserForm({ user, update = false }: { user?: User, update?: boolean }) {
+export default function UserForm({ user, update = false }: UserFormProps) {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { salaries, accounts, ...initialData } = { ...defaultUser(), ...user };
@@ -26,4 +26,9 @@ export default function UserForm({ user, update = false }: { user?: User, update
   };
 
   return <FormComponent initialData={initialData} fields={fields} onSubmit={onSubmit} title={update ? "Modifier l'utilisateur" : "Créer un utilisateur"} />;
+}
+
+type UserFormProps = {
+  user?: User;
+  update?: boolean;
 }

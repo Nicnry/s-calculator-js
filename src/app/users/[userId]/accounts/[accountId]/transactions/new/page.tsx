@@ -1,6 +1,6 @@
 import AccountTransactionForm from "@/app/components/transactions/accountTransactionForm";
 
-export default async function NewAccountTransactionPage({ params, }: { params: Promise<{ userId: string, accountId: string }> }) {
+export default async function NewAccountTransactionPage({ params }: NewAccountTransactionPageParams) {
 
   const { userId, accountId } = await params;
   const id = Number(userId);
@@ -14,3 +14,7 @@ export default async function NewAccountTransactionPage({ params, }: { params: P
     </div>
   );
 }
+
+type NewAccountTransactionPageParams = {
+  params: Promise<{ userId: string, accountId: string }>
+};

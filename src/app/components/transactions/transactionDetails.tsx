@@ -19,24 +19,6 @@ import Link from "next/link";
 import DetailItem from "@/app/components/global/DetailItem";
 import { AccountTransactionService } from "@/app/services/accountTransactionService";
 
-// Interface fournie
-interface AccountTransaction {
-  id?: number;
-  bankAccountId: number;
-  amount: number;
-  type: 'income' | 'expense';
-  category: string;
-  date: Date;
-  description?: string;
-  createdAt?: Date;
-}
-
-interface TransactionDetailsProps {
-  userId: number;
-  accountId: number;
-  transactionId: number;
-}
-
 export default function TransactionDetails({ userId, accountId, transactionId }: TransactionDetailsProps) {
   const [transaction, setTransaction] = useState<AccountTransaction | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -270,4 +252,21 @@ export default function TransactionDetails({ userId, accountId, transactionId }:
       </div>
     </div>
   );
+}
+
+type AccountTransaction = {
+  id?: number;
+  bankAccountId: number;
+  amount: number;
+  type: 'income' | 'expense';
+  category: string;
+  date: Date;
+  description?: string;
+  createdAt?: Date;
+}
+
+type TransactionDetailsProps = {
+  userId: number;
+  accountId: number;
+  transactionId: number;
 }

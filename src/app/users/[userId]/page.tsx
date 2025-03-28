@@ -1,6 +1,6 @@
 import UserDetails from "@/app/components/users/userDetails";
 
-export default async function UserShowPage({ params }: { params: Promise<{ userId: string }> }) {
+export default async function UserShowPage({ params }: UserShowPageParams) {
   const { userId } = await params;
   const id = Number(userId);
 
@@ -12,3 +12,7 @@ export default async function UserShowPage({ params }: { params: Promise<{ userI
     </div>
   );
 }
+
+type UserShowPageParams = {
+  params: Promise<{ userId: string }>
+};
