@@ -1,25 +1,15 @@
 'use client';
 
 import { Salary, defaultSalary } from "@/app/db/schema";
-import { SalaryService } from "@/app/services/salaryService";
+import SalaryService from "@/app/services/salaryService";
 import FormComponent from "@/app/components/global/FormComponent";
-import FormField from "@/app/types/formField";
-import { Wallet, FileText, ShieldCheck, PiggyBank, Briefcase, HeartPulse, Repeat } from "lucide-react";
+import { salaryFields } from "@/app/components/salaries/salaryFormFields";
+import { useUser } from "@/app/contexts/UserContext";
 
-export default function SalaryForm({ userId, salary, update = false }: { userId: number, salary?: Salary, update?: boolean }) {
-  const initialData = { ...defaultSalary(), ...salary, userId };
+export default function SalaryForm({ salary, update = false }: SalaryFormProps) {
+  const { user } = useUser();
 
-  const fields: FormField[] = [
-    { name: "totalSalary", label: "Salaire brut", type: "number", icon: <Wallet /> },  
-    { name: "taxableSalary", label: "Salaire taxable", type: "number", icon: <FileText /> },  
-    { name: "avsAiApgContribution", label: "Cotisation AVS", type: "number", icon: <ShieldCheck /> },  
-    { name: "vdLpcfamDeduction", label: "Cotisation LPC FAM", type: "number", icon: <PiggyBank /> },  
-    { name: "acDeduction", label: "Cotisation chômage", type: "number", icon: <Briefcase /> },  
-    { name: "aanpDeduction", label: "Cotisation AANP", type: "number", icon: <HeartPulse /> },  
-    { name: "ijmA1Deduction", label: "Cotisation IJMA1", type: "number", icon: <HeartPulse /> },  
-    { name: "lppDeduction", label: "Cotisation LPP", type: "number", icon: <PiggyBank /> },  
-    { name: "monthlyPayments", label: "Récurrence", type: "number", icon: <Repeat /> },  
-  ];
+  const initialData = { ...defaultSalary(), ...salary, userId: user!.id! };
 
   const onSubmit = async (data: Salary) => {
     if(update) {
@@ -29,5 +19,10 @@ export default function SalaryForm({ userId, salary, update = false }: { userId:
     }
   };
 
-  return <FormComponent initialData={initialData} fields={fields} onSubmit={onSubmit} title={update ? "Modifier le salaire" : "Créer un salaire"} />;
+  return <FormComponent initialData={initialData} fields={salaryFields} onSubmit={onSubmit} title={update ? "Modifier le salaire" : "Créer un salaire"} />;
+}
+
+interface SalaryFormProps {
+  salary?: Salary;
+  update?: boolean;
 }

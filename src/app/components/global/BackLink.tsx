@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 
-export default function BackLink({ href = "/", title = "Retour" }: { href?: string, title?: string }) {
+export default function BackLink({ href = "/", title = "Retour" }: BackLinkProps) {
   return (
     <Link href={href} className="flex items-center text-gray-700 hover:text-black">
       <ArrowLeft className="w-6 h-6" />
@@ -9,3 +9,8 @@ export default function BackLink({ href = "/", title = "Retour" }: { href?: stri
     </Link>
   );
 }
+
+type BackLinkProps = {
+  href?: string;
+  title?: string;
+};

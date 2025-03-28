@@ -1,6 +1,6 @@
 import TransactionDetails from "@/app/components/transactions/transactionDetails";
 
-export default async function SalaryShowPage({ params }: { params: Promise<{ userId: string, accountId: string, transactionId: string }> }) {
+export default async function SalaryShowPage({ params }: SalaryShowPageParams) {
   const { userId, accountId, transactionId } = await params;
   const uId = Number(userId);
   const aId = Number(accountId);
@@ -14,3 +14,7 @@ export default async function SalaryShowPage({ params }: { params: Promise<{ use
     </div>
   );
 }
+
+type SalaryShowPageParams = {
+  params: Promise<{ userId: string, accountId: string, transactionId: string }>
+};

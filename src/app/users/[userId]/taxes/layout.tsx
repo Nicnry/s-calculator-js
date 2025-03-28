@@ -1,7 +1,7 @@
 import { ReactNode } from "react";
 import Link from "next/link";
 
-export default function Layout({ children }: { children: ReactNode }) {
+export default function Layout({ children }: LayoutProps) {
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="flex justify-between items-center mb-6">
@@ -29,3 +29,7 @@ export default function Layout({ children }: { children: ReactNode }) {
     </div>
   );
 }
+
+type LayoutProps = {
+  children: ReactNode;
+};

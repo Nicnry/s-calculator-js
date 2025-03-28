@@ -1,7 +1,7 @@
 'use client';
 
 import { Salary } from "@/app/db/schema";
-import { SalaryService } from "@/app/services/salaryService";
+import SalaryService from "@/app/services/salaryService";
 import { useState, useEffect } from "react";
 import { 
   User as UserIcon, 
@@ -18,15 +18,12 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import DetailItem from "@/app/components/global/DetailItem";
+import { useUser } from "@/app/contexts/UserContext";
 
-interface SalaryDetailsProps {
-  userId: number;
-  salaryId: number;
-}
-
-export default function SalaryDetails({ userId, salaryId }: SalaryDetailsProps) {
+export default function SalaryDetails({ salaryId }: SalaryDetailsProps) {
+  const { user } = useUser();
   const [salary, setSalary] = useState<Salary>({ 
-    userId: userId, 
+    userId: user!.id!,
     totalSalary: 0, 
     taxableSalary: 0, 
     avsAiApgContribution: 0, 
@@ -36,12 +33,16 @@ export default function SalaryDetails({ userId, salaryId }: SalaryDetailsProps) 
     ijmA1Deduction: 0, 
     lppDeduction: 0,
     monthlyPayments: 0,
+    employmentRate: 0,
+    from: new Date(),
+    to: new Date(),
+    createdAt: new Date(),
   });
-  
+
+  const percentedSalary = SalaryService.calculateAdjustedSalary(salary);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [formattedCreatedAt, setFormattedCreatedAt] = useState<string>('');
   const [isAnnualView, setIsAnnualView] = useState<boolean>(false);
-
   useEffect(() => {
     const fetchSalary = async (): Promise<void> => {
       try {
@@ -82,11 +83,14 @@ export default function SalaryDetails({ userId, salaryId }: SalaryDetailsProps) 
     ];
     
     const totalPercentDeduction = percentDeductions.reduce(
-      (acc, percent) => acc + (salary.totalSalary * percent / 100), 
+      (acc, percent) => {
+
+        return acc + (percentedSalary * percent / 100)
+      }, 
       0
     );
-    
-    return salary.totalSalary - totalPercentDeduction - salary.lppDeduction;
+
+    return percentedSalary - totalPercentDeduction - salary.lppDeduction;
   };
 
   const netSalary = calculateNetSalary();
@@ -197,13 +201,13 @@ export default function SalaryDetails({ userId, salaryId }: SalaryDetailsProps) 
             <DetailItem 
               icon={<DollarSign size={18} className="text-green-600" />} 
               label={`Salaire brut ${isAnnualView ? 'annuel' : ''}`}
-              value={`CHF ${formatCurrency(getDisplayAmount(salary.totalSalary))}`} 
+              value={`CHF ${formatCurrency(getDisplayAmount(percentedSalary))}`} 
             />
             
             <DetailItem 
               icon={<CreditCard size={18} className="text-green-600" />} 
               label={`Salaire imposable ${isAnnualView ? 'annuel' : ''}`}
-              value={`CHF ${formatCurrency(getDisplayAmount(salary.taxableSalary))}`} 
+              value={`CHF ${formatCurrency(getDisplayAmount(salary.taxableSalary / 100 * salary.employmentRate))}`} 
             />
             
             <div className="flex items-start py-2">
@@ -226,31 +230,31 @@ export default function SalaryDetails({ userId, salaryId }: SalaryDetailsProps) 
             <DetailItem 
               icon={<Percent size={18} className="text-red-500" />} 
               label="AVS/AI/APG" 
-              value={`${salary.avsAiApgContribution}% (CHF ${formatCurrency(getDisplayAmount(salary.totalSalary * salary.avsAiApgContribution / 100))})`} 
+              value={`${salary.avsAiApgContribution}% (CHF ${formatCurrency(getDisplayAmount(percentedSalary * salary.avsAiApgContribution / 100))})`} 
             />
             
             <DetailItem 
               icon={<Percent size={18} className="text-red-500" />} 
               label="VD/LPCFam" 
-              value={`${salary.vdLpcfamDeduction}% (CHF ${formatCurrency(getDisplayAmount(salary.totalSalary * salary.vdLpcfamDeduction / 100))})`} 
+              value={`${salary.vdLpcfamDeduction}% (CHF ${formatCurrency(getDisplayAmount(percentedSalary * salary.vdLpcfamDeduction / 100))})`} 
             />
             
             <DetailItem 
               icon={<Percent size={18} className="text-red-500" />} 
               label="AC" 
-              value={`${salary.acDeduction}% (CHF ${formatCurrency(getDisplayAmount(salary.totalSalary * salary.acDeduction / 100))})`} 
+              value={`${salary.acDeduction}% (CHF ${formatCurrency(getDisplayAmount(percentedSalary * salary.acDeduction / 100))})`} 
             />
             
             <DetailItem 
               icon={<Percent size={18} className="text-red-500" />} 
               label="AANP" 
-              value={`${salary.aanpDeduction}% (CHF ${formatCurrency(getDisplayAmount(salary.totalSalary * salary.aanpDeduction / 100))})`} 
+              value={`${salary.aanpDeduction}% (CHF ${formatCurrency(getDisplayAmount(percentedSalary * salary.aanpDeduction / 100))})`} 
             />
             
             <DetailItem 
               icon={<Percent size={18} className="text-red-500" />} 
               label="IJM A1" 
-              value={`${salary.ijmA1Deduction}% (CHF ${formatCurrency(getDisplayAmount(salary.totalSalary * salary.ijmA1Deduction / 100))})`} 
+              value={`${salary.ijmA1Deduction}% (CHF ${formatCurrency(getDisplayAmount(percentedSalary * salary.ijmA1Deduction / 100))})`} 
             />
             
             <DetailItem 
@@ -291,4 +295,8 @@ export default function SalaryDetails({ userId, salaryId }: SalaryDetailsProps) 
       </div>
     </div>
   );
+}
+
+interface SalaryDetailsProps {
+  salaryId: number;
 }
