@@ -37,7 +37,7 @@ export function AccountsClientLoader({ children, userId }: AccountsClientLoaderP
   }
 
   return (
-    <AccountsProvider accounts={accounts}>
+    <AccountsProvider initialAccounts={accounts}>
       {children}
     </AccountsProvider>
   );

@@ -16,7 +16,7 @@ export default function UserDashboard() {
   const { salaries } = useSalaries();
   const { accounts } = useAccounts();
   const { fixedExpenses } = useFixedExpenses();
-  
+  console.warn("user : ", user, " / salaries :", salaries, " / accounts :", accounts, " / fixedExpenses :", fixedExpenses);
   const [stats, setStats] = useState<DashboardStats>({
     totalSalarySum: 0,
     totalExpensesSum: 0,

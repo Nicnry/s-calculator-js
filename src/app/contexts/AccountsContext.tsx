@@ -15,4 +15,8 @@ export function useAccounts() {
 
 type AccountsContextType = {
   accounts: BankAccount[] | [];
+  setAccounts?: React.Dispatch<React.SetStateAction<BankAccount[]>>;
+  addAccount?: (account: BankAccount) => Promise<BankAccount>;
+  removeAccount?: (id: number) => Promise<boolean>;
+  updateAccount?: (account: BankAccount) => Promise<BankAccount>;
 }

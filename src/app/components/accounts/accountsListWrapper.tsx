@@ -1,34 +1,37 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { BankAccount } from '@/app/db/schema';
-import { UserAccountService } from '@/app/services/userAccountService';
 import AccountsList from '@/app/components/accounts/accountsList';
 import GenericListWrapper from '@/app/components/global/GenericListWrapper';
 import { useUser } from '@/app/contexts/UserContext';
+import { useAccounts } from '@/app/contexts/AccountsContext';
 
 export default function AccountsListWrapper() {
-  const [accounts, setAccounts] = useState<BankAccount[]>([]);
   const [loading, setLoading] = useState(true);
   const { user } = useUser();
+  const { accounts, removeAccount } = useAccounts();
 
   useEffect(() => {
-    (async () => {
+    const initializeData = async () => {
       setLoading(true);
-      if(user && user.id) {
-        const data = await UserAccountService.getAllUserAccounts(user.id);
-        setAccounts(data);
-      }
       setLoading(false);
-    })();
-  }, [user]);
+    };
+    
+    initializeData();
+  }, [accounts]);
 
   if (!user) {
     return <div>Erreur inattendue: utilisateur non disponible</div>;
   }
 
-  const handleDeleteAccount = (deletedId: number) => {
-    setAccounts((prevAccounts) => prevAccounts.filter((account) => account.id !== deletedId));
+  const handleDeleteAccount = async (deletedId: number) => {
+    try {
+      if (removeAccount) {
+        await removeAccount(deletedId);
+      }
+    } catch (error) {
+      console.error("Erreur lors de la suppression du compte:", error);
+    }
   };
   
   return (
