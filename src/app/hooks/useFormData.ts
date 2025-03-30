@@ -4,7 +4,7 @@ export function useFormData<T extends Record<string, string | number | Date | bo
   const [formData, setFormData] = useState<T>(initialData);
   const [loading, setLoading] = useState(false);
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
 
     if (formData[name] instanceof Date) {

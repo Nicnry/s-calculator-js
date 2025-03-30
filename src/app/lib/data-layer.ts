@@ -1,12 +1,16 @@
 'use client';
 
 import SalaryService from "@/app/services/salaryService";
-import { defaultUser, Salary, User } from '@/app/db/schema';
+import { BankAccount, defaultUser, FixedExpense, Salary, User } from '@/app/db/schema';
 import { UserService } from "../services/userService";
+import { AccountService } from "../services/accountService";
+import FixedExpenseService from "../services/fixedExpenseService";
 
 export interface DataSource {
   getUser(userId: number): Promise<User>;
   getAllUserSalaries(userId: number): Promise<Salary[]>;
+  getAllUserAccounts(userId: number): Promise<BankAccount[]>;
+  getAllUserFixedExpenses(userId: number): Promise<FixedExpense[]>;
   getAllSalaries(): Promise<Salary[]>;
   getSalaryById(id: number): Promise<Salary>;
   addSalary(salary: Salary): Promise<number | null>;
@@ -23,6 +27,14 @@ export class IndexedDBDataSource implements DataSource {
 
   async getAllUserSalaries(userId: number): Promise<Salary[]> {
     return await SalaryService.getAllUserSalaries(userId);
+  }
+
+  async getAllUserAccounts(userId: number): Promise<BankAccount[]> {
+    return await AccountService.getAllUserAccounts(userId);
+  }
+
+  async getAllUserFixedExpenses(userId: number): Promise<FixedExpense[]> {
+    return await FixedExpenseService.getAllUserExpenses(userId);
   }
   
   async getAllSalaries(): Promise<Salary[]> {
@@ -69,6 +81,28 @@ export class ApiDataSource implements DataSource {
   async getAllUserSalaries(userId: number): Promise<Salary[]> {
     try {
       const response = await fetch(`/api/users/${userId}/salaries`);
+      if (!response.ok) throw new Error('Erreur réseau');
+      return await response.json();
+    } catch (error) {
+      console.error('Erreur API:', error);
+      return [];
+    }
+  }
+
+  async getAllUserAccounts(userId: number): Promise<BankAccount[]> {
+    try {
+      const response = await fetch(`/api/users/${userId}/accounts`);
+      if (!response.ok) throw new Error('Erreur réseau');
+      return await response.json();
+    } catch (error) {
+      console.error('Erreur API:', error);
+      return [];
+    }
+  }
+
+  async getAllUserFixedExpenses(userId: number): Promise<FixedExpense[]> {
+    try {
+      const response = await fetch(`/api/users/${userId}/fixed-expenses`);
       if (!response.ok) throw new Error('Erreur réseau');
       return await response.json();
     } catch (error) {

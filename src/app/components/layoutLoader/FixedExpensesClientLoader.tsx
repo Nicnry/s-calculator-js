@@ -2,21 +2,21 @@
 
 import { useState, useEffect } from 'react';
 import { getDataSource } from '@/app/lib/data-layer';
-import { User } from '@/app/db/schema';
-import { UserProvider } from '@/app/providers/UserProvider';
+import { FixedExpensesProvider } from "@/app/providers/FixedExpensesProvider";
+import { FixedExpense } from '@/app/db/schema';
 
-export function UserClientLoader({ children, userId }: SalariesClientLoaderProps) {
-  const [user, setUser] = useState<User>();
+export function FixedExpensesClientLoader({ children, userId }: FixedExpensesClientLoaderProps) {
+  const [fixedExpenses, setFixedExpenses] = useState<FixedExpense[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    async function loadUser() {
+    async function loadFixedExpenses() {
       try {
         setLoading(true);
         const dataSource = getDataSource('indexeddb');
-        const data = await dataSource.getUser(userId);
-        setUser(data);
+        const data = await dataSource.getAllUserFixedExpenses(userId);
+        setFixedExpenses(data);
       } catch (error) {
         console.error('Erreur lors du chargement des salaires:', error);
         setError("Impossible de charger les données. Veuillez réessayer plus tard.");
@@ -25,7 +25,7 @@ export function UserClientLoader({ children, userId }: SalariesClientLoaderProps
       }
     }
     
-    loadUser();
+    loadFixedExpenses();
   }, [userId]);
 
   if (loading) {
@@ -37,13 +37,13 @@ export function UserClientLoader({ children, userId }: SalariesClientLoaderProps
   }
 
   return (
-    <UserProvider user={user}>
+    <FixedExpensesProvider initialFixedExpenses={fixedExpenses}>
       {children}
-    </UserProvider>
+    </FixedExpensesProvider>
   );
 }
 
-type SalariesClientLoaderProps = {
+type FixedExpensesClientLoaderProps = {
   children: React.ReactNode;
   userId: number;
 }

@@ -5,11 +5,6 @@ import { getDataSource } from '@/app/lib/data-layer';
 import { SalariesProvider } from "@/app/providers/SalariesProvider";
 import { Salary } from '@/app/db/schema';
 
-type SalariesClientLoaderProps = {
-  children: React.ReactNode;
-  userId: number;
-}
-
 export function SalariesClientLoader({ children, userId }: SalariesClientLoaderProps) {
   const [salaries, setSalaries] = useState<Salary[]>([]);
   const [loading, setLoading] = useState(true);
@@ -42,8 +37,13 @@ export function SalariesClientLoader({ children, userId }: SalariesClientLoaderP
   }
 
   return (
-    <SalariesProvider salaries={salaries}>
+    <SalariesProvider initialSalaries={salaries}>
       {children}
     </SalariesProvider>
   );
+}
+
+type SalariesClientLoaderProps = {
+  children: React.ReactNode;
+  userId: number;
 }

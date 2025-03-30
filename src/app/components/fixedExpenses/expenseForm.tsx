@@ -5,6 +5,7 @@ import { FixedExpense, FixedExpenseCreate, defaultFixedExpense } from "@/app/db/
 import FormComponent from "@/app/components/global/FormComponent";
 import { fixedExpenseFormFields } from "@/app/components/fixedExpenses/fixedExpenseFormFields";
 import { useUser } from "@/app/contexts/UserContext";
+import { useFixedExpenses } from "@/app/contexts/FixedExpensesContext";
 
 type FixedExpenseFormProps = {
   expense?: FixedExpenseCreate | FixedExpense;
@@ -13,6 +14,7 @@ type FixedExpenseFormProps = {
 
 export default function ExpenseForm({ expense, update = false }: FixedExpenseFormProps) {
   const { user } = useUser();
+  const { addFixedExpense } = useFixedExpenses();
   const initialData = {...defaultFixedExpense(), ...expense, userId: user!.id!};
 
   const onSubmit = async (data: typeof initialData) => {
@@ -40,7 +42,11 @@ export default function ExpenseForm({ expense, update = false }: FixedExpenseFor
         throw new Error("Expense must have an 'id' to be updated.");
       }
     } else {
-      await FixedExpenseService.addFixedExpense(submissionData);
+      if (addFixedExpense) {
+        await addFixedExpense(submissionData);
+      } else {
+        console.warn("La fonction addFixedExpense n'est pas disponible dans le contexte");
+      }
     }
   };
 

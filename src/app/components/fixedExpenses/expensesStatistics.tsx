@@ -148,7 +148,7 @@ export default function FixedExpensesStatistics() {
     } else {
       setFilteredExpenses(formattedExpenses);
     }
-  }, [expenses, startDate, endDate]);
+  }, [expenses, startDate, endDate, formatExpenseData]);
 
   const calculateStats = () => {
     if (!expenses.length) return null;

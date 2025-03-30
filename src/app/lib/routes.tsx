@@ -6,7 +6,11 @@ export const getMenuItems = (id: number): MenuItem[] => [
     href: `/users/${id}`, 
     label: "Mon compte",
     icon: <User className="mr-2 h-5 w-5" />,
-    hasDropdown: false
+    hasDropdown: true,
+    dropdownItems: [
+      { href: `/users/${id}/dashboard`, label: "Dashboard" },
+      { href: `/users/${id}`, label: "Profile" }
+    ]
   },
   { 
     href: `/users/${id}/fixed-expenses`, 

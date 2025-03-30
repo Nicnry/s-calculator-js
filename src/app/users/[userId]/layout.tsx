@@ -1,4 +1,7 @@
 import Sidebar from "@/app/components/global/Sidebar";
+import { AccountsClientLoader } from "@/app/components/layoutLoader/AccountsClientLoader";
+import { FixedExpensesClientLoader } from "@/app/components/layoutLoader/FixedExpensesClientLoader";
+import { SalariesClientLoader } from "@/app/components/layoutLoader/SalariesClientLoader";
 import { UserClientLoader } from "@/app/components/layoutLoader/UserClientLoader";
 
 export default async function Layout({ children, params }: LayoutProps) {
@@ -11,16 +14,22 @@ export default async function Layout({ children, params }: LayoutProps) {
   
   return (
     <UserClientLoader userId={id}>
-      <div className="flex flex-col md:flex-row min-h-screen bg-gray-50">
-        <Sidebar />
-        <main className="flex-1 p-4 md:p-6 pt-16 md:pt-6">
-          <div className="max-w-7xl mx-auto">
-            <div className="bg-white rounded-lg shadow-sm p-4 md:p-6">
-              {children}
+      <SalariesClientLoader userId={id}>
+        <AccountsClientLoader userId={id}>
+          <FixedExpensesClientLoader userId={id}>
+            <div className="flex flex-col md:flex-row min-h-screen bg-gray-50">
+              <Sidebar />
+              <main className="flex-1 p-4 md:p-6 pt-16 md:pt-6">
+                <div className="max-w-7xl mx-auto">
+                  <div className="bg-white rounded-lg shadow-sm p-4 md:p-6">
+                    {children}
+                  </div>
+                </div>
+              </main>
             </div>
-          </div>
-        </main>
-      </div>
+          </FixedExpensesClientLoader>
+        </AccountsClientLoader>
+      </SalariesClientLoader>
     </UserClientLoader>
   );
 }

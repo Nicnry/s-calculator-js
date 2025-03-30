@@ -15,4 +15,8 @@ export function useSalaries() {
 
 type SalariesContextType = {
   salaries: Salary[] | [];
+  setSalaries?: React.Dispatch<React.SetStateAction<Salary[]>>;
+  addSalary?: (account: Salary) => Promise<Salary>;
+  removeSalary?: (id: number) => Promise<boolean>;
+  updateSalary?: (account: Salary) => Promise<Salary>;
 }
