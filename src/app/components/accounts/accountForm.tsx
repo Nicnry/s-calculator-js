@@ -18,7 +18,6 @@ export default function AccountForm({ account, update = false }: AccountFormProp
       if (update) {
         await UserAccountService.updateAccount(account!.id!, account);
       } else {
-        await UserAccountService.addAccount(account);
         if (addAccount) {
           await addAccount(account);
         } else {
