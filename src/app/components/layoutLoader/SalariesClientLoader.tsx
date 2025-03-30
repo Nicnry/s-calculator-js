@@ -37,7 +37,7 @@ export function SalariesClientLoader({ children, userId }: SalariesClientLoaderP
   }
 
   return (
-    <SalariesProvider salaries={salaries}>
+    <SalariesProvider initialSalaries={salaries}>
       {children}
     </SalariesProvider>
   );

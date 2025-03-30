@@ -37,7 +37,7 @@ export function FixedExpensesClientLoader({ children, userId }: FixedExpensesCli
   }
 
   return (
-    <FixedExpensesProvider fixedExpenses={fixedExpenses}>
+    <FixedExpensesProvider initialFixedExpenses={fixedExpenses}>
       {children}
     </FixedExpensesProvider>
   );
