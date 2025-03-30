@@ -11,8 +11,12 @@ export function AccountsProvider({ initialAccounts, children }: AccountsProvider
   const addAccount = async (account: BankAccount) => {
     try {
       await UserAccountService.addAccount(account);
-      setAccounts(prevAccounts => [...prevAccounts, account]);
-      return account;
+      const savedAccount: BankAccount = account;
+      setAccounts((prevAccounts: BankAccount[]) => {
+        return [...prevAccounts, savedAccount] as BankAccount[];
+      });
+      
+      return savedAccount;
     } catch (error) {
       console.error("Erreur lors de l'ajout du compte:", error);
       throw error;
