@@ -1,7 +1,7 @@
 'use client';
 
 import { createContext, useContext } from 'react';
-import { FixedExpense } from '@/app/db/schema';
+import { FixedExpense, FixedExpenseTimeStamps } from '@/app/db/schema';
 
 export const FixedExpensesContext = createContext<FixedExpensesContextType>({ fixedExpenses: [] });
 
@@ -15,4 +15,8 @@ export function useFixedExpenses() {
 
 type FixedExpensesContextType = {
   fixedExpenses: FixedExpense[] | [];
+  setFixedExpenses?: React.Dispatch<React.SetStateAction<FixedExpense[]>>;
+  addFixedExpense?: (account: FixedExpenseTimeStamps) => Promise<FixedExpenseTimeStamps>;
+  removeFixedExpense?: (id: number) => Promise<boolean>;
+  updateFixedExpense?: (account: FixedExpense) => Promise<FixedExpense>;
 }
