@@ -57,6 +57,9 @@ export class UserService {
         return false;
       }
       await localDb.users.delete(id);
+      await localDb.bankAccounts.where('userId').equals(id).delete();
+      await localDb.salaries.where('userId').equals(id).delete();
+      await localDb.fixedExpenses.where('userId').equals(id).delete();
       return true;
     } catch (error) {
       console.error("Erreur lors de la suppression de l'utilisateur", error);
