@@ -1,4 +1,4 @@
-import AccountsListWrapper from "@/app/components/accounts/accountsListWrapper";
+import AccountsListWrapper from "@/components/accounts/accountsListWrapper";
 
 export default async function AccountPage() {
   return (

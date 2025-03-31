@@ -1,4 +1,4 @@
-import TransactionDetails from "@/app/components/transactions/transactionDetails";
+import TransactionDetails from "@/components/transactions/transactionDetails";
 
 export default async function SalaryShowPage({ params }: SalaryShowPageParams) {
   const { userId, accountId, transactionId } = await params;

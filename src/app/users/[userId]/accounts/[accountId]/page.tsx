@@ -1,4 +1,4 @@
-import AccountDetails from "@/app/components/accounts/accountDetails";
+import AccountDetails from "@/components/accounts/accountDetails";
 
 export default async function AccountShowPage({ params }: AccountShowPageParams) {
   const { accountId } = await params;

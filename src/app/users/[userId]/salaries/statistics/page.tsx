@@ -1,4 +1,4 @@
-import SalariesStatistics from "@/app/components/salaries/salariesStatistics";
+import SalariesStatistics from "@/components/salaries/salariesStatistics";
 
 export default async function SalaryStatsPage() {
 

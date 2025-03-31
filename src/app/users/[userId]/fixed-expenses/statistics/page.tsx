@@ -1,4 +1,4 @@
-import FixedExpensesStatistics from "@/app/components/fixedExpenses/expensesStatistics";
+import FixedExpensesStatistics from "@/components/fixedExpenses/expensesStatistics";
 
 export default async function FixedExpenseStatsPage() {
   return (

@@ -1,4 +1,4 @@
-import AccountEdit from "@/app/components/accounts/accountEdit";
+import AccountEdit from "@/components/accounts/accountEdit";
 
 export default async function EditAccountPage({ params }: EditAccountPageParams) {
   const { accountId } = await params;

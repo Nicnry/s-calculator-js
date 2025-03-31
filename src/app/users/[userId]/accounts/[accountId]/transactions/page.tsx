@@ -1,4 +1,4 @@
-import TransactionsListWrapper from "@/app/components/transactions/transactionsListWrapper";
+import TransactionsListWrapper from "@/components/transactions/transactionsListWrapper";
 
 export default async function TransactionsPage({ params }: TransactionsPageParams) {
   const { accountId } = await params;

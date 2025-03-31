@@ -1,4 +1,4 @@
-import SalariesListWrapper from "@/app/components/salaries/salariesListWrapper";
+import SalariesListWrapper from "@/components/salaries/salariesListWrapper";
 
 export default async function SalaryPage() {
   

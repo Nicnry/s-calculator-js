@@ -1,4 +1,4 @@
-import FixedExpenseEdit from "@/app/components/fixedExpenses/fixedExpenseEdit";
+import FixedExpenseEdit from "@/components/fixedExpenses/fixedExpenseEdit";
 
 export default async function EditFixedExpensesPage({ params }: EditFixedExpensesPageParams) {
   const { fixedExpenseId } = await params;

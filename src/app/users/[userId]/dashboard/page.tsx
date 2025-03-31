@@ -2,10 +2,10 @@
 
 import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
-import { useUser } from '@/app/contexts/UserContext';
-import { useSalaries } from '@/app/contexts/SalariesContext';
-import { useAccounts } from '@/app/contexts/AccountsContext';
-import { useFixedExpenses } from '@/app/contexts/FixedExpensesContext';
+import { useUser } from '@/contexts/UserContext';
+import { useSalaries } from '@/contexts/SalariesContext';
+import { useAccounts } from '@/contexts/AccountsContext';
+import { useFixedExpenses } from '@/contexts/FixedExpensesContext';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
 export default function UserDashboard() {

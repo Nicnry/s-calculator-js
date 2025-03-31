@@ -1,4 +1,4 @@
-import AccountTransactionForm from "@/app/components/transactions/accountTransactionForm";
+import AccountTransactionForm from "@/components/transactions/accountTransactionForm";
 
 export default async function NewAccountTransactionPage({ params }: NewAccountTransactionPageParams) {
 

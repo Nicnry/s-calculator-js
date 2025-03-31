@@ -1,4 +1,4 @@
-import TransactionEdit from "@/app/components/transactions/transactionEdit";
+import TransactionEdit from "@/components/transactions/transactionEdit";
 
 export default async function EditAccountTransactionPage({ params }: EditAccountTransactionPageParams) {
   const { userId, accountId, transactionId } = await params;

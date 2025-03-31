@@ -1,4 +1,4 @@
-import UserDetails from "@/app/components/users/userDetails";
+import UserDetails from "@/components/users/userDetails";
 
 export default async function UserShowPage({ params }: UserShowPageParams) {
   const { userId } = await params;
