@@ -1,6 +1,6 @@
 import React from 'react';
 import SalariesItem from '@/components/salaries/salariesItem';
-import { Salary } from '@/db/schema';
+import { SalaryModel } from '@/models/SalaryModel';
 
 export default function SalariesList({ salary, onDelete }: SalariesListProps) {
   
@@ -8,6 +8,6 @@ export default function SalariesList({ salary, onDelete }: SalariesListProps) {
 };
 
 interface SalariesListProps {
-  salary: Salary;
+  salary: SalaryModel;
   onDelete: (id: number) => void;
 }
