@@ -7,8 +7,8 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import SalaryService from "@/services/salaryService";
-import { Salary } from "@/db/schema";
 import ActionMenu, { ActionItem } from "@/components/global/ActionMenu";
+import { SalaryModel } from "@/models/SalaryModel";
 
 export default function SalariesItem({ salary, onDelete }: SalariesItemProps) {
   const {
@@ -26,18 +26,12 @@ export default function SalariesItem({ salary, onDelete }: SalariesItemProps) {
     monthlyPayments,
     from,
     to,
+    adjustedTaxableSalary,
   } = salary;
   
   const [isDeleting, setIsDeleting] = useState<boolean>(false);
   
   const adjustedTotalSalary = SalaryService.calculateAdjustedSalary(salary);
-  const adjustedTaxableSalary = SalaryService.calculateAdjustedTaxableSalary(salary);
-  
-  const netSalary = getNetSalary(
-    adjustedTaxableSalary, 
-    [avsAiApgContribution, vdLpcfamDeduction, acDeduction, aanpDeduction, ijmA1Deduction], 
-    [lppDeduction]
-  );
 
   const handleDelete = async (): Promise<void> => {
     setIsDeleting(true);
@@ -101,7 +95,7 @@ export default function SalariesItem({ salary, onDelete }: SalariesItemProps) {
               </h3>
               <div className="flex flex-wrap items-center gap-2 mt-1">
                 <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
-                  Net: CHF {formatCurrency(netSalary)}
+                  Net: CHF {formatCurrency(salary.getNetSalary())}
                 </span>
                 {monthlyPayments > 1 && (
                   <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
@@ -209,7 +203,7 @@ export default function SalariesItem({ salary, onDelete }: SalariesItemProps) {
           
           <div className="flex flex-col">
             <span className="text-xs text-gray-500">Salaire net</span>
-            <span className="font-semibold text-green-600">CHF {formatCurrency(netSalary)}</span>
+            <span className="font-semibold text-green-600">CHF {formatCurrency(salary.getNetSalary())}</span>
           </div>
         </div>
 
@@ -217,12 +211,12 @@ export default function SalariesItem({ salary, onDelete }: SalariesItemProps) {
           <div className="w-full bg-gray-200 rounded-full h-2">
             <div 
               className="bg-green-600 h-2 rounded-full" 
-              style={{ width: `${(netSalary / adjustedTotalSalary) * 100}%` }}
+              style={{ width: `${(salary.getNetSalary() / adjustedTotalSalary) * 100}%` }}
             ></div>
           </div>
           <div className="flex justify-between text-xs mt-1">
-            <span>Net: {((netSalary / adjustedTotalSalary) * 100).toFixed(1)}%</span>
-            <span>Déductions: {((1 - netSalary / adjustedTotalSalary) * 100).toFixed(1)}%</span>
+            <span>Net: {((salary.getNetSalary() / adjustedTotalSalary) * 100).toFixed(1)}%</span>
+            <span>Déductions: {((1 - salary.getNetSalary() / adjustedTotalSalary) * 100).toFixed(1)}%</span>
           </div>
         </div>
       </div>
@@ -230,14 +224,7 @@ export default function SalariesItem({ salary, onDelete }: SalariesItemProps) {
   );
 }
 
-function getNetSalary(taxableSalary: number, percentDeductions: number[], fixedDeductions: number[]): number {
-  const totalPercentDeduction = percentDeductions.reduce((acc, percent) => acc + (taxableSalary * percent / 100), 0);
-  const totalFixedDeduction = fixedDeductions.reduce((acc, deduction) => acc + deduction, 0);
-
-  return taxableSalary - totalPercentDeduction - totalFixedDeduction;
-}
-
 interface SalariesItemProps {
-  salary: Salary;
+  salary: SalaryModel;
   onDelete: (id: number) => void;
 }
