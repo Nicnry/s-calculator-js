@@ -1,4 +1,4 @@
-import AccountsStatistics from "@/app/components/accounts/accountsStatistics";
+import AccountsStatistics from "@/components/accounts/accountsStatistics";
 
 export default async function AccountStatsPage() {
   return (

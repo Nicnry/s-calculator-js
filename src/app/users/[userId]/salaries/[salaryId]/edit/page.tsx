@@ -1,4 +1,4 @@
-import SalaryEdit from "@/app/components/salaries/salaryEdit";
+import SalaryEdit from "@/components/salaries/salaryEdit";
 
 export default async function EditSalaryPage({ params }: EditSalaryPageParams) {
   const { salaryId } = await params;

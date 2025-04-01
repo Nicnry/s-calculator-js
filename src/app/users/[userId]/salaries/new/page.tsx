@@ -1,4 +1,4 @@
-import SalaryForm from "@/app/components/salaries/salaryForm";
+import SalaryForm from "@/components/salaries/salaryForm";
 
 export default async function NewSalaryPage() {
   return (

@@ -1,6 +1,6 @@
 'use client';
 
-import UserListWrapper from '@/app/components/users/usersListWrapper';
+import UserListWrapper from '@/components/users/usersListWrapper';
 
 export default function UsersPageLayout() {
   return (

@@ -1,6 +1,6 @@
 import Link from "next/link";
-import ExportCSVButton from "@/app/components/global/ExportCSVButton";
-import ImportCSVButton from "@/app/components/global/ImportCSVButton";
+import ExportCSVButton from "@/components/global/ExportCSVButton";
+import ImportCSVButton from "@/components/global/ImportCSVButton";
 import { UsersIcon, CalculatorIcon, Github } from "lucide-react";
 import packageInfo from "@/../package.json";
 

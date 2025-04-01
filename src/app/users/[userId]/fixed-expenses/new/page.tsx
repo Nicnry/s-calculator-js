@@ -1,4 +1,4 @@
-import ExpenseForm from "@/app/components/fixedExpenses/expenseForm";
+import ExpenseForm from "@/components/fixedExpenses/expenseForm";
 
 export default async function NewExpensePage() {
   return (

@@ -1,4 +1,4 @@
-import FixedExpensesListWrapper from "@/app/components/fixedExpenses/fixedExpensesListWrapper";
+import FixedExpensesListWrapper from "@/components/fixedExpenses/fixedExpensesListWrapper";
 
 export default async function FixedExpensePage() {
   return (

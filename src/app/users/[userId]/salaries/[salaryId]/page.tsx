@@ -1,4 +1,4 @@
-import SalaryDetails from "@/app/components/salaries/salaryDetails";
+import SalaryDetails from "@/components/salaries/salaryDetails";
 
 export default async function SalaryShowPage({ params }: SalaryShowPageParams) {
   const { salaryId } = await params;

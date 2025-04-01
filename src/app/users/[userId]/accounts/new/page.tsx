@@ -1,4 +1,4 @@
-import AccountForm from "@/app/components/accounts/accountForm";
+import AccountForm from "@/components/accounts/accountForm";
 
 export default async function NewAccountPage() {
   return (

@@ -1,8 +1,8 @@
-import Sidebar from "@/app/components/global/Sidebar";
-import { AccountsClientLoader } from "@/app/components/layoutLoader/AccountsClientLoader";
-import { FixedExpensesClientLoader } from "@/app/components/layoutLoader/FixedExpensesClientLoader";
-import { SalariesClientLoader } from "@/app/components/layoutLoader/SalariesClientLoader";
-import { UserClientLoader } from "@/app/components/layoutLoader/UserClientLoader";
+import Sidebar from "@/components/global/Sidebar";
+import { AccountsClientLoader } from "@/components/layoutLoader/AccountsClientLoader";
+import { FixedExpensesClientLoader } from "@/components/layoutLoader/FixedExpensesClientLoader";
+import { SalariesClientLoader } from "@/components/layoutLoader/SalariesClientLoader";
+import { UserClientLoader } from "@/components/layoutLoader/UserClientLoader";
 
 export default async function Layout({ children, params }: LayoutProps) {
   const { userId } = await params;

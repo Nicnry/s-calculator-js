@@ -1,4 +1,4 @@
-import FixedExpensesDetails from "@/app/components/fixedExpenses/fixedExpensesDetails";
+import FixedExpensesDetails from "@/components/fixedExpenses/fixedExpensesDetails";
 
 export default async function FixedExpenseShowPage({ params }: FixedExpenseShowPageParams) {
   const { fixedExpenseId } = await params;
