@@ -68,6 +68,7 @@ export const salaryFields: FormField[] = [
     icon: <ShieldCheck />,
     required: true,
     min: 0,
+    step: "any",
     validation: [
       {
         required: true,
@@ -87,6 +88,7 @@ export const salaryFields: FormField[] = [
     icon: <PiggyBank />,
     required: true,
     min: 0,
+    step: "any",
     validation: [
       {
         required: true,
@@ -105,6 +107,7 @@ export const salaryFields: FormField[] = [
     icon: <Briefcase />,
     required: true,
     min: 0,
+    step: "any",
     validation: [
       {
         required: true,
@@ -123,6 +126,7 @@ export const salaryFields: FormField[] = [
     icon: <HeartPulse />,
     required: true,
     min: 0,
+    step: "any",
     validation: [
       {
         required: true,
@@ -142,6 +146,7 @@ export const salaryFields: FormField[] = [
     icon: <HeartPulse />,
     required: true,
     min: 0,
+    step: "any",
     validation: [
       {
         required: true,
@@ -161,6 +166,7 @@ export const salaryFields: FormField[] = [
     icon: <PiggyBank />,
     required: true,
     min: 0,
+    step: "any",
     validation: [
       {
         required: true,
