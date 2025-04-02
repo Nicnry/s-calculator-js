@@ -22,7 +22,7 @@ type FormField = {
   icon?: ReactNode;
   min?: number;
   max?: number;
-  step?: number;
+  step?: number | "any";
   validation?: ValidationRule | ValidationRule[];
   errorClassName?: string;
   disabled?: boolean;
