@@ -9,6 +9,7 @@ import {
   ResponsiveContainer, Cell, AreaChart, Area
 } from 'recharts';
 import { useUser } from '@/contexts/UserContext';
+import { SalaryModel } from '@/models/SalaryModel';
 
 export default function SalariesStatistics() {
   const [salaries, setSalaries] = useState<Salary[]>([]);
@@ -28,8 +29,9 @@ export default function SalariesStatistics() {
       try {
         setLoading(true);
         const data = await SalaryService.getAllUserSalaries(user!.id!);
-        
-        const sortedData = [...data].sort((a, b) => 
+        const salaryModels = data.map(salary => new SalaryModel(salary));
+
+        const sortedData = [...salaryModels].sort((a, b) => 
           new Date(a.from).getTime() - new Date(b.from).getTime()
         );
         
@@ -37,7 +39,8 @@ export default function SalariesStatistics() {
         
         if (sortedData.length > 0) {
           const firstDate = new Date(sortedData[0].from);
-          const lastDate = new Date(sortedData[sortedData.length - 1].to);
+
+          const lastDate = new Date(sortedData[sortedData.length - 1].getEffectiveEndDate());
           
           setStartDate(firstDate.toISOString().split('T')[0]);
           setEndDate(lastDate.toISOString().split('T')[0]);
@@ -59,7 +62,7 @@ export default function SalariesStatistics() {
       period: `${new Date(salary.from).toLocaleDateString('fr-CH', { month: 'short', year: 'numeric' })}`,
       dateObj: new Date(salary.from),
       fromDate: new Date(salary.from).toLocaleDateString('fr-CH'),
-      toDate: new Date(salary.to).toLocaleDateString('fr-CH'),
+      toDate: new Date(salary.to ?? '9999-12-31').toLocaleDateString('fr-CH'),
       monthYear: new Date(salary.from).toLocaleDateString('fr-CH', { month: 'long', year: 'numeric' }),
       netSalary: salary.taxableSalary - (
         salary.avsAiApgContribution + 
@@ -174,7 +177,7 @@ export default function SalariesStatistics() {
   const resetFilters = () => {
     if (salaries.length > 0) {
       const firstDate = new Date(salaries[0].from);
-      const lastDate = new Date(salaries[salaries.length - 1].to);
+      const lastDate = new Date(salaries[salaries.length - 1].to ?? '9999-12-31');
       
       setStartDate(firstDate.toISOString().split('T')[0]);
       setEndDate(lastDate.toISOString().split('T')[0]);
@@ -265,7 +268,7 @@ export default function SalariesStatistics() {
                 <input 
                   type="date" 
                   className="w-full p-2 border rounded"
-                  value={endDate}
+                  value={endDate ?? ''}
                   onChange={(e) => handleDateChange(e, 'end')}
                 />
               </div>

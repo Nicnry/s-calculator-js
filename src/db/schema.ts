@@ -48,7 +48,7 @@ export type Salary = {
   monthlyPayments: number;
   employmentRate: number;
   from: Date;
-  to: Date;
+  to?: Date;
   createdAt?: Date;
 }
 
@@ -102,7 +102,7 @@ export function defaultAccountTransaction(): Omit<AccountTransaction, "id" | "ba
 }
 
 export function defaultSalary(): Omit<Salary, "userId"> {
-  const { today, nextYear } = getTodayAndNextYear();
+  const { today } = getTodayAndNextYear();
 
   return {
     totalSalary: 5000,
@@ -116,7 +116,6 @@ export function defaultSalary(): Omit<Salary, "userId"> {
     monthlyPayments: 12,
     employmentRate: 100,
     from: today,
-    to: nextYear,
     createdAt: today,
   };
 }

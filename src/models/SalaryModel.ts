@@ -14,7 +14,7 @@ export class SalaryModel implements Salary {
   monthlyPayments: number;
   employmentRate: number;
   from: Date;
-  to: Date;
+  to?: Date;
   createdAt?: Date;
   adjustedTaxableSalary: number;
 
@@ -65,6 +65,14 @@ export class SalaryModel implements Salary {
       aanpDeductionAmount + 
       ijmA1DeductionAmount +
       this.lppDeduction;
+  }
+
+  isActive(date: Date = new Date()): boolean {
+    return this.from <= date && (!this.to || this.to >= date);
+  }
+
+  getEffectiveEndDate(): Date {
+    return this.to || new Date('9999-12-31');
   }
 
   toSalary(): Salary {

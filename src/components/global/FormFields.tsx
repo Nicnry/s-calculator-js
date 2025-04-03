@@ -237,11 +237,15 @@ export function FormFields<T extends Record<string, string | number | Date | boo
           </div>
         );
       } 
-      case "date": { 
-        const dateValue = formData[name] instanceof Date 
+      case "date": {
+        let dateValue = '';
+
+        if (formData[name] !== undefined) {
+          dateValue = formData[name] instanceof Date 
           ? (formData[name] as Date).toISOString().split('T')[0] 
           : String(formData[name]);
-          
+        }
+
         return (
           <div className="space-y-2" key={name}>
             {labelElement}

@@ -28,6 +28,7 @@ export const fixedExpenseFormFields: FormField[] = [
     icon: <Calculator />,
     required: true,
     min: 0,
+    step: 'any',
     validation: [
       {
         required: true,

@@ -116,7 +116,7 @@ export default function SalariesItem({ salary, onDelete }: SalariesItemProps) {
         
         <div className="flex items-center text-sm text-gray-500 mb-3">
           <Calendar size={16} className="mr-1 shrink-0" />
-          <span className="truncate">Période: {formatDate(from)} - {formatDate(to)}</span>
+          {to ? <span className="truncate">Période : {formatDate(from)} - {formatDate(to)}</span> : <span className="truncate">Depuis le : {formatDate(from)}</span>}
         </div>
         
         <div className="mb-4 p-3 bg-gray-50 rounded-lg border border-gray-100">

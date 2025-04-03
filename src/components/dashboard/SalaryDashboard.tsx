@@ -67,12 +67,15 @@ export function SalaryDashboard() {
               <tbody className="bg-white divide-y divide-gray-200">
                 {sortedSalaries.map((salaryModel) => {
                   const fromDate = new Date(salaryModel.from);
-                  const toDate = new Date(salaryModel.to);
-                  
+                  let toDate = null;
+                  if(salaryModel.to) {
+                    toDate = new Date(salaryModel.to);
+                  }
+                  console.log(toDate)
                   return (
                     <tr key={salaryModel.id} className="hover:bg-gray-50">
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                        {formatDateSwiss(fromDate)} - {formatDateSwiss(toDate)}
+                      {toDate ? `${formatDateSwiss(fromDate)} - ${formatDateSwiss(toDate)}` : formatDateSwiss(fromDate)}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-right">
                         <div className="font-medium text-gray-900">{formatCurrency(salaryModel.getNetSalary())}</div>
@@ -93,8 +96,6 @@ export function SalaryDashboard() {
           <div className="px-6 py-4 bg-gray-50 border-t border-gray-200">
             <div className="flex flex-col">
               <p className="text-xs text-gray-500 italic mb-3">
-                Note: Les montants par versement sont bruts (avant déductions sociales et impôts). 
-                Le montant effectivement versé dépend des cotisations sociales, de la situation fiscale et d'autres déductions spécifiques.
               </p>
               
               {sortedSalaries.length > 0 && (
