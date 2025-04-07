@@ -62,7 +62,7 @@ export type FixedExpenseCreate = {
   paid?: boolean;
   paymentMethod?: 'Carte' | 'Virement' | 'Prélèvement' | 'Espèces' | 'Autre';
   from: Date;
-  to: Date;
+  to?: Date;
   endDate?: string;
 }
 
@@ -85,8 +85,7 @@ export function defaultFixedExpense(): Omit<FixedExpense, "id" | "userId"> {
     recurrence: 'mensuelle',
     paid: false,
     paymentMethod: 'Virement',
-    from: new Date(),
-    to: new Date(),
+    from: new Date()
   };
 }
 

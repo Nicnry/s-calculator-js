@@ -38,7 +38,7 @@ export default function FixedExpensesStatistics() {
         if (sortedExpenses.length > 0) {
           try {
             const firstDate = new Date(sortedExpenses[0].from);
-            const lastDate = new Date(sortedExpenses[sortedExpenses.length - 1].to);
+            const lastDate = new Date(sortedExpenses[sortedExpenses.length - 1].to ?? '9999-12-31');
             
             if (!isNaN(firstDate.getTime()) && !isNaN(lastDate.getTime())) {
               setStartDate(firstDate.toISOString().split('T')[0]);
@@ -76,7 +76,7 @@ export default function FixedExpensesStatistics() {
     return expenses.map(expense => {
       try {
         const fromDate = new Date(expense.from);
-        const toDate = new Date(expense.to);
+        const toDate = new Date(expense.to ?? '9999-12-31');
         
         const fromDateStr = !isNaN(fromDate.getTime()) 
           ? fromDate.toLocaleDateString('fr-CH')
@@ -202,7 +202,7 @@ export default function FixedExpensesStatistics() {
           break;
         case 'ponctuelle':
           const fromDate = new Date(expense.from);
-          const toDate = new Date(expense.to);
+          const toDate = new Date(expense.to ?? '9999-12-31');
           const durationMonths = (toDate.getTime() - fromDate.getTime()) / (30 * 24 * 60 * 60 * 1000);
           monthlyAmount = expense.amount / Math.max(1, durationMonths);
           break;
@@ -311,7 +311,7 @@ export default function FixedExpensesStatistics() {
     if (expenses.length > 0) {
       try {
         const firstDate = new Date(expenses[0].from);
-        const lastDate = new Date(expenses[expenses.length - 1].to);
+        const lastDate = new Date(expenses[expenses.length - 1].to ?? '9999-12-31');
         
         if (!isNaN(firstDate.getTime()) && !isNaN(lastDate.getTime())) {
           setStartDate(firstDate.toISOString().split('T')[0]);

@@ -13,7 +13,6 @@ const ImportCSVButton: React.FC = () => {
     const file = event.target.files?.[0];
     if (!file) return;
     
-    console.log("Début de l'importation");
     setIsImporting(true);
     setProgress(10);
     
@@ -24,7 +23,7 @@ const ImportCSVButton: React.FC = () => {
       setProgress(20);
       
       const parsedData = parseCSVContent(content);
-      console.log("Données parsées:", parsedData);
+
       setProgress(30);
       
       await clearAndImportData(parsedData);

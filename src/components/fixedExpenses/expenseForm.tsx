@@ -32,7 +32,7 @@ export default function ExpenseForm({ expense, update = false }: FixedExpenseFor
       createdAt: now,
       updatedAt: now,
       from: data.from || now,
-      to: data.to || null
+      to: data.to || undefined,
     };
 
     if (update) {

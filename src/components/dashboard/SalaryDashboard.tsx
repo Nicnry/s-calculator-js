@@ -71,7 +71,7 @@ export function SalaryDashboard() {
                   if(salaryModel.to) {
                     toDate = new Date(salaryModel.to);
                   }
-                  console.log(toDate)
+
                   return (
                     <tr key={salaryModel.id} className="hover:bg-gray-50">
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">

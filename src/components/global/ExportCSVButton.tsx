@@ -39,7 +39,7 @@ function transformData(data: any) {
 }
 
 function convertToSingleCSV(data: any) {
-  console.log(data)
+
   let csvContent = '';
   
   for (const tableName in data) {

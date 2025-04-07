@@ -15,6 +15,7 @@ export default function SalaryForm({ salary, update = false }: SalaryFormProps) 
   const onSubmit = async (data: Salary) => {
     try {
       const salary = { ...data, createdAt: new Date() };
+
       if (update) {
         await SalaryService.updateSalary(salary!.id!, salary);
       } else {

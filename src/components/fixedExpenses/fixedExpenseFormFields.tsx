@@ -139,24 +139,13 @@ export const fixedExpenseFormFields: FormField[] = [
     label: "Date de fin", 
     type: "date", 
     icon: <Calendar />,
-    required: true,
     validation: [
       {
-        required: true,
-        message: "La date de fin est obligatoire"
-      },
-      {
         validate: (value) => {
-          if (!value) return false;
-          return value instanceof Date && !isNaN(value.getTime());
-        },
-        message: "Veuillez entrer une date valide"
-      },
-      {
-        validate: (value) => {
-          if (!value) return false;
           const fromElement = document.getElementById('from') as HTMLInputElement | null;
+
           if (!fromElement || !fromElement.value) return true;
+          if(value === '') return true;
           
           const endDate = value instanceof Date ? value : new Date(String(value));
           const startDate = new Date(fromElement.value);
@@ -165,7 +154,6 @@ export const fixedExpenseFormFields: FormField[] = [
         },
         message: "La date de fin doit être postérieure à la date de début"
       }
-    ],
-    helpText: "Date de fin de la dépense (obligatoire)"
+    ]
   },
 ];

@@ -239,7 +239,7 @@ export function FormFields<T extends Record<string, string | number | Date | boo
       } 
       case "date": {
         let dateValue = '';
-
+        
         if (formData[name] !== undefined) {
           dateValue = formData[name] instanceof Date 
           ? (formData[name] as Date).toISOString().split('T')[0] 
