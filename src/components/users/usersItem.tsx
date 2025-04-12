@@ -29,7 +29,7 @@ export default function UsersItem({ id, name, email, onDelete }: UsersItemProps)
   
   return (
     <div 
-      className="px-6 py-4 hover:bg-gray-50 border-b border-gray-100 transition-colors duration-200 flex items-center justify-between"
+      className="rounded px-6 py-4 shadow-md shadow-gray-200 hover:shadow-gray-300 transition-shadow duration-200 flex md:items-center md:justify-between md:flex-row flex-col justify-start items-start gap-6 md:gap-2"
     >
       <div className="flex items-center space-x-4">
         <div className="w-10 h-10 bg-emerald-100 rounded-full flex items-center justify-center text-emerald-600 font-bold">
@@ -41,14 +41,13 @@ export default function UsersItem({ id, name, email, onDelete }: UsersItemProps)
         </div>
       </div>
   
-      <div className="flex items-center space-x-4">
+      <div className="flex items-center space-x-2 w-full md:w-auto">
         <Link 
           href={`/users/${id}/dashboard`} 
-          className="px-3 py-2 bg-emerald-100 text-emerald-700 rounded-md hover:bg-emerald-200 transition-colors flex items-center"
+          className="p-2 text-gray-500 rounded-md hover:text-blue-600 transition-colors"
           title="Tableau de bord"
         >
           <BarChart3 size={18} className="mr-1.5" />
-          <span className="hidden sm:inline">Dashboard</span>
         </Link>
 
         <Link 
@@ -58,33 +57,16 @@ export default function UsersItem({ id, name, email, onDelete }: UsersItemProps)
         >
           <Eye size={18} />
         </Link>
+
+        <button 
+          onClick={handleDelete}
+          className="p-2 text-sm text-red-600 hover:cursor-pointer hover:text-red-800 text-left flex items-center transition-colors ml-auto"
+          disabled={isDeleting}
+        >
+          <Trash2 size={16} className="mr-2" />
+          {isDeleting ? 'Suppression...' : ''}
+        </button>
         
-        <div className="relative">
-          <button 
-            onClick={() => setShowDropdown(!showDropdown)}
-            className="p-2 text-gray-500 hover:text-gray-700 transition-colors"
-            title="Plus d'options"
-            aria-haspopup="true"
-          >
-            <MoreHorizontal size={18} />
-          </button>
-          
-          {showDropdown && (
-            <div 
-              className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-10 border border-gray-200"
-              onMouseLeave={() => setShowDropdown(false)}
-            >
-              <button 
-                onClick={handleDelete}
-                className="px-4 py-2 text-sm text-red-600 hover:bg-gray-100 w-full text-left flex items-center transition-colors"
-                disabled={isDeleting}
-              >
-                <Trash2 size={16} className="mr-2" />
-                {isDeleting ? 'Suppression...' : 'Supprimer'}
-              </button>
-            </div>
-          )}
-        </div>
       </div>
     </div>
   );

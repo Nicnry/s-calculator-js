@@ -21,13 +21,12 @@ export default function UserListWrapper() {
 
   return (
     <>
-      <div className="flex justify-between items-center mb-6">
+      <div className="flex flex-col md:flex-row justify-between md:items-center mb-14 gap-4">
         <BackLink />
-        <h1 className="text-3xl font-bold mb-6">Gestion des Utilisateurs</h1>
+        <h1 className="text-3xl font-bold mb-6 md:mb-0">Gestion des Utilisateurs</h1>
         <CreateNew href="users/new" title="+ Créer un utilisateur" />
       </div>
-      <div className="bg-white shadow-lg rounded-xl overflow-hidden">
-        <div className="divide-y divide-gray-100">
+        <div className="grid gap-6">
           <Suspense fallback={<ListSkeleton />}>
             {users.map((user) => (
               <UsersList 
@@ -38,7 +37,6 @@ export default function UserListWrapper() {
                 onDelete={handleDeleteUser} />
             ))}
           </Suspense>
-        </div>
       </div>
     </>
     );
