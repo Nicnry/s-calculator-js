@@ -18,7 +18,7 @@ export default function Home() {
           Gérez et calculez votre fortune et vos avoirs en toute simplicité
         </p>
         
-        <div className="grid md:grid-cols-2 gap-4 mb-10">
+        <div className="grid gap-4 mb-10">
           <Link
             href="/users/"
             className="flex items-center justify-center gap-2 bg-blue-600 text-white font-medium py-4 px-6 rounded-xl hover:bg-blue-700 transition shadow-md"
