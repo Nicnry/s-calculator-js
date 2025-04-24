@@ -116,7 +116,7 @@ export function SalaryDashboard() {
         </div>
       ) : (
         <div className="bg-white rounded-lg shadow p-6 text-center">
-          <p className="text-gray-500">Aucun salaire trouvé pour le mois de {currentMonth}.</p>
+          <p className="text-gray-500">Aucun salaire trouvé pour le mois de {currentMonth}</p>
           <button 
             className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
           >

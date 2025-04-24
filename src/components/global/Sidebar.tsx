@@ -56,7 +56,7 @@ export default function Sidebar() {
       
       <aside className={`
         fixed md:sticky top-0 right-0 md:left-0 md:right-auto z-40 
-        h-screen w-64 bg-white shadow-md p-4 overflow-y-auto
+        h-screen w-80 bg-white shadow-md p-4 overflow-y-auto
         transition-transform duration-300 ease-in-out
         ${isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full md:translate-x-0'}
       `}>

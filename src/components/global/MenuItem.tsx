@@ -1,6 +1,6 @@
 'use client';
 import Link from "next/link";
-import { ChevronDown, ChevronRight } from "lucide-react";
+import { ChevronUp, ChevronDown } from "lucide-react";
 import { MenuItem, SubMenuItem } from "@/lib/routes";
 
 export default function MenuItemComponent({ item, pathname, userId, isOpen, toggleDropdown }: MenuItemProps) {
@@ -30,7 +30,7 @@ export default function MenuItemComponent({ item, pathname, userId, isOpen, togg
           )}
         </div>
         {item.hasDropdown && (
-          isOpen ? <ChevronDown className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />
+          isOpen ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />
         )}
       </div>
       
