@@ -137,14 +137,13 @@ export function FormFields<T extends Record<string, string | number | Date | boo
     const errorMessage = errors[name];
     const hasError = !!errorMessage;
     
-    const baseInputClass = `w-full px-3 py-2 border ${hasError ? errorClassName : 'border-gray-300 focus:ring-blue-500'} rounded-md focus:outline-none focus:ring-2`;
+    const baseInputClass = `w-full px-3 py-2 border ${hasError ? errorClassName : 'border-gray-300 focus:border-blue-500'} rounded-md focus:outline-none focus:ring-0`;
     
     const labelElement = (
       <label 
-        className={`text-sm font-semibold text-gray-700 ${icon ? 'flex items-center' : ''}`}
+        className={`pt-2 text-xs font-semibold text-gray-700 ${icon ? 'flex items-center' : ''}`}
         htmlFor={name}
       >
-        {icon && <span className="mr-2">{icon}</span>}
         <span>{label}{required && <span className="text-red-500 ml-1">*</span>}</span>
       </label>
     );

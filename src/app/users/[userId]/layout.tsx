@@ -19,11 +19,9 @@ export default async function Layout({ children, params }: LayoutProps) {
           <FixedExpensesClientLoader userId={id}>
             <div className="flex flex-col md:flex-row min-h-screen bg-gray-50">
               <Sidebar />
-              <main className="flex-1 p-4 md:p-6 pt-16 md:pt-6">
-                <div className="max-w-7xl mx-auto">
-                  <div className="bg-white rounded-lg shadow-sm p-4 md:p-6">
-                    {children}
-                  </div>
+              <main className="flex-1">
+                <div className="w-full h-full bg-white">
+                  {children}
                 </div>
               </main>
             </div>

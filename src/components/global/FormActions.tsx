@@ -8,12 +8,12 @@ export function FormActions({ loading }: FormActionsProps) {
   const router = useRouter();
   
   return (
-    <div className="bg-gray-50 px-6 py-4 flex justify-between items-center">
+    <div className="p-6 flex justify-end items-center">
       <div className="flex space-x-3">
         <button
           type="button"
           onClick={() => router.back()}
-          className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 transition-colors"
+          className="bg-white border border-red-600 text-red-600 px-4 py-2 rounded hover:bg-red-600 hover:text-white transition-colors"
         >
           Annuler
         </button>
@@ -21,7 +21,7 @@ export function FormActions({ loading }: FormActionsProps) {
         <button
           type="submit"
           disabled={loading}
-          className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition-colors"
+          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition-colors"
         >
           {loading ? "En cours..." : "Enregistrer"}
         </button>

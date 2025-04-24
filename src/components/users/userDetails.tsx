@@ -6,7 +6,8 @@ import {
   Mail, 
   User as UserIcon, 
   Calendar, 
-  Edit 
+  Edit,
+  Trash
 } from "lucide-react";
 import Link from "next/link";
 import DetailItem from "@/components/global/DetailItem";
@@ -56,24 +57,16 @@ export default function UserDetail({ id }: UserDetailProps) {
   };
 
   return (
-    <div className="max-w-2xl mx-auto bg-white shadow-lg rounded-xl overflow-hidden">
-      <div className="bg-blue-50 px-6 py-8 flex flex-col items-center">
+    <div className="container mx-auto px-4 py-8">
+      <div className="bg-blue-50 px-6 py-8 flex flex-col items-center rounded-md overflow-hidden">
         <div className="w-24 h-24 bg-blue-200 rounded-full flex items-center justify-center text-blue-700 text-4xl font-bold mb-4">
           {userObj.name.charAt(0).toUpperCase()}
         </div>
         <h1 className="text-2xl font-bold text-gray-800">{userObj.name}</h1>
         <p className="text-gray-500 mb-4">{userObj.email}</p>
-        
-        <Link 
-          href={`/users/${userObj.id}/edit`} 
-          className="flex items-center space-x-2 text-blue-600 hover:text-blue-800 transition-colors"
-        >
-          <Edit size={20} />
-          <span>Modifier le profil</span>
-        </Link>
       </div>
 
-      <div className="p-6 space-y-4">
+      <div className="space-y-4 mt-6">
         <DetailItem 
           icon={<UserIcon size={20} />} 
           label="Nom complet" 
@@ -95,20 +88,22 @@ export default function UserDetail({ id }: UserDetailProps) {
         )}
       </div>
 
-      <div className="bg-gray-50 px-6 py-4 flex justify-between items-center">
+      <div className="flex items-center justify-end mt-6">
         
         <div className="flex space-x-3">
           <Link 
             href={`/users/${userObj.id}/edit`} 
-            className="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600 transition-colors"
+            className="bg-blue-600 text-white px-4 py-2 flex gap-4 rounded hover:bg-blue-700 transition-colors"
           >
+            <Edit size={20} />
             Modifier
           </Link>
           
           <button 
-            className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition-colors"
+            className="bg-red-500 text-white px-4 py-2 flex gap-4 rounded hover:bg-red-600 transition-colors"
             onClick={handleDelete}
           >
+            <Trash size={20} />
             Supprimer
           </button>
         </div>
